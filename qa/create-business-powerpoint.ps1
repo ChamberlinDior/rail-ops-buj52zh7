@@ -1,0 +1,59 @@
+$ErrorActionPreference='Stop'
+$out='C:\Users\mvetg\OneDrive\Desktop\SETRAG_Modele_Economique_Premium.pptx'
+$hero='C:\Users\mvetg\Documents\setrag-demo-concours\public\images\business-partnership-hero-v2.png'
+$ppt=New-Object -ComObject PowerPoint.Application
+$ppt.Visible=-1
+$pres=$ppt.Presentations.Add()
+$pres.PageSetup.SlideWidth=960
+$pres.PageSetup.SlideHeight=540
+$navy=0x301C06; $deep=0x482E0A; $green=0x5B7B08; $gold=0x4FB9E9; $white=0xFFFFFF; $pale=0xF7F9F6; $muted=0xB7A99E; $ink=0x382209
+function Rect($s,$x,$y,$w,$h,$fill,$radius=0){$sh=$s.Shapes.AddShape($(if($radius){5}else{1}),$x,$y,$w,$h);$sh.Fill.ForeColor.RGB=$fill;$sh.Line.Visible=0;return $sh}
+function Text($s,$txt,$x,$y,$w,$h,$size=18,$color=$ink,$bold=$false,$font='Manrope',$align=1){$sh=$s.Shapes.AddTextbox(1,$x,$y,$w,$h);$sh.TextFrame.TextRange.Text=$txt;$sh.TextFrame.TextRange.Font.Name=$font;$sh.TextFrame.TextRange.Font.Size=$size;$sh.TextFrame.TextRange.Font.Color.RGB=$color;$sh.TextFrame.TextRange.Font.Bold=[int]$bold;$sh.TextFrame.TextRange.ParagraphFormat.Alignment=$align;$sh.TextFrame.MarginLeft=0;$sh.TextFrame.MarginRight=0;$sh.TextFrame.MarginTop=0;$sh.TextFrame.MarginBottom=0;return $sh}
+function AddSlide($title,$kicker,$dark=$false){$s=$pres.Slides.Add($pres.Slides.Count+1,12);$bg=if($dark){$navy}else{$pale};Rect $s 0 0 960 540 $bg|Out-Null;Text $s $kicker 56 38 700 20 10 $(if($dark){$gold}else{$green}) $true|Out-Null;Text $s $title 56 65 850 68 32 $(if($dark){$white}else{$ink}) $true|Out-Null;Rect $s 56 132 70 3 $gold|Out-Null;return $s}
+function Card($s,$x,$y,$w,$h,$title,$body,$accent=$green,$dark=$false){$bg=if($dark){0x3C2B12}else{$white};$c=Rect $s $x $y $w $h $bg 1;$c.Line.Visible=-1;$c.Line.ForeColor.RGB=if($dark){0x60482A}else{0xE4DDD8};$c.Line.Transparency=.35;Rect $s $x $y 5 $h $accent|Out-Null;Text $s $title ($x+18) ($y+17) ($w-32) 30 15 $(if($dark){$white}else{$ink}) $true|Out-Null;Text $s $body ($x+18) ($y+52) ($w-32) ($h-62) 10 $(if($dark){0xC9BDB5}else{0x77675E}) $false|Out-Null}
+function Footer($s,$n){Text $s 'MVET × SETRAG  ·  PARTENARIAT TECHNOLOGIQUE' 56 512 500 12 8 $(0x8D8078) $true|Out-Null;Text $s ("{0:00}" -f $n) 875 510 30 14 9 $gold $true 'Manrope' 3|Out-Null}
+
+# 1 Hero
+$s=$pres.Slides.Add(1,12);$s.Shapes.AddPicture($hero,0,-1,0,0,960,540)|Out-Null;Rect $s 0 0 960 540 $navy|ForEach-Object{$_.Fill.Transparency=30};Rect $s 0 0 650 540 $navy|ForEach-Object{$_.Fill.Transparency=8};Text $s 'PROPOSITION STRATÉGIQUE · SETRAG × MVET' 58 54 520 20 10 $gold $true|Out-Null;Text $s "Partenariat technologique`n& modèle économique" 58 91 610 125 38 $white $true|Out-Null;Text $s 'Une trajectoire claire : 6 mois de déploiement, puis 3 ans d’accompagnement digital.' 58 226 545 50 16 0xD8D0CA|Out-Null
+$badges=@(@('6 MOIS','Déploiement initial'),@('10 000 000 FCFA','Investissement initial'),@('36 MOIS','Accompagnement long terme'));for($i=0;$i -lt 3;$i++){Rect $s (58+$i*181) 300 168 70 0x4A3820 1|ForEach-Object{$_.Fill.Transparency=16;$_.Line.Visible=-1;$_.Line.ForeColor.RGB=0x6A5740};Text $s $badges[$i][0] (72+$i*181) 315 145 20 14 $white $true|Out-Null;Text $s $badges[$i][1] (72+$i*181) 342 145 15 8 0xB6AAA1|Out-Null};Text $s 'Concevoir · Développer · Tester · Former · Déployer · Accompagner' 58 413 580 18 11 $gold $true|Out-Null;Footer $s 1
+
+# 2 Vision
+$s=AddSlide 'Pourquoi cette approche est la bonne pour SETRAG' '01 · LA VISION';$items=@(@('Traçabilité complète','Chaque opération laisse une preuve exploitable.'),@('Réduction des écarts','Moins de doubles saisies et d’incohérences.'),@('Expérience voyageur','Un achat simple et un billet plus clair.'),@('Agents mieux équipés','Des parcours adaptés au terrain.'),@('Pilotage par la donnée','Des indicateurs lisibles pour décider.'),@('Socle évolutif','Une base pour les futurs services numériques.'));for($i=0;$i -lt 6;$i++){Card $s (56+($i%3)*285) (160+[math]::Floor($i/3)*145) 265 125 $items[$i][0] $items[$i][1]};Footer $s 2
+
+# 3 budget overview
+$s=AddSlide 'Comment les 10 000 000 FCFA sont utilisés' '02 · INVESTISSEMENT INITIAL' $true;Text $s '10 000 000' 58 164 330 60 40 $white $true|Out-Null;Text $s 'FCFA · DÉPLOIEMENT SUR 6 MOIS' 61 225 300 20 10 $gold $true|Out-Null;Text $s '9 postes précis. Aucun montant caché. Un total strictement égal à dix millions FCFA.' 59 268 300 62 13 0xC5B9B1|Out-Null;$sum=0;$vals=@(12,32,11,8,7,6,10,7,7);$cols=@(0x4FB9E9,0x5B7B08,0x8FBD4F,0x609AAF,0xB89A52,0xC7BEB6,0x3F9D78,0x78A49B,0xA28D76);for($i=0;$i -lt 9;$i++){Rect $s 405 (154+$i*34) ($vals[$i]*13) 20 $cols[$i] 1|Out-Null;Text $s ($vals[$i].ToString()+' %') 820 (156+$i*34) 50 18 10 $white $true|Out-Null};Text $s '100 % affecté à la réalisation, aux tests et à la mise en service.' 58 408 760 30 15 $gold $true|Out-Null;Footer $s 3
+
+# 4 budget detail
+$s=AddSlide 'Répartition budgétaire détaillée' '03 · TRANSPARENCE DU BUDGET';$bud=@(@('Cadrage, étude et conception','1 200 000'),@('Interfaces et modules métiers','3 200 000'),@('Backend, base de données, API et intégrations','1 100 000'),@('UX/UI premium et navigation','800 000'),@('Reporting, tableaux de bord et traçabilité','700 000'),@('Cybersécurité, accès et continuité','600 000'),@('Tests, pilote et matériel de test','1 000 000'),@('Formation, déploiement et démarrage','700 000'),@('Gestion de projet et coordination','700 000'));for($i=0;$i -lt 9;$i++){$x=56+($i%3)*286;$y=152+[math]::Floor($i/3)*102;Card $s $x $y 266 88 $bud[$i][0] ($bud[$i][1]+' FCFA') $(if($i -eq 1){$gold}else{$green})};Text $s 'TOTAL : 10 000 000 FCFA' 616 468 280 25 16 $green $true 'Manrope' 3|Out-Null;Footer $s 4
+
+# 5 scope
+$s=AddSlide 'Ce que MVET livre pendant les 6 mois' '04 · PÉRIMÈTRE CLAIR';Card $s 56 155 365 305 'INCLUS DANS LES 10 M FCFA' "Cadrage et architecture`nDéveloppement de la solution`nBack-office et interfaces métier`nVente, contrôle et données centralisées`nReporting et tableaux de bord`nSécurité et gouvernance des accès`nTests et pilote terrain`nFormation, déploiement et support de démarrage" $green;Card $s 441 155 220 305 'À DIMENSIONNER' "Parc de production`nTerminaux à grande échelle`nConnectivité opérateurs`nHébergement final selon SLA et volumes" $gold;Card $s 681 155 223 305 'FUTURS PROJETS' "Nouveaux modules majeurs`nGrands projets hors périmètre`nDéploiements additionnels`nIntégrations lourdes nouvelles" 0x987255;Footer $s 5
+
+# 6 material
+$s=AddSlide 'Tester avant de généraliser' '05 · MATÉRIEL & PILOTE';Card $s 56 160 390 260 'MATÉRIEL DE TEST · INCLUS' "Tablettes et terminaux de test`nTPE ou environnement TPE`nLecteurs QR / NFC`nImprimante et consommables de recette`nAccessoires et connectivité d’essai" $green;Card $s 466 160 438 260 'PARC DE PRODUCTION · À CHARGE SETRAG' "Les tablettes, TPE, scanners et terminaux destinés au déploiement réel sont dimensionnés séparément après le pilote. SETRAG investit ainsi sur la base de besoins validés, et non sur des hypothèses." $gold;Text $s 'Développement  →  Tests internes  →  Pilote terrain  →  Validation SETRAG  →  Dimensionnement' 84 450 790 25 13 $green $true 'Manrope' 2|Out-Null;Footer $s 6
+
+# 7 planning
+$s=AddSlide 'Un déploiement maîtrisé sur 6 mois' '06 · FEUILLE DE ROUTE' $true;$months=@(@('M1','Cadrage & architecture'),@('M2','Socle technique'),@('M3','Vente & opérations'),@('M4','Finance & intégrations'),@('M5','Sécurité & pilote'),@('M6','Recette & mise en service'));for($i=0;$i -lt 6;$i++){Card $s (45+$i*150) 175 135 205 $months[$i][0] $months[$i][1] $(if($i -eq 5){$gold}else{$green}) $true};Text $s 'CONCEPTION  →  DÉVELOPPEMENT  →  TESTS  →  PILOTE  →  VALIDATION  →  MISE EN SERVICE' 70 430 820 30 12 $gold $true 'Manrope' 2|Out-Null;Footer $s 7
+
+# 8 partnership
+$s=AddSlide 'Après la mise en service : un partenariat sur 36 mois' '07 · À PARTIR DU 7e MOIS';Rect $s 56 155 848 138 $green 1|Out-Null;Text $s '3 000 000' 86 182 310 48 36 $white $true|Out-Null;Text $s 'FCFA / MOIS' 90 232 180 20 11 $gold $true|Out-Null;Text $s 'Montant de référence, ajustable selon le périmètre retenu par SETRAG.' 410 189 430 45 15 $white $true|Out-Null;Text $s 'M1–M6  RÉALISATION     →     M7  DÉMARRAGE DU SERVICE     →     M7–M42  36 MOIS' 410 247 420 20 10 0xD3E2DD $true|Out-Null;$svc=@('Maintenance corrective','Évolutions légères','Support utilisateurs','Supervision','Nouveaux rapports & KPI','Sécurité & sauvegardes','Accompagnement équipes','Digitalisation continue');for($i=0;$i -lt 8;$i++){Rect $s (56+($i%4)*212) (324+[math]::Floor($i/4)*64) 198 50 $white 1|Out-Null;Text $s ('✓  '+$svc[$i]) (70+($i%4)*212) (341+[math]::Floor($i/4)*64) 172 20 10 $ink $true|Out-Null};Footer $s 8
+
+# 9 value
+$s=AddSlide 'Pourquoi l’accompagnement mensuel crée plus de valeur' '08 · VALEUR DURABLE';Card $s 56 165 266 275 'POUR SETRAG' "Continuité et stabilité`nVisibilité sur les évolutions`nMaîtrise progressive du système`nPartenaire technologique dédié" $green;Card $s 347 165 266 275 'POUR LES UTILISATEURS' "Support accessible`nCorrections rapides`nMeilleure adoption`nOutils continuellement simplifiés" $gold;Card $s 638 165 266 275 'POUR LA DIRECTION' "KPI adaptés`nLecture claire des recettes`nDécisions mieux documentées`nTrajectoire digitale maîtrisée" 0x987255;Footer $s 9
+
+# 10 impact
+$s=AddSlide 'La valeur créée pour toute l’entreprise' '09 · IMPACT CONCRET';$imp=@(@('Voyageurs','Achat simple et meilleur service'),@('Agents','Moins de ressaisie, outils fiables'),@('Contrôle','Traçabilité et moins de fraude'),@('Finance','Rapprochement et recettes lisibles'),@('Direction','KPI, visibilité et alertes'),@('DSI / exploitation','Sécurité, monitoring, évolutivité'));for($i=0;$i -lt 6;$i++){Card $s (56+($i%3)*285) (150+[math]::Floor($i/3)*130) 265 112 $imp[$i][0] $imp[$i][1]};Text $s '100 % TRAÇABLE    ·    1 PLATEFORME CENTRALE    ·    1 PARTENAIRE TECHNOLOGIQUE' 80 442 800 30 13 $green $true 'Manrope' 2|Out-Null;Footer $s 10
+
+# 11 recommendation
+$s=AddSlide 'Notre recommandation' '10 · TROIS OPTIONS';Card $s 56 165 266 275 '1 · DÉPLOIEMENT SEUL' "10 000 000 FCFA`n`nSolution livrée en 6 mois avec mise en service initiale. Continuité à organiser ensuite." 0x987255;Card $s 347 165 266 275 '2 · DÉPLOIEMENT + SUPPORT' "10 M + ABONNEMENT`n`nSupport, maintenance et amélioration continue après la mise en production." $green;Rect $s 638 152 266 301 $navy 1|Out-Null;Rect $s 678 140 185 25 $gold 1|Out-Null;Text $s 'RECOMMANDÉ PAR MVET' 690 147 160 12 8 $ink $true 'Manrope' 2|Out-Null;Text $s '3 · PARTENARIAT DE DIGITALISATION' 658 183 226 40 15 $white $true|Out-Null;Text $s "10 M + 36 MOIS`n`nMVET devient le partenaire technologique durable de SETRAG : support, conseil et amélioration continue pilotée." 658 243 220 145 13 0xC8D2D0|Out-Null;Footer $s 11
+
+# 12 final
+$s=$pres.Slides.Add(12,12);Rect $s 0 0 960 540 $navy|Out-Null;Text $s 'UNE PROPOSITION RÉALISTE AUJOURD’HUI, DURABLE DEMAIN' 58 48 780 20 10 $gold $true|Out-Null;Text $s "Construire avec SETRAG,`nprogresser avec SETRAG." 58 90 620 92 34 $white $true|Out-Null;Text $s 'Les 10 millions financent une réalisation sérieuse. Le contrat mensuel sécurise l’exploitation, l’amélioration et la continuité.' 58 195 720 45 15 0xC4B9B2|Out-Null;$nums=@(@('10 000 000','FCFA initial'),@('6','mois'),@('3 000 000','FCFA / mois dès M7'),@('36','mois d’accompagnement'));for($i=0;$i -lt 4;$i++){Rect $s (58+$i*213) 290 195 115 0x3C2B12 1|ForEach-Object{$_.Line.Visible=-1;$_.Line.ForeColor.RGB=0x5C4630};Text $s $nums[$i][0] (72+$i*213) 316 165 35 22 $white $true 'Manrope' 2|Out-Null;Text $s $nums[$i][1] (72+$i*213) 359 165 18 9 $gold $true 'Manrope' 2|Out-Null};Text $s 'MVET × SETRAG  ·  UNE TRAJECTOIRE DE DIGITALISATION DURABLE' 58 463 840 28 13 $gold $true 'Manrope' 2|Out-Null;Footer $s 12
+
+$pres.SaveAs($out,24)
+$count=$pres.Slides.Count
+$pres.Close();$ppt.Quit()
+[System.Runtime.InteropServices.Marshal]::ReleaseComObject($pres)|Out-Null
+[System.Runtime.InteropServices.Marshal]::ReleaseComObject($ppt)|Out-Null
+Write-Output ('OUTPUT='+$out)
+Write-Output ('SLIDES='+$count)

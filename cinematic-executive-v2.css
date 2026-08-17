@@ -1,0 +1,18 @@
+.rail-film{background:#f4f1e9;color:#102a2a;isolation:isolate}
+.rail-film:before{content:"";position:absolute;inset:-3%;z-index:-2;background:url("public/images/setrag-cinematic-hero-v2.png") center center/cover no-repeat;animation:executiveCamera 6.4s cubic-bezier(.18,.72,.24,1) both;filter:saturate(.82) contrast(1.02)}
+.rail-film:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#f6f3ec 0%,#f6f3ecef 23%,#f6f3ec8c 43%,transparent 66%),linear-gradient(0deg,#102b291f,transparent 36%);opacity:1;animation:none}
+.film-sky,.film-grid,.film-orbit{display:none!important}
+.film-copy{left:7.2%;top:47%;max-width:570px;color:#102a2a;animation:executiveCopy 1.05s .55s cubic-bezier(.2,.75,.2,1) both}
+.film-copy:before{content:"S";display:grid;place-items:center;width:54px;height:54px;margin-bottom:32px;border:2px solid #0a684a;border-radius:17px 5px 17px 5px;color:#0a684a;font-size:25px;font-weight:900;box-shadow:0 10px 28px #0a684a18}
+.film-copy>span{display:flex;align-items:center;gap:11px;color:#0a684a;font-size:9px;font-weight:800;letter-spacing:.25em}.film-copy>span:before{content:"";width:34px;height:2px;background:#d4a51f}
+.film-copy h2{max-width:560px;margin:17px 0 14px;color:#102a2a;font-family:Manrope,Segoe UI,sans-serif;font-size:clamp(44px,5vw,78px);font-weight:650;line-height:.97;letter-spacing:-.062em;text-shadow:none}
+.film-copy p{max-width:440px;color:#526867;font-size:13px;line-height:1.7;letter-spacing:.02em}
+.film-copy p:after{content:"";display:block;width:116px;height:5px;margin-top:28px;background:linear-gradient(90deg,var(--gabon-green) 0 33%,var(--gabon-yellow) 33% 66%,var(--gabon-blue) 66%);border-radius:8px}
+.film-progress{left:7.2%;right:7.2%;bottom:6.5%;height:1px;background:#183d3630}.film-progress i{height:2px;background:#0a684a;box-shadow:none;animation:executiveLoad 5.3s cubic-bezier(.2,.7,.2,1) forwards}.film-progress span{margin-top:12px;color:#637a77;font-size:7px;font-weight:700;letter-spacing:.2em}
+.film-skip{right:3.2%;top:4%;border:1px solid #143e3630;background:#f9f7f1c9;color:#31524d;box-shadow:0 8px 25px #153b3020;backdrop-filter:blur(12px);font-weight:700;transition:.25s}.film-skip:hover{background:#fff;transform:translateY(-2px)}
+.film-exit{animation:executiveExit .8s cubic-bezier(.4,0,.6,1) forwards}
+@keyframes executiveCamera{from{transform:scale(1.075) translate3d(1.2%,0,0);filter:saturate(.65) contrast(.98) blur(1.5px)}to{transform:scale(1.015) translate3d(-.4%,0,0);filter:saturate(.86) contrast(1.03)}}
+@keyframes executiveCopy{from{opacity:0;transform:translateY(-44%);clip-path:inset(0 100% 0 0)}to{opacity:1;transform:translateY(-50%);clip-path:inset(0)}}
+@keyframes executiveLoad{from{width:0}to{width:100%}}
+@keyframes executiveExit{to{opacity:0;filter:blur(7px);transform:scale(1.015)}}
+@media(max-width:850px){.rail-film:before{background-position:66% center}.rail-film:after{background:linear-gradient(90deg,#f6f3ecf5 0,#f6f3ecb8 58%,transparent)}.film-copy{top:50%;left:7%;max-width:82%}.film-copy h2{font-size:42px}.film-copy p{font-size:11px}}

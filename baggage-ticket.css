@@ -1,0 +1,5 @@
+.ocx-owner{display:flex;align-items:center;gap:13px;margin:20px 28px 0;padding:14px 16px;border:1px solid #bfe2d2;border-radius:13px;background:linear-gradient(100deg,#edf9f3,#f8fbfc)}
+.ocx-owner-avatar{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#08764a;color:#fff;font-size:17px;font-weight:900}
+.ocx-owner small{color:#6c8293;font-size:8px;font-weight:900}.ocx-owner h3{margin:3px 0;color:#092f4b}.ocx-owner p{margin:0;color:#526d80;font-size:10px}.ocx-owner .ocx-status{margin-left:auto}
+.ocx-bag-ticket .ocx-ticket-top{background:linear-gradient(120deg,#07304f,#0b8260)}.ocx-bag-ticket .ocx-ticket-foot>div{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:720px){.ocx-owner{margin:14px;align-items:flex-start}.ocx-owner .ocx-status{margin-left:0}.ocx-bag-ticket .ocx-ticket-foot{display:grid}}

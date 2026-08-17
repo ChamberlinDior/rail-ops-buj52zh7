@@ -1,0 +1,9 @@
+﻿(function(){
+ const previousBind=bind;
+ bind=function(){
+  previousBind();
+  document.querySelectorAll('[data-context]').forEach(el=>el.onchange=()=>toast(`${el.previousElementSibling?.textContent||'Contexte'} mis à jour · données recalculées`));
+  document.querySelectorAll('.seat').forEach(s=>s.onclick=()=>{const occupied=!!s.dataset.passenger;const panel=document.createElement('div');panel.className='seat-modal-backdrop';panel.innerHTML=`<div class="seat-modal"><button class="icon-btn seat-close">×</button><span class="subtle">FICHE DE PLACE</span><h2>Place ${s.dataset.seat} · V2 Confort</h2><div class="seat-modal-grid"><div><small>Statut</small><b>${occupied?'Vendue / occupée':'Disponible'}</b></div><div><small>Segment</small><b>Ndjolé → Booué</b></div><div><small>Passager</small><b>${s.dataset.passenger||'Aucun passager affecté'}</b></div><div><small>Billet</small><b>${occupied?'SET-260802-'+String(s.dataset.seat).padStart(4,'0'):'—'}</b></div><div><small>Bagages</small><b>${occupied?'2 · 18 kg':'—'}</b></div><div><small>Contrôle</small><b>${occupied?'À contrôler':'Non applicable'}</b></div></div><p class="subtle">La disponibilité est recalculée pour le segment sélectionné afin d’éviter toute double attribution.</p><button class="btn primary seat-close">Fermer</button></div>`;document.body.append(panel);panel.querySelectorAll('.seat-close').forEach(x=>x.onclick=()=>panel.remove())});
+  document.querySelectorAll('[data-action]').forEach(el=>{if(!el.dataset.boundFix){el.dataset.boundFix='1';el.addEventListener('click',()=>{if(el.dataset.action==='export-seats'||el.dataset.action==='car-report'||el.dataset.action==='seat-manifest')toast('Document généré · prêt à imprimer');if(el.dataset.action==='import-plan')toast('Importateur de plan ouvert · modèle Express validé');})}});
+ };
+})();

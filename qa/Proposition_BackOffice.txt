@@ -1,0 +1,257 @@
+﻿SYSTÃˆME CENTRAL DE BILLETTIQUE
+PROPOSITION TECHNIQUE ET COMMERCIALE
+Back Office de gestion, contrÃ´le, comptabilisation et pilotage de lâ€™activitÃ© voyageurs
+MONTANT FORFAITAIRE
+10 000 000 FCFA HT
+DÃ‰LAI DE RÃ‰ALISATION
+6 mois
+PROPOSITION CONFIDENTIELLE - DESTINÃ‰E Ã€ LA SETRAG
+Libreville, Gabon | Version 1.0 | AoÃ»t 2026
+0. Lettre de soumission
+Madame, Monsieur,
+En rÃ©ponse au cahier des charges relatif Ã  la mise en place du systÃ¨me billettique SETRAG, nous avons lâ€™honneur de soumettre une proposition complÃ¨te pour la conception, le dÃ©veloppement, lâ€™intÃ©gration, la sÃ©curisation et la mise en exploitation dâ€™un Back Office centralisÃ© couvrant lâ€™ensemble de lâ€™activitÃ© voyageurs.
+Notre approche repose sur une solution sur mesure, modulaire, traÃ§able, interopÃ©rable et adaptÃ©e aux rÃ©alitÃ©s opÃ©rationnelles du rÃ©seau ferroviaire gabonais, notamment la dispersion gÃ©ographique des gares, lâ€™instabilitÃ© de la connectivitÃ© et les exigences Ã©levÃ©es de contrÃ´le financier et de cybersÃ©curitÃ©.
+Le montant forfaitaire proposÃ© pour le pÃ©rimÃ¨tre dÃ©crit dans le prÃ©sent document est fixÃ© Ã  dix millions (10 000 000) de francs CFA hors taxes, pour un dÃ©lai de rÃ©alisation de six mois Ã  compter de la date de dÃ©marrage effectif.
+Engagement de confidentialitÃ©
+Les informations fonctionnelles, financiÃ¨res, voyageurs et opÃ©rationnelles sont traitÃ©es exclusivement dans le cadre du projet. Aucun composant dâ€™analyse nâ€™externalisera les donnÃ©es de SETRAG vers un service public ou tiers non autorisÃ©.
+1. ComprÃ©hension du besoin
+La SETRAG souhaite remplacer les limites fonctionnelles et sÃ©curitaires de lâ€™environnement actuel par un systÃ¨me central capable de gÃ©rer, suivre, analyser, contrÃ´ler, facturer et comptabiliser les prestations voyageurs, tout en supprimant les risques de doublons, de rÃ©impressions incontrÃ´lÃ©es, dâ€™annulations non tracÃ©es et dâ€™Ã©carts entre ventes et encaissements.
+Centraliser les ventes et rÃ©fÃ©rentiels sur lâ€™ensemble du rÃ©seau ferroviaire.
+GÃ©rer les billets voyageurs, bagages, colis express, TAA, transport funÃ©raire et messagerie voyageurs.
+Assurer une identification unique de chaque opÃ©ration et une piste dâ€™audit complÃ¨te.
+GÃ©rer les trains, voitures, classes, places, quotas, horaires et tarifs.
+Rapprocher les ventes, rÃ¨glements, annulations, remboursements et caisses.
+Produire les journaux comptables destinÃ©s Ã  Sage X3 V12.
+Exposer des API sÃ©curisÃ©es au Front Office client et Ã  lâ€™application contrÃ´leur.
+Garantir la continuitÃ© de service, y compris en mode dÃ©gradÃ©.
+2. PÃ©rimÃ¨tre fonctionnel proposÃ©
+Domaine
+Fonctions couvertes
+RÃ©fÃ©rentiels
+Gares, agences, points de vente, utilisateurs, profils, produits, taxes, moyens de paiement, classes, trains, voitures, places, modÃ¨les dâ€™impression et dâ€™email.
+Vente et taxation
+CrÃ©ation des opÃ©rations, calcul tarifaire, encaissement, Ã©mission, rÃ©impression contrÃ´lÃ©e, annulation, remboursement, vente manuelle rÃ©gularisÃ©e.
+CapacitÃ© ferroviaire
+Composition des trains, gestion des voitures, plans de places, places debout, blocage/dÃ©blocage, quotas agences et disponibilitÃ© par segment de trajet.
+Tarification
+Tarifs gÃ©nÃ©raux et rÃ©duits, enfants, groupes, militaires, abonnements, promotions, week-end, Ã©tudiant, troisiÃ¨me Ã¢ge, rÃ¨gles dâ€™arrondi et pÃ©riodes de validitÃ©.
+ContrÃ´le financier
+Ã‰tats de caisse, rapprochement ventes/rÃ¨glements, remboursements, annulations, totaux par point de vente, vendeur, produit et mode de paiement.
+ComptabilitÃ©
+Production du journal V65 et dÃ©versement vers Sage X3 V12 selon les mappings validÃ©s.
+Pilotage
+KPI, tableaux de bord, exports, recherche voyageurs, rapports opÃ©rationnels et directionnels.
+InteropÃ©rabilitÃ©
+API REST sÃ©curisÃ©es, imports/exports JSON, XML, CSV, connecteurs paiement, Sage X3, Active Directory, SIEM et COLIRAIL.
+3. Gestion dÃ©taillÃ©e des prestations
+3.1 Billets voyageurs
+Billet papier ou Ã©lectronique avec identifiant unique, QR code, gare de dÃ©part et dâ€™arrivÃ©e, train, dates, classe, tarif, identitÃ© du titulaire, contacts, montants HT/TVA/CSS/TTC, rÃ©duction, rÃ©servation, appareil Ã©metteur et Ã©tat de lâ€™opÃ©ration.
+3.2 Bagages
+Ã‰tiquette unique liÃ©e au billet voyageur, poids de 0 Ã  30 kg, trajet, expÃ©diteur, destinataire, tarif, montants, train, dates et dispositif Ã©metteur.
+3.3 Colis express
+ExpÃ©dition autonome avec numÃ©ro unique, une ou plusieurs vignettes, description, poids, expÃ©diteur, destinataire, contacts, montant et interface de suivi avec COLIRAIL.
+3.4 Transport Auto AccompagnÃ©
+Prestation liÃ©e Ã  un billet voyageur, intÃ©grant la rÃ©fÃ©rence du billet, le vÃ©hicule, le tonnage, le trajet, le tarif, les dates, le train et les Ã©lÃ©ments financiers.
+3.5 Transport funÃ©raire
+Prestation autonome avec numÃ©ro dâ€™expÃ©dition, trajet, expÃ©diteur, tonnage, train, dates, tarification et montants perÃ§us/Ã  payer.
+3.6 Messagerie voyageurs
+Gestion paramÃ©trable des opÃ©rations de messagerie associÃ©es au rÃ©gime des trains voyageurs, selon les rÃ¨gles mÃ©tier validÃ©es au cadrage.
+4. Gestion des trains, places et segments
+CrÃ©ation et modification des trains EXPRESS, OMNIBUS et SPÃ‰CIAL.
+Composition de chaque train par voitures et classes : 1re, 2e et VIP.
+Importation du plan de places par rangÃ©es et colonnes.
+Gestion des places assises, places debout, blocages et dÃ©blocages.
+TraÃ§abilitÃ© de toute action sur une place : agent, date, heure, train, voiture, classe et motif.
+DisponibilitÃ© calculÃ©e par segment : une place vendue Owendo-BoouÃ© peut Ãªtre revendue sur un segment ultÃ©rieur si elle est libre.
+PrÃ©vention transactionnelle des doubles ventes et rÃ©servation temporaire pendant le paiement.
+Gestion des quotas attribuÃ©s aux gares et agences accrÃ©ditÃ©es.
+5. Moteur tarifaire et Yield Management
+Le moteur tarifaire sera entiÃ¨rement paramÃ©trable afin dâ€™Ã©viter toute dÃ©pendance Ã  des rÃ¨gles codÃ©es en dur.
+Composant
+Couverture
+Tarif de base
+Calcul selon relation, distance, type de train et classe.
+RÃ©ductions
+Enfants 4-11 ans, groupes, militaires, abonnements, week-end, Ã©tudiant, troisiÃ¨me Ã¢ge et promotions.
+RÃ¨gles dâ€™arrondi
+10 FCFA pour 0-99 km, 50 FCFA pour 100-299 km, 100 FCFA Ã  partir de 300 km.
+Bagages et colis
+Frais dâ€™enregistrement, franchise, excÃ©dents, zones kilomÃ©triques et paliers de poids.
+Cycle de vie
+Brouillon, validation, rejet, activation, expiration, import/export de masse.
+Yield Management
+Classes tarifaires, quotas de places, anticipation de la demande, taux de remplissage, pÃ©riode et proximitÃ© du dÃ©part.
+6. Module analytique intelligent local
+Architecture locale et souveraine
+Le moteur dâ€™analyse sera crÃ©Ã© et exÃ©cutÃ© dans lâ€™environnement contrÃ´lÃ© de SETRAG. Il sera connectÃ© Ã  la base de donnÃ©es selon des droits strictement dÃ©finis, sans envoi des donnÃ©es voyageurs, commerciales ou financiÃ¨res vers une plateforme dâ€™intelligence artificielle publique. Il produira exclusivement des analyses, alertes et rapports Ã  partir des donnÃ©es autorisÃ©es.
+SynthÃ¨ses automatiques des ventes, recettes, taux de remplissage et Ã©carts de caisse.
+DÃ©tection dâ€™anomalies : doublons, rÃ©impressions rÃ©pÃ©tÃ©es, remboursements atypiques, annulations inhabituelles et comportements hors profil.
+PrÃ©vision de la demande par relation, pÃ©riode, train et classe.
+Recommandations de quotas et de positionnement tarifaire soumises Ã  validation humaine.
+Rapports pÃ©riodiques pour les responsables KPI, la Direction FinanciÃ¨re, MOBIRAIL et la DSI.
+Journalisation des consultations et limitation des donnÃ©es visibles selon le rÃ´le utilisateur.
+Absence de dÃ©cision automatique irrÃ©versible : les actions sensibles restent validÃ©es par un utilisateur habilitÃ©.
+7. FrontiÃ¨res dâ€™intÃ©gration et API
+Interface
+Engagement
+Front Office client
+API de consultation des horaires, tarifs, places, crÃ©ation de rÃ©servation, confirmation de paiement et Ã©mission de billet.
+Application contrÃ´leur
+API de vÃ©rification de validitÃ©, synchronisation des listes, rÃ©gularisation et ventes Ã  bord.
+Paiements
+Connecteurs Airtel Money, Moov Money, Click&Pay, Visa et Mastercard, sous rÃ©serve de mise Ã  disposition des contrats, clÃ©s et environnements de test.
+Sage X3 V12
+Journal comptable V65, mapping des comptes et axes analytiques, export ou API selon capacitÃ©s disponibles.
+Active Directory
+SSO SAML2/OIDC, MFA et gestion des rÃ´les par groupes AD.
+COLIRAIL
+Ã‰change des rÃ©fÃ©rences et statuts nÃ©cessaires au suivi des colis express.
+SIEM/Monitoring
+Export centralisÃ© des journaux et alertes vers les outils de supervision disponibles.
+8. CybersÃ©curitÃ© et protection des donnÃ©es
+SSO Active Directory avec SAML2 ou OIDC et MFA obligatoire.
+Gestion RBAC fondÃ©e sur le moindre privilÃ¨ge et dÃ©provisionnement automatique.
+Chiffrement TLS 1.2+ en transit et AES-256 au repos.
+SÃ©paration stricte des environnements dÃ©veloppement, test, prÃ©production et production.
+Protection contre les risques OWASP Top 10 et gestion rÃ©guliÃ¨re des correctifs.
+Journalisation complÃ¨te, horodatÃ©e et centralisable dans le SIEM.
+AccÃ¨s administrateur via un dispositif sÃ©curisÃ© conforme aux rÃ¨gles SETRAG/ERAMET.
+Sauvegardes rÃ©guliÃ¨res, restauration testÃ©e, PRA et procÃ©dures de reprise documentÃ©es.
+Anonymisation des donnÃ©es utilisÃ©es en test et rÃ¨gles de conservation paramÃ©trables.
+Tests de vulnÃ©rabilitÃ© et accompagnement Ã  la rÃ©ponse aux questionnaires Cyber, PRA et SaaS.
+9. Architecture technique cible
+Couche
+Principes
+PrÃ©sentation
+Application web responsive, adaptÃ©e aux ordinateurs, tablettes et smartphones professionnels.
+Services mÃ©tier
+Architecture modulaire exposant des API sÃ©curisÃ©es et documentÃ©es.
+DonnÃ©es
+Base relationnelle centralisÃ©e, contraintes dâ€™intÃ©gritÃ©, historique et audit immuable des Ã©vÃ©nements sensibles.
+IntÃ©gration
+Passerelle API, gestion des secrets, files de traitement et mÃ©canismes de reprise.
+DisponibilitÃ©
+Architecture SaaS, redondance, sauvegardes, supervision et montÃ©e en charge.
+Mode dÃ©gradÃ©
+RÃ©gularisation des billets manuels prÃ©imprimÃ©s sans rÃ©Ã©mission dâ€™un second titre.
+ObservabilitÃ©
+Suivi des bases, portails, API, erreurs, performances et seuils dâ€™alerte par email.
+10. MÃ©thodologie et planning de rÃ©alisation
+PÃ©riode
+Phase
+Principaux rÃ©sultats
+Mois 1
+Cadrage et conception
+Ã‰tude de lâ€™existant, ateliers mÃ©tiers, architecture, sÃ©curitÃ©, UX, backlog, plan de migration et dossier de spÃ©cifications.
+Mois 2
+Socle et rÃ©fÃ©rentiels
+SSO/RBAC, rÃ©fÃ©rentiels, gares, utilisateurs, trains, voitures, places, horaires et base tarifaire.
+Mois 3
+Vente et prestations
+Billets, bagages, colis, TAA, transport funÃ©raire, impression, QR code, annulation et remboursement.
+Mois 4
+Finance et intÃ©grations
+Caisses, journaux, Sage X3, paiements, API Front Office/contrÃ´leur, COLIRAIL et monitoring.
+Mois 5
+Pilotage et sÃ©curitÃ©
+KPI, reporting, module analytique local, tests de charge, sÃ©curitÃ©, PRA et prÃ©production.
+Mois 6
+Recette et dÃ©ploiement
+UAT, corrections, formation, documentation, mise en production et accompagnement initial.
+11. Livrables
+Ã‰tude de lâ€™existant et rapport de cadrage.
+SpÃ©cifications fonctionnelles et techniques dÃ©taillÃ©es.
+Dossier dâ€™architecture logicielle et dâ€™intÃ©gration.
+Back Office web et services API dÃ©ployÃ©s.
+Documentation API et jeux de tests.
+Plan de tests, rapports de tests et procÃ¨s-verbaux de recette.
+Guide utilisateur, manuel technique et procÃ©dures dâ€™exploitation.
+Documentation de sÃ©curitÃ©, sauvegarde, PRA et supervision.
+ProcÃ¨s-verbaux de livraison, mise en production et transfert de compÃ©tences.
+Code source et composants spÃ©cifiques selon les conditions contractuelles arrÃªtÃ©es entre les parties.
+12. Formation, support et maintenance
+Volet
+Proposition
+Formation fonctionnelle
+Sessions pour vendeurs, responsables de points de vente, contrÃ´leurs de recettes, responsables KPI et administrateurs fonctionnels.
+Formation technique
+Administration, supervision, diagnostic, sauvegarde, restauration et procÃ©dures de premier niveau.
+Assistance terrain
+Organisation conjointe des sessions pour les agents situÃ©s dans les gares et sites Ã©loignÃ©s.
+Garantie corrective
+Correction des anomalies imputables au dÃ©veloppement pendant les six premiers mois suivant la mise en production.
+Support
+Canal de ticketing, qualification des incidents et niveaux de prioritÃ© dÃ©finis au dÃ©marrage.
+13. Proposition financiÃ¨re
+Lot
+Montant HT
+Cadrage, conception et architecture
+1 200 000 FCFA
+DÃ©veloppement fonctionnel Back Office
+4 300 000 FCFA
+API et intÃ©grations
+1 400 000 FCFA
+CybersÃ©curitÃ©, monitoring et PRA
+900 000 FCFA
+Reporting et module analytique local
+900 000 FCFA
+Tests, documentation, formation et dÃ©ploiement
+1 300 000 FCFA
+TOTAL FORFAITAIRE
+10 000 000 FCFA HT
+13.1 Ã‰chÃ©ancier proposÃ©
+Ã‰chÃ©ance
+Pourcentage
+Montant
+Ã€ la commande et au dÃ©marrage
+30 %
+3 000 000 FCFA
+Validation des spÃ©cifications et de lâ€™architecture
+20 %
+2 000 000 FCFA
+Livraison de la version de prÃ©production
+30 %
+3 000 000 FCFA
+Recette finale et mise en production
+20 %
+2 000 000 FCFA
+14. HypothÃ¨ses, exclusions et options
+Principe commercial
+Le forfait couvre le dÃ©veloppement logiciel et les prestations dÃ©crites. Les achats de matÃ©riels, licences tierces, frais opÃ©rateurs et travaux dâ€™infrastructure sont exclus, sauf mention Ã©crite contraire.
+Ã‰lÃ©ment
+Traitement commercial
+TPE de paiement
+Optionnel. Fourniture, licences, SIM, contrats acquÃ©reurs et maintenance matÃ©rielle Ã  chiffrer aprÃ¨s choix des Ã©quipements.
+Cartes RFID/NFC
+Optionnel. Achat des cartes, personnalisation, encodeurs et lecteurs non inclus dans le forfait.
+Terminaux contrÃ´leurs
+Optionnel. Smartphones professionnels ou tablettes durcies Ã  fournir par SETRAG ou Ã  acquÃ©rir sur devis.
+Imprimantes/Scanners
+Optionnel. Imprimantes billets, imprimantes thermiques, lecteurs QR et consommables sur devis.
+Bornes libre-service
+Optionnel, aprÃ¨s validation du modÃ¨le opÃ©rationnel et du pÃ©rimÃ¨tre matÃ©riel.
+Frais de transaction
+SupportÃ©s selon les contrats SETRAG avec les opÃ©rateurs de paiement et banques.
+HÃ©bergement SaaS
+Le dimensionnement et les frais rÃ©currents seront validÃ©s aprÃ¨s choix de lâ€™infrastructure, volumes, rÃ©tention et exigences de disponibilitÃ©.
+Migration historique
+Incluse uniquement pour les donnÃ©es disponibles, documentÃ©es et exploitables. Les reprises complexes feront lâ€™objet dâ€™un cadrage spÃ©cifique.
+15. RÃ©versibilitÃ© et propriÃ©tÃ© des donnÃ©es
+Restitution des donnÃ©es en formats ouverts CSV, JSON ou XML.
+Garantie dâ€™intÃ©gritÃ© et dâ€™exhaustivitÃ© dans la limite des donnÃ©es effectivement prÃ©sentes dans le systÃ¨me.
+Assistance Ã  la migration pendant une pÃ©riode contractuelle dâ€™au moins trois mois.
+Maintien de la confidentialitÃ© pendant le transfert.
+Suppression des copies aprÃ¨s confirmation de migration et remise dâ€™une attestation dâ€™effacement.
+Les donnÃ©es de SETRAG demeurent la propriÃ©tÃ© exclusive de SETRAG.
+Acceptation de la proposition
+La prÃ©sente proposition deviendra contractuelle aprÃ¨s validation Ã©crite, finalisation des hypothÃ¨ses de cadrage et signature des parties.
+Pour le prestataire
+Pour la SETRAG
+Nom : ______________________________
+Fonction : ___________________________
+Date : ______________________________
+Signature et cachet :
+Nom : ______________________________
+Fonction : ___________________________
+Date : ______________________________
+Signature et cachet :

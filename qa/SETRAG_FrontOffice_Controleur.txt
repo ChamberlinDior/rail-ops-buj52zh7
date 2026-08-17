@@ -1,0 +1,464 @@
+SETRAG                                                                                                         Document confidentiel -- destiné à la SETRAG
+
+SYSTÈME CENTRAL DE BILLETTIQUE
+
+PROTOTYPE & MAQUETTES FONCTIONNELLES
+
+Front Office & Contrôleur
+-- l'expérience voyageur
+
+Maquettes du site/app voyageur, du paiement, du billet électronique et de l'application Contrôleur embarquée.
+
+10 000 000 FCFA HT                             6 mois  13 écrans
+
+Libreville, Gabon -- Version 1.0 -- Août 2026                     Document Front Office & Contrôleur -- complément visuel de la proposition technique et commerciale
+                                                        FRONT OFFICE -- CLIENT                                                                          SETRAG -- Billettique
+                                                                                                                                                                     Page 2 / 17
+                                                        Écrans présentés dans cette partie :
+                                                                                                           Résultats
+                                                                       Recherche
+                                                                                                           Comparatif trains et tarifs
+                                                                          Gares, dates, voyageurs
+                                                                                                           Paiement
+                                                                       Sélection place
+                                                                                                           Mobile Money, cartes
+                                                                          Plan de places, options
+                                                                                                           Espace client
+                                                                       Billet électronique
+                                                                                                           Historique
+                                                                          QR code, PDF hors ligne
+                                                                                                                     6
+01                                                      10 000 000 FCFA                            6 mois
+                                                                                                                                 ÉCRANS
+Front Office Client                                     MONTANT HT (AVEC CONTRÔLEUR)               DÉLAI
+
+Recherche, réservation, paiement, billet électronique.
+
+                                                        SETRAG · Système Central de Billettique            Document confidentiel -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 01                                                                                                                                                SETRAG -- Billettique
+                                                                                                                                                                                               Page 3 / 17
+Recherche d'itinéraire
+                                                                                                                                                                          POINTS
+Point d'entrée du parcours d'achat en ligne, pensé pour les réseaux mobiles variables du Gabon.                                                                           FONCTIONNELS CLÉS
+
+           voyage.setrag.ga                                           Rechercher un trajet Mes réservations Aide                 Mon compte                                1 Sélection des gares de
+ SETRAG                                                                                                                                                                          départ et d'arrivée,
+                                                             Où souhaitez-vous voyager ?                                                                                         date, aller simple ou
+DÉPART                                                                                                                                                                           aller-retour.
+                                                        Réservez votre billet SETRAG en ligne, payez par Mobile Money ou carte.
+    Owendo                                                                                                                                                                 2 Nombre et profils de
+                                                                                                                    ARRIVÉE                                                      voyageurs (adultes,
+DATE                                                                                                                                                                             enfants, groupes).
+   12/08/2026                                                                                       Franceville
+        Aller simple  Aller-retour                                                                                                                                         3 Design responsive --
+                                                                                               VOYAGEURS                                                                         web et mobile.
+                          Airtel & Moov Money                                                 2 adultes
+                            Paiement mobile instantané                                                                                                        Rechercher
+                                                                                                Billet QR code
+                                                                                               Disponible hors connexion         Réservation en 5 min
+                                                                                                                                 Parcours nominal optimisé
+
+SETRAG · Système Central de Billettique                                                                                          Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 02                                                                                                                              SETRAG -- Billettique
+                                                                                                                                                                             Page 4 / 17
+Résultats de recherche
+                                                                                                                                                        POINTS
+Owendo  Franceville -- comparatif clair des trains disponibles et de leurs tarifs.                                                                      FONCTIONNELS CLÉS
+
+          voyage.setrag.ga/resultats                                                Rechercher un trajet Mes réservations Aide           Mon compte      1 Tri et filtres : prix,
+SETRAG                                                                                                                                                         durée, horaire, type de
+                                                                                                                                12 500 FCFA                    train, classe.
+
+                                                                                                                                 24 places disponibles   2 Affichage de la
+                                                                                                                                                               disponibilité en temps
+                                                                                                                                 8 900 FCFA                    réel par segment.
+
+                                                                                                                                 41 places disponibles   3 Comparaison rapide
+                                                                                                                                                               EXPRESS / OMNIBUS /
+                                                                                                                                15 800 FCFA                    SPÉCIAL.
+
+                   3 trains trouvés -- Owendo  Franceville -- 12/08/2026                                                          6 places disponibles
+
+FILTRES            EXPRESS 102           07:30  14:10
+Prix croissant
+Durée du trajet                          Durée 6h40 · 1re / 2e / VIP
+Horaire de départ
+Type de train      OMNIBUS 210           09:15  18:40
+Classe
+                                         Durée 9h25 · 1re / 2e / VIP
+
+                   SPÉCIAL 301           13:00  19:20
+
+                                         Durée 6h20 · 1re / 2e / VIP
+
+SETRAG · Système Central de Billettique                                                                                         Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 03                                                                                                                                     SETRAG -- Billettique
+                                                                                                                                                                                    Page 5 / 17
+Sélection de la place & options
+                                                                                                                                                               POINTS
+Plan de places interactif et options complémentaires avant passage au paiement.                                                                                FONCTIONNELS CLÉS
+
+          voyage.setrag.ga/selection                                             Rechercher un trajet Mes réservations Aide                      Mon compte     1 Choix du train, de la
+SETRAG                                                                                                                                                                classe, de la place et
+                                                                                                                                                                      des options
+                                                                                                                                                                      paramétrables.
+
+                                                                                                                                                                2 Réservation temporaire
+                                                                                                                                                                      de la place pendant le
+                                                                                                                                                                      paiement.
+
+                                                                                                                                                                3 Prévention des
+                                                                                                                                                                      doubles ventes par
+                                                                                                                                                                      verrouillage
+                                                                                                                                                                      transactionnel.
+
+VOITURE 2 · 2E CLASSE -- PLACE C2 SÉLECTIONNÉE                                                                               RÉSUMÉ TARIFAIRE
+                                                                                                                             Tarif de base (2e)
+1  2           3  4                                                                                                          TVA / CSS           12 500 FCFA
+                                                                                                                                                     625 FCFA
+
+5  6           7  8
+
+9  10 11          12                                                                                                         Total TTC           13 125 FCFA
+                  Occupé
+   Disponible             Sélectionné    Bloqué                                                                              Continuer vers le paiement
+
+OPTIONS
+ Bagage supplémentaire (0-30 kg)
+ Transport Auto Accompagné (option)
+ Assistance embarquement
+
+SETRAG · Système Central de Billettique                                                                                      Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 04                                                                                                                      SETRAG -- Billettique
+                                                                                                                                                                     Page 6 / 17
+Paiement sécurisé
+                                                                                                                                                POINTS
+Intégration multi-moyens de paiement adaptée au contexte gabonais.                                                                              FONCTIONNELS CLÉS
+
+          voyage.setrag.ga/paiement                                 Rechercher un trajet Mes réservations Aide                      Mon compte   1 Connecteurs Airtel
+SETRAG                                                                                                          Click&Pay                              Money, Moov Money,
+                                                                                                                                                       Click&Pay, Visa,
+                                                                                                                                                       Mastercard.
+
+                                                                                                                                                 2 Tokenisation des
+                                                                                                                                                       données de paiement
+                                                                                                                                                       -- aucun stockage de
+                                                                                                                                                       numéro de carte.
+
+                                                                                                                                                 3 Confirmation
+                                                                                                                                                       instantanée et
+                                                                                                                                                       rapprochement
+                                                                                                                                                       automatique.
+
+       Visa / Mastercard                                           Airtel Money          Moov Money
+
+PAIEMENT PAR CARTE                                    RÉCAPITULATIF
+   Numéro de carte                                    EXPRESS 102 · Owendo  Franceville
+                                                      12/08/2026 · 2e classe · Place C2
+MM/AA               CVC
+                                                      Total TTC 13 125 FCFA
+Paiement tokenisé -- aucune donnée de carte stockée.
+                                                              Payer 13 125 FCFA
+
+SETRAG · Système Central de Billettique                                                                         Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 05                                                                                        SETRAG -- Billettique
+                                                                                                                                       Page 7 / 17
+Confirmation & billet électronique
+                                                                                               POINTS FONCTIONNELS CLÉS
+Le titre de transport est disponible immédiatement, avec ou sans connexion.
+                                                                                                1 Numéro de réservation unique et QR
+                                         09:41                                        82%             code de contrôle.
+
+                                              SETRAG                             Confirmé       2 Billet PDF disponible hors connexion
+                                                                                                      après achat.
+                                             SETRAG
+                                                                                                3 Notifications de confirmation, rappel,
+                                              BILLET ÉLECTRONIQUE                                     changement, retard.
+
+                                           Owendo  Franceville
+
+                                             EXPRESS 102 · 12/08/2026 · 07:30
+
+                                              VOYAGEUR
+
+                                             A. NGOMA
+
+                                              CLASSE / PLACE
+
+                                             2e · C2
+
+                                              RÉSERVATION
+
+                                             RES-2026-88213
+
+                                         Télécharger PDF                         Portefeuille
+
+                                         Confirmation envoyée par SMS et e-mail
+
+SETRAG · Système Central de Billettique                                                        Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+FRONT OFFICE -- CLIENT / ÉCRAN 06                                                                                                                SETRAG -- Billettique
+                                                                                                                                                               Page 8 / 17
+Espace client & historique
+                                                                                                                       POINTS FONCTIONNELS CLÉS
+Un espace personnel pour gérer ses voyages passés et à venir.
+                                                                                                                        1 Création de compte, connexion
+                                                                09:41                                            82%          sécurisée, récupération de mot de
+                                                                                                                              passe.
+                                                                      SETRAG                                 Confirmé
+                                                                                                             Confirmé   2 Historique complet des réservations et
+                                                                          Alice NGOMA                         Terminé         voyages effectués.
+
+                                                                              alice.ngoma@mail.com                      3 Après-vente : annulation, modification,
+                                                               MES RÉSERVATIONS                                               remboursement, report.
+
+                                                                  Owendo  Franceville
+                                                                   12 Août 2026 · EXPRESS 102
+
+                                                                  Franceville  Owendo
+                                                                   19 Août 2026 · EXPRESS 105
+
+                                                                  Owendo  Booué
+                                                                   2 Juillet 2026 · OMNIBUS 210
+
+                                                               Rechercher  Réservations             Alertes  Profil
+
+SETRAG · Système Central de Billettique                                                                                Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+                                                          APPLICATION CONTRÔLEUR                                                         SETRAG -- Billettique
+                                                                                                                                                     Page 9 / 17
+                                                          Écrans présentés dans cette partie :
+                                                                                                           Tableau de bord
+                                                                         Connexion
+                                                                                                           Train en cours
+                                                                            SSO, MFA, biométrie
+                                                                                                           Vente à bord
+                                                                         Scan & contrôle
+                                                                                                           Régularisation
+                                                                            QR/NFC
+                                                                                                           Mode hors ligne
+                                                                         Procès-verbal
+                                                                                                           Synchronisation
+                                                                            Infraction, amende
+                                                                                                                     7
+02                                                        10 000 000 FCFA                          6 mois
+                                                                                                                                 ÉCRANS
+Application Contrôleur                                    MONTANT HT (AVEC FRONT OFFICE)           DÉLAI
+
+Validation embarquée, vente à bord, PV, mode hors ligne.
+
+                                                          SETRAG · Système Central de Billettique          Document confidentiel -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 01                                                                                                        SETRAG -- Billettique
+                                                                                                                                                     Page 10 / 17
+Connexion sécurisée
+                                                                                                               POINTS FONCTIONNELS CLÉS
+Authentification renforcée avant le téléchargement des listes de contrôle.
+                                                                                                                1 SSO / MFA, biométrie lorsque
+                                         09:41                                                            82%         disponible.
+
+                                              SETRAG                                                            2 Profils Contrôleur, Superviseur ou
+                                                                                                                      Maintenance.
+
+                                                                                                                3 Téléchargement sécurisé des listes et
+                                                                                                                      clés de validation avant le départ.
+
+                                                      Application Contrôleur
+
+                                                                     SETRAG -- Accès professionnel
+                                         MATRICULE
+
+                                            CTRL-04521
+                                         MOT DE PASSE
+
+                                            ········
+
+                                                                         Se connecter
+
+                                                                        ou authentification biométrique
+
+                                                                                    MFA activé
+
+SETRAG · Système Central de Billettique                                                                        Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 02                                                                                                                     SETRAG -- Billettique
+                                                                                                                                                                  Page 11 / 17
+Tableau de bord contrôleur
+                                                                                                                            POINTS FONCTIONNELS CLÉS
+Vue de service en temps réel pour le contrôleur en poste.
+                                                                                                                             1 Vue du train en cours et progression du
+                                                            09:41                                             82%                  contrôle.
+
+                                                                  SETRAG                               128 / 212 contrôlés   2 Statistiques du jour : contrôles, ventes,
+                                                                                                                                   régularisations.
+                                                           TRAIN EN COURS
+                                                                                                                             3 Indicateur de connectivité et de
+                                                           EXPRESS 102                                                             synchronisation.
+
+                                                           Owendo  Franceville · Voiture 2
+
+                                                              En ligne
+
+                                                                   CONTRÔLES                        VALIDES
+
+                                                           214                              208
+
+                                                            +6 vs hier                       97%
+
+                                                                   SUSPECTS                         VENTES À BORD
+
+                                                           3                                6
+
+                                                           À vérifier                       31 400 FCFA
+
+                                                                              Démarrer le contrôle
+
+                                                           Accueil  Scanner                 Vente  PV              Profil
+
+SETRAG · Système Central de Billettique                                                                                     Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 03                                                                                      SETRAG -- Billettique
+                                                                                                                                   Page 12 / 17
+Scan QR code & résultat de contrôle
+                                                                                             POINTS FONCTIONNELS CLÉS
+Validation instantanée des titres, avec code couleur immédiatement lisible.
+                                                                                              1 Lecture rapide QR/NFC, même faible
+                                         09:41                                          82%         luminosité ou en mouvement.
+
+                                              SETRAG                                          2 Résultats : valide, déjà utilisé, annulé,
+                                                                                                    remboursé, hors date/train, suspect.
+                                                Caméra active
+                                                                                              3 Horodatage, identité contrôleur, train et
+                                                                                                    terminal enregistrés.
+
+                                                           Visez le QR code du billet
+
+                                         VALIDE
+
+                                         A. NGOMA · 2e · C2
+
+                                         DÉJÀ UTILISÉ
+
+                                         Scanné à 07:32 · Voiture 1
+
+SETRAG · Système Central de Billettique                                                      Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 04                                                                                                          SETRAG -- Billettique
+                                                                                                                                                       Page 13 / 17
+Vente à bord & régularisation
+                                                                                                                 POINTS FONCTIONNELS CLÉS
+Émission d'un titre directement à bord, avec encaissement tracé.
+                                                                                                                  1 Création d'un billet à bord avec calcul
+                                                                                                                        tarifaire automatique.
+
+                                                                                                                  2 Paiement Mobile Money ou espèces,
+                                                                                                                        tracé et rapproché.
+
+                                                                                                                  3 Émission immédiate du titre régularisé.
+
+                                                                  09:41                                     82%
+
+                                                                       SETRAG                    9 400 FCFA
+
+                                                                    VENTE À BORD              Espèces
+
+                                                                     TRAJET RESTANT
+                                                                         Booué  Franceville
+
+                                                                     CLASSE
+                                                                         2e classe
+
+                                                                    Tarif calculé
+
+                                                                    MODE DE PAIEMENT
+
+                                                                                Mobile Money
+
+                                                                  Émettre le titre
+
+SETRAG · Système Central de Billettique                                                                          Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 05                                                                                                                        SETRAG -- Billettique
+                                                                                                                                                                     Page 14 / 17
+Procès-verbal d'infraction
+                                                                                                                               POINTS FONCTIONNELS CLÉS
+Formulaire structuré pour qualifier, tracer et encaisser une infraction.
+                                                                                                                                1 Saisie structurée : infraction, voyageur,
+                                                                          09:41                                    82%                circonstances, montant.
+
+                                                                               SETRAG                                           2 Perception de l'amende par paiement
+                                                                                                                                      électronique.
+                                                                            PROCÈS-VERBAL D'INFRACTION
+                                                                                                                                3 Pièces jointes et preuves associées au
+                                                                             VOYAGEUR                                                 dossier.
+                                                                                 Nom, contact
+
+                                                                             MOTIF
+                                                                              Sans titre de transport
+                                                                              Titre invalide ou falsifié
+                                                                              Place non conforme au billet
+
+                                                                          Montant de l'amende                     25 000 FCFA
+
+                                                                                Ajouter une pièce jointe (photo)
+
+                                                                          Encaisser & émettre le PV
+
+SETRAG · Système Central de Billettique                                                                                        Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 06                                                                                                       SETRAG -- Billettique
+                                                                                                                                                    Page 15 / 17
+Mode hors ligne & synchronisation
+                                                                                                              POINTS FONCTIONNELS CLÉS
+Continuité de service garantie, même sans couverture réseau.
+                                                                                                               1 Stockage local chiffré des listes et clés
+                                         09:41                                                    82%                de validation.
+
+                                              SETRAG                                                           2 File d'attente de synchronisation avec
+                                                                                                                     reprise automatique.
+                                                  Hors connexion
+                                                    42 opérations en attente de synchronisation                3 Prévention des doublons lors de la
+                                                                                                                     resynchronisation.
+
+                                         FILE D'ATTENTE DE SYNCHRONISATION
+
+                                         Contrôle -- billet RES-2026-88213                       En attente
+
+                                         Vente à bord -- 9 400 FCFA                              En attente
+
+                                         PV-2026-0042 -- 25 000 FCFA                             Synchronisé
+
+                                         Synchronisation en cours                                87%
+
+SETRAG · Système Central de Billettique                                                                       Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+APPLICATION CONTRÔLEUR / ÉCRAN 07                                                                                                                                           SETRAG -- Billettique
+                                                                                                                                                                                        Page 16 / 17
+Équipements & terminaux
+                                                                                                                                                  POINTS FONCTIONNELS CLÉS
+TPE et cartes RFID/NFC -- options matérielles complémentaires à l'application Contrôleur.
+                                                                                                                                                   1 TPE embarqué pour la vente à bord et la
+                                                                                                                                                         régularisation par carte.
+
+                                                                                                                                                   2 Carte RFID/NFC pour les abonnés --
+                                                                                                                                                         lecture instantanée au contrôle.
+
+                                                                                                                                                   3 Équipements optionnels, à chiffrer selon
+                                                                                                                                                         le modèle retenu par la SETRAG.
+
+         SETRAG                                                                            SETRAG
+
+      13 125 FCFA                                                                          4521 8890 2201
+
+                  Paiement accepté                                                           TITULAIRE                                      TYPE
+
+Terminal de paiement électronique (TPE)                                                    A. NGOMA     Abonnement mensuel
+
+        Encaissement carte & sans contact à bord                                           Carte abonné RFID/NFC
+
+                                                                                           Contrôle rapide sans billet papier
+
+SETRAG · Système Central de Billettique                                                                                                           Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+SYNTHÈSE                                                                                                                SETRAG -- Billettique
+                                                                                                                                   Page 17 / 17
+Récapitulatif
+
+                                                                   MONTANT FORFAITAIRE HT
+
+                                             10 000 000 FCFA
+
+                                         Délai de réalisation : 6 mois -- Front Office client + Application Contrôleur
+
+SETRAG · Système Central de Billettique                                                                                 Document confidentiel -- Prototype & maquettes fonctionnelles -- Version 1.0 -- Août 2026
+
