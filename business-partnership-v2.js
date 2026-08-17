@@ -32,5 +32,23 @@ ${S('conclusion','09 · SYNTHÈSE','Une proposition réaliste aujourd’hui, dur
 </div><div class="bp-present"><button data-bp-exit>${I('x')} Quitter</button><span><b data-bp-num>1</b> / 10</span><button data-bp-prev>${I('arrow-left')}</button><button data-bp-next>${I('arrow-right')}</button></div>`}
 function wire(){if(window.current!=='business')return;const root=document.querySelector('.bp-page');if(!root)return;if(window.lucide)lucide.createIcons();root.querySelectorAll('[data-go-bp]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.goBp)?.scrollIntoView({behavior:'smooth'}));root.querySelectorAll('[data-budget-row]').forEach(b=>b.onclick=()=>b.classList.toggle('open'));const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});root.querySelectorAll('.bp-reveal').forEach(x=>obs.observe(x));addEventListener('scroll',()=>{let d=document.documentElement;root.style.setProperty('--p',(scrollY/(d.scrollHeight-innerHeight)*100)+'%')},{passive:true});const slides=[...root.querySelectorAll('[data-bp-slide]')];let n=0;const show=x=>{n=Math.max(0,Math.min(slides.length-1,x));slides.forEach((s,i)=>s.classList.toggle('current',i===n));document.querySelector('[data-bp-num]').textContent=n+1};root.querySelector('[data-bp-present]').onclick=()=>{document.body.classList.add('bp-presenting');show(0)};document.querySelector('[data-bp-exit]').onclick=()=>document.body.classList.remove('bp-presenting');document.querySelector('[data-bp-prev]').onclick=()=>show(n-1);document.querySelector('[data-bp-next]').onclick=()=>show(n+1)}
 document.addEventListener('keydown',e=>{if(!document.body.classList.contains('bp-presenting'))return;({'ArrowRight':'[data-bp-next]','ArrowLeft':'[data-bp-prev]','Escape':'[data-bp-exit]'})[e.key]&&document.querySelector(({'ArrowRight':'[data-bp-next]','ArrowLeft':'[data-bp-prev]','Escape':'[data-bp-exit]'})[e.key]).click()});
-const install=()=>{if(!window.pages||!window.bind)return setTimeout(install,50);pages.business=render;const old=bind;bind=function(){old();wire()};if(window.current==='business'){document.querySelector('#content').innerHTML=render();wire()}};install();
+const install=()=>{
+  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
+  window.renderBusinessPartnership=render;
+  pages.business=render;
+  if(typeof bind==='function'&&!bind.__businessPartnershipWrapped){
+    const old=bind;
+    const enhanced=function(){old();wire()};
+    enhanced.__businessPartnershipWrapped=true;
+    bind=enhanced;
+    window.bind=enhanced;
+  }
+  const requested=new URLSearchParams(location.search).get('page');
+  const active=document.querySelector('[data-page="business"].active')||document.querySelector('.bp-page');
+  if(requested==='business'||active){
+    const content=document.querySelector('#content');
+    if(content){content.innerHTML=render();wire()}
+  }
+};
+install();
 })();
