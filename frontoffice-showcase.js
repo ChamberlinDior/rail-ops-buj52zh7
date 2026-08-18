@@ -32,10 +32,18 @@ function addToWallet(rec){WALLET.unshift(rec);updateWalletBadge()}
 function updateWalletBadge(){const b=document.getElementById('fosWalletBadge');if(!b)return;if(WALLET.length){b.style.display='inline-flex';b.textContent=WALLET.length}else{b.style.display='none'}}
 function docCardHtml(rec){
  return `<div class="fos-ticket">
+  <div class="fos-ticket-holo"></div>
+  <div class="fos-ticket-body">
   <div class="fos-ticket-main">
    <div class="fos-ticket-brand"><span>S</span> ${rec.brand}</div>
    <div class="fos-ticket-route">${rec.headlineHtml}</div>
    <div class="fos-ticket-meta">${rec.fields.map(f=>`<span><small>${f[0]}</small><b>${f[1]}</b></span>`).join('')}</div>
+   <div class="fos-ticket-security">
+    <span>${I('shield-check')} Titre sécurisé</span>
+    <span>${I('badge-check')} Vérifié SETRAG</span>
+    <span>${I('scan-line')} Contrôle QR/NFC</span>
+   </div>
+   <div class="fos-ticket-stamp">${I('badge-check')}<span>SETRAG<br>OFFICIEL</span></div>
   </div>
   <div class="fos-ticket-stub">
    <small class="fos-stub-label">${rec.kind==='billet'?'TRAJET':'RÉFÉRENCE'}</small>
@@ -44,6 +52,7 @@ function docCardHtml(rec){
    <small class="fos-stub-label">${rec.kind==='billet'?'N° BILLET':'N° DOSSIER'}</small>
    <b class="fos-stub-id">${rec.id}</b>
    <div class="fos-barcode"></div>
+  </div>
   </div>
  </div>`
 }
