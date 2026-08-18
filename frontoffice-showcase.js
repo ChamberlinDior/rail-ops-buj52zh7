@@ -26,6 +26,27 @@ const SERVICES=[
 const stationOptions=sel=>STATIONS.map(s=>`<option value="${s[0]}" ${s[0]===sel?'selected':''}>${s[1]}</option>`).join('');
 
 const ST={o:'OWE',d:'FCV',date:'2026-08-22',pax:1,cls:'2e',train:null,seats:[],pass:{},pay:null};
+const WALLET=[];
+const kindIcon=k=>({billet:'ticket',bagage:'luggage',colis:'package',taa:'car-front',funeraire:'flower-2',messagerie:'send'}[k]||'file-text');
+function addToWallet(rec){WALLET.unshift(rec);updateWalletBadge()}
+function updateWalletBadge(){const b=document.getElementById('fosWalletBadge');if(!b)return;if(WALLET.length){b.style.display='inline-flex';b.textContent=WALLET.length}else{b.style.display='none'}}
+function docCardHtml(rec){
+ return `<div class="fos-ticket">
+  <div class="fos-ticket-main">
+   <div class="fos-ticket-brand"><span>S</span> ${rec.brand}</div>
+   <div class="fos-ticket-route">${rec.headlineHtml}</div>
+   <div class="fos-ticket-meta">${rec.fields.map(f=>`<span><small>${f[0]}</small><b>${f[1]}</b></span>`).join('')}</div>
+  </div>
+  <div class="fos-ticket-stub">
+   <small class="fos-stub-label">${rec.kind==='billet'?'TRAJET':'RÉFÉRENCE'}</small>
+   <div class="fos-stub-code">${I(kindIcon(rec.kind))} ${rec.code}</div>
+   <div class="fos-qr">${qr(rec.id)}</div>
+   <small class="fos-stub-label">${rec.kind==='billet'?'N° BILLET':'N° DOSSIER'}</small>
+   <b class="fos-stub-id">${rec.id}</b>
+   <div class="fos-barcode"></div>
+  </div>
+ </div>`
+}
 
 function trainsFor(){
  const dist=Math.abs(stKm(ST.d)-stKm(ST.o));
@@ -139,42 +160,20 @@ function ticketPanel(){
  const resa=`RES-${ST.date.replace(/-/g,'').slice(2)}-${id.slice(-4)}`;
  const tarif=`T-${ST.o}-${ST.d}-${ST.cls.toUpperCase()}`;
  const nom=(ST.pass.prenom||'Nadia')+' '+(ST.pass.nom||'Raponda');
+ const rec={id,kind:'billet',brand:'SETRAG · BILLET ÉLECTRONIQUE',headlineHtml:`<b>${stName(ST.o)}</b>${I('arrow-right')}<b>${stName(ST.d)}</b>`,code:`${ST.o} → ${ST.d}`,date:today(),fields:[
+  ['Train',`${t.code} · ${t.type}`],['Classe',clsLabel(ST.cls)],['Départ',`${fmtDate(ST.date)} · ${t.depart}`],['Arrivée',t.arrive],
+  ['Titulaire',esc(nom)],['Place(s)',ST.seats.join(', ')||'—'],['Distance',`${t.dist} km`],['Code tarifaire',tarif],
+  ['Montant HT',fmtMoney(ht)],['TVA',fmtMoney(tva)],['Montant TTC perçu',fmtMoney(amount)],['Mode de paiement',(PAYMENTS.find(p=>p[0]===ST.pay)||['','Espèces'])[1]],
+  ['N° réservation',resa],['Date de vente',today()]
+ ]};
+ if(!ST.savedToWallet){addToWallet(rec);ST.savedToWallet=true}
  return `<div class="fos-flow-panel active fos-reveal">
-  <div class="fos-flow-head"><div><h3>Billet électronique</h3><p>Votre titre de transport est prêt — présentez le QR code à l’embarquement.</p></div><button class="fos-flow-back" data-fos-back="reset">${I('rotate-ccw')} Nouvelle recherche</button></div>
-  <div class="fos-ticket">
-   <div class="fos-ticket-top">
-    <div>
-     <div class="fos-ticket-brand"><span>S</span> SETRAG · BILLET ÉLECTRONIQUE</div>
-     <div class="fos-ticket-route"><b>${stName(ST.o)}</b>${I('arrow-right')}<b>${stName(ST.d)}</b></div>
-     <div class="fos-ticket-meta">
-      <span><small>Train</small><b>${t.code} · ${t.type}</b></span>
-      <span><small>Classe</small><b>${clsLabel(ST.cls)}</b></span>
-      <span><small>Départ</small><b>${fmtDate(ST.date)} · ${t.depart}</b></span>
-      <span><small>Arrivée</small><b>${t.arrive}</b></span>
-     </div>
-     <div class="fos-ticket-meta">
-      <span><small>Titulaire</small><b>${esc(nom)}</b></span>
-      <span><small>Place(s)</small><b>${ST.seats.join(', ')||'—'}</b></span>
-      <span><small>Distance</small><b>${t.dist} km</b></span>
-      <span><small>Code tarifaire</small><b>${tarif}</b></span>
-     </div>
-    </div>
-    <div><div class="fos-ticket-id"><small>N° billet</small><b>${id}</b></div><div class="fos-qr">${qr(id)}</div></div>
-   </div>
-   <div class="fos-ticket-strip"><span class="fos-ticket-hole"></span><i class="fos-ticket-dashed"></i><span class="fos-ticket-hole"></span></div>
-   <div class="fos-ticket-bottom">
-    <span><small>Montant HT</small><b>${fmtMoney(ht)}</b></span>
-    <span><small>TVA</small><b>${fmtMoney(tva)}</b></span>
-    <span><small>Montant TTC perçu</small><b>${fmtMoney(amount)}</b></span>
-    <span><small>Mode de paiement</small><b>${(PAYMENTS.find(p=>p[0]===ST.pay)||['','Espèces'])[1]}</b></span>
-    <span><small>N° réservation</small><b>${resa}</b></span>
-    <span><small>Date de vente</small><b>${today()}</b></span>
-   </div>
-  </div>
+  <div class="fos-flow-head"><div><h3>Billet électronique</h3><p>Votre titre de transport est prêt — présentez le QR code à l’embarquement, ou retrouvez-le dans votre portefeuille.</p></div><button class="fos-flow-back" data-fos-back="reset">${I('rotate-ccw')} Nouvelle recherche</button></div>
+  ${docCardHtml(rec)}
   <div class="fos-ticket-actions">
    <button data-fos-action="pdf">${I('download')} Télécharger le PDF</button>
    <button data-fos-action="sms">${I('send')} Envoyer par SMS</button>
-   <button class="gold" data-fos-back="reset">${I('rotate-ccw')} Nouvelle recherche</button>
+   <button class="gold" data-fos-open-wallet>${I('wallet')} Voir mon portefeuille</button>
   </div>
  </div>`
 }
@@ -262,7 +261,7 @@ function render(){
  return `<div class="fos-page"><div class="fos-progress"><i></i></div>
  <nav class="fos-nav"><div class="fos-nav-brand"><span>S</span> SETRAG · Front Office voyageur</div>
  <div class="fos-nav-links"><button data-fos-scroll="fosSearch">Réserver</button><button data-fos-scroll="services">Services</button><button data-fos-scroll="application">Application</button><button data-fos-scroll="paiement">Paiement</button></div>
- <div class="fos-nav-cta"><button data-fos-scroll="services">${I('grid')} Tous les services</button><button class="gold" data-fos-scroll="fosSearch">${I('ticket')} Réserver</button></div>
+ <div class="fos-nav-cta"><button data-fos-scroll="services">${I('grid')} Tous les services</button><button id="fosWalletBtn">${I('wallet')} Profil<span class="fos-wallet-badge" id="fosWalletBadge">0</span></button><button class="gold" data-fos-scroll="fosSearch">${I('ticket')} Réserver</button></div>
  </nav>
  <section class="fos-hero"><div class="fos-hero-photo"></div>
   <div class="fos-hero-copy">
@@ -297,7 +296,7 @@ function openServiceModal(id){
  if(!s||!s.fields)return;
  const root=document.querySelector('#modalRoot');
  if(!root)return;
- root.innerHTML=`<div class="fos-modal-backdrop" data-fos-modal-close><div class="fos-modal" onclick="event.stopPropagation()">
+ root.innerHTML=`<div class="fos-modal-backdrop" data-fos-modal-close><div class="fos-modal fos-modal-wide" onclick="event.stopPropagation()">
   <header><div style="display:flex;gap:12px;align-items:flex-start"><span>${I(s.icon)}</span><div><h3>${s.title}</h3></div></div><button class="fos-modal-close" data-fos-modal-close>×</button></header>
   <p class="desc">${s.desc}</p>
   <div class="fos-modal-fields">${s.fields.map((f,i)=>`<label>${f[0]}${f[1]==='select'?`<select data-f="${i}">${stationOptions(/arrivée/i.test(f[0])?'FCV':'OWE')}</select>`:`<input data-f="${i}" type="${f[1]}" placeholder="${f[2]||''}">`}</label>`).join('')}</div>
@@ -307,11 +306,51 @@ function openServiceModal(id){
  root.addEventListener('click',e=>e.stopPropagation());
  root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=e=>{if(e.target===x)root.innerHTML=''});
  document.getElementById('fosModalSubmit').onclick=()=>{
+  const vals=s.fields.map((f,i)=>{const el=root.querySelector(`[data-f="${i}"]`);return[f[0],esc((el&&el.value.trim())||f[2]||'—')]});
   const ref=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
-  root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success"><i>${I('check')}</i><h3>Demande enregistrée</h3><p>${s.title} · confirmation envoyée par SMS et e-mail.</p><b>${ref}</b><button class="fos-modal-submit" data-fos-modal-close>Fermer</button></div>`;
+  const rec={id:ref,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()}`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Statut','Confirmé'],['Date',today()]]};
+  addToWallet(rec);
+  root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success-doc"><div class="fos-modal-success-head"><i>${I('check')}</i><div><h3>Demande confirmée</h3><p>Ajouté à votre portefeuille · confirmation envoyée par SMS et e-mail.</p></div></div>${docCardHtml(rec)}<div class="fos-ticket-actions" style="margin-top:16px"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button class="gold" data-fos-modal-close>Fermer</button></div></div>`;
   if(window.lucide)lucide.createIcons();
-  root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=()=>root.innerHTML='')
+  root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=()=>root.innerHTML='');
+  root.querySelectorAll('[data-fos-action]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Document PDF généré')})
  }
+}
+
+function renderWalletList(root){
+ if(!WALLET.length){
+  root.innerHTML=`<div class="fos-modal-backdrop" data-fos-modal-close><div class="fos-modal" onclick="event.stopPropagation()">
+   <header><div style="display:flex;gap:12px;align-items:flex-start"><span>${I('wallet')}</span><div><h3>Mon portefeuille</h3></div></div><button class="fos-modal-close" data-fos-modal-close>×</button></header>
+   <div class="fos-wallet-empty">${I('inbox')}<p>Vos billets et confirmations de service apparaîtront ici après un achat ou une demande.</p></div>
+  </div></div>`;
+ }else{
+  root.innerHTML=`<div class="fos-modal-backdrop" data-fos-modal-close><div class="fos-modal fos-modal-wide" onclick="event.stopPropagation()">
+   <header><div style="display:flex;gap:12px;align-items:flex-start"><span>${I('wallet')}</span><div><h3>Mon portefeuille</h3><p class="desc" style="margin:2px 0 0">${WALLET.length} document${WALLET.length>1?'s':''} · voyageur et services</p></div></div><button class="fos-modal-close" data-fos-modal-close>×</button></header>
+   <div class="fos-wallet-list">${WALLET.map((r,i)=>`<button class="fos-wallet-row" data-wallet-open="${i}"><span class="fos-wallet-row-icon">${I(kindIcon(r.kind))}</span><span class="fos-wallet-row-mid"><b>${r.brand}</b><small>${r.code} · ${r.id}</small></span><span class="fos-wallet-row-date">${r.date}</span>${I('chevron-right')}</button>`).join('')}</div>
+  </div></div>`;
+ }
+ if(window.lucide)lucide.createIcons();
+ root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=e=>{if(e.target===x)root.innerHTML=''});
+ root.querySelectorAll('[data-wallet-open]').forEach(b=>b.onclick=()=>openWalletDetail(root,+b.dataset.walletOpen));
+}
+function openWalletDetail(root,i){
+ const r=WALLET[i];
+ if(!r)return;
+ root.innerHTML=`<div class="fos-modal-backdrop" data-fos-modal-close><div class="fos-modal fos-modal-wide" onclick="event.stopPropagation()">
+  <header><button class="fos-wallet-back" data-wallet-back>${I('arrow-left')} Portefeuille</button><button class="fos-modal-close" data-fos-modal-close>×</button></header>
+  ${docCardHtml(r)}
+  <div class="fos-ticket-actions"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button data-fos-action="sms">${I('send')} Envoyer par SMS</button></div>
+ </div></div>`;
+ if(window.lucide)lucide.createIcons();
+ root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=e=>{if(e.target===x)root.innerHTML=''});
+ root.querySelector('[data-wallet-back]').onclick=()=>renderWalletList(root);
+ root.querySelectorAll('[data-fos-action]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast(b.dataset.fosAction==='pdf'?'Document PDF généré':'Document envoyé par SMS')});
+}
+function openWallet(){
+ const root=document.querySelector('#modalRoot');
+ if(!root)return;
+ renderWalletList(root);
+ root.addEventListener('click',e=>e.stopPropagation());
 }
 
 function wire(){
@@ -327,6 +366,9 @@ function wire(){
  root.querySelectorAll('[data-fos-scroll]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.fosScroll)?.scrollIntoView({behavior:'smooth',block:'start'}));
  root.querySelectorAll('[data-fos-quick]').forEach(b=>b.onclick=()=>openServiceModal(b.dataset.fosQuick));
  root.querySelectorAll('[data-fos-service]').forEach(b=>b.onclick=()=>{const id=b.dataset.fosService;if(id==='ticket'){document.getElementById('fosSearch')?.scrollIntoView({behavior:'smooth'})}else openServiceModal(id)});
+ const walletBtn=document.getElementById('fosWalletBtn');
+ if(walletBtn)walletBtn.onclick=openWallet;
+ updateWalletBadge();
 
  const swap=document.getElementById('fosSwap');
  if(swap)swap.onclick=()=>{const t=ST.o;ST.o=ST.d;ST.d=t;refreshFlowHead()};
@@ -398,6 +440,8 @@ function wireFlow(){
   if(to==='seat'){flow.innerHTML=seatPanel();wireFlow();flow.scrollIntoView({behavior:'smooth',block:'start'});return}
  });
  flow.querySelectorAll('[data-fos-action]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast(b.dataset.fosAction==='pdf'?'Billet PDF généré et prêt au téléchargement':'Billet envoyé par SMS')});
+ flow.querySelectorAll('[data-fos-open-wallet]').forEach(b=>b.onclick=openWallet);
+ updateWalletBadge();
 }
 
 const install=()=>{

@@ -110,33 +110,57 @@
 .fos-spinner{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:fos-spin .8s linear infinite}
 @keyframes fos-spin{to{transform:rotate(360deg)}}
 
-.fos-ticket{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(135deg,#08283c,#075143);color:#fff;padding:0}
-.fos-ticket-top{display:grid;grid-template-columns:1fr auto;gap:18px;padding:26px 26px 20px}
-.fos-ticket-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:12px;letter-spacing:.06em;color:#bfe3d6}
-.fos-ticket-brand span{width:26px;height:26px;border-radius:8px;background:var(--gold);display:grid;place-items:center;color:#142b3b;font-weight:900}
-.fos-ticket-route{margin-top:14px;display:flex;align-items:center;gap:14px}
-.fos-ticket-route b{font-size:24px}
-.fos-ticket-route svg{width:18px;color:var(--gold)}
-.fos-ticket-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-.fos-ticket-meta span{display:grid;gap:3px}
+.fos-ticket{position:relative;display:flex;align-items:stretch;overflow:hidden;border-radius:22px;background:linear-gradient(135deg,#08283c,#075143);color:#fff;box-shadow:0 26px 60px #05192a4d}
+.fos-ticket-main{flex:1;min-width:0;padding:26px 24px}
+.fos-ticket-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:11.5px;letter-spacing:.08em;color:#bfe3d6;text-transform:uppercase}
+.fos-ticket-brand span{width:26px;height:26px;border-radius:8px;background:var(--gold);display:grid;place-items:center;color:#142b3b;font-weight:900;flex:0 0 auto}
+.fos-ticket-route{margin:16px 0 20px;display:flex;align-items:center;flex-wrap:wrap;gap:14px}
+.fos-ticket-route b{font-size:23px;letter-spacing:-.02em}
+.fos-ticket-route svg{width:17px;color:var(--gold)}
+.fos-ticket-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 20px}
+.fos-ticket-meta span{display:grid;gap:4px;padding-top:12px;border-top:1px solid #ffffff1f}
 .fos-ticket-meta small{color:#8fb3ab;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
-.fos-ticket-meta b{font-size:13px}
-.fos-qr{width:96px;height:96px;border-radius:12px;background:#fff;padding:8px;display:grid;place-items:center}
+.fos-ticket-meta b{font-size:13px;word-break:break-word}
+.fos-qr{width:112px;height:112px;border-radius:12px;background:#fff;padding:9px;display:grid;place-items:center}
 .fos-qr svg{width:100%;height:100%}
-.fos-ticket-strip{display:flex;align-items:center;gap:16px;padding:0 26px}
-.fos-ticket-dashed{flex:1;border-top:2px dashed #ffffff33}
-.fos-ticket-hole{width:22px;height:22px;border-radius:50%;background:#f6f8f7}
-.fos-ticket-bottom{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px 26px 26px}
-.fos-ticket-bottom span{display:grid;gap:3px}
-.fos-ticket-bottom small{color:#8fb3ab;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
-.fos-ticket-bottom b{font-size:13px}
-.fos-ticket-id{text-align:right;margin-bottom:12px}
-.fos-ticket-id small{display:block;color:#8fb3ab;font-size:9px;text-transform:uppercase}
-.fos-ticket-id b{font-size:13px;color:var(--gold)}
+.fos-ticket-stub{position:relative;flex:0 0 200px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:26px 18px;text-align:center;border-left:2px dashed #ffffff40;background:#ffffff08}
+.fos-ticket-stub:before,.fos-ticket-stub:after{content:"";position:absolute;left:-13px;width:26px;height:26px;border-radius:50%;background:var(--fos-ticket-notch,#f6f8f7)}
+.fos-ticket-stub:before{top:-13px}
+.fos-ticket-stub:after{bottom:-13px}
+.fos-stub-label{color:#8fb3ab;font-size:8.5px;text-transform:uppercase;letter-spacing:.1em}
+.fos-stub-code{font-size:19px;font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:6px}
+.fos-stub-code svg{width:14px;color:var(--gold)}
+.fos-stub-id{font-size:13px;color:var(--gold);word-break:break-all}
+.fos-barcode{width:100%;height:32px;margin-top:2px;border-radius:3px;background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 3px,#fff 3px 4px,transparent 4px 5px,#fff 5px 8px,transparent 8px 9px,#fff 9px 10px,transparent 10px 13px);opacity:.92}
 .fos-ticket-actions{display:flex;gap:10px;margin-top:18px}
 .fos-ticket-actions button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff;color:var(--ink);font:800 12px Manrope;cursor:pointer}
 .fos-ticket-actions button.gold{border:0;background:var(--gold);color:#142b3b}
 .fos-ticket-actions svg{width:14px}
+.fos-modal .fos-ticket-stub:before,.fos-modal .fos-ticket-stub:after{background:#fff}
+.fos-modal.fos-modal-wide{width:min(680px,100%)}
+.fos-modal-success-doc{text-align:left}
+.fos-modal-success-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.fos-modal-success-head i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#eef8f3;color:var(--green);flex:0 0 auto}
+.fos-modal-success-head svg{width:20px}
+.fos-modal-success-head h3{margin:0 0 4px}
+.fos-modal-success-head p{margin:0;color:var(--muted);font-size:12px}
+.fos-wallet-empty{display:grid;justify-items:center;gap:12px;padding:40px 10px;color:var(--muted);text-align:center}
+.fos-wallet-empty svg{width:34px;opacity:.5}
+.fos-wallet-list{display:grid;gap:8px;max-height:60vh;overflow:auto}
+.fos-wallet-row{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fbfdfc;cursor:pointer;text-align:left;transition:.2s}
+.fos-wallet-row:hover{border-color:#98c8b7;transform:translateX(2px)}
+.fos-wallet-row-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#eef8f3;color:var(--green)}
+.fos-wallet-row-icon svg{width:16px}
+.fos-wallet-row-mid{display:grid;gap:2px;min-width:0}
+.fos-wallet-row-mid b{font-size:12.5px}
+.fos-wallet-row-mid small{color:var(--muted);font-size:10.5px}
+.fos-wallet-row-date{color:#8aa0a6;font-size:10px;white-space:nowrap}
+.fos-wallet-row>svg{width:15px;color:#c3cfd2}
+.fos-modal header .fos-wallet-back{border:0;background:none;color:var(--green);font:800 12px Manrope;display:flex;align-items:center;gap:6px;cursor:pointer;padding:0}
+.fos-modal header .fos-wallet-back svg{width:14px}
+.fos-nav-cta{position:relative}
+#fosWalletBtn{position:relative}
+.fos-wallet-badge{display:none;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;margin-left:2px;border-radius:999px;background:var(--gold);color:#142b3b;font-size:9px;font-weight:900}
 
 .fos-section{padding:100px clamp(22px,6vw,80px)}
 .fos-head{max-width:760px;margin:0 auto 44px;text-align:center}
@@ -265,8 +289,13 @@
 .fos-hero{padding:64px 18px 200px}
 .fos-search{border-radius:20px}
 .fos-search-body{padding:16px}
+.fos-ticket{flex-direction:column}
+.fos-ticket-stub{flex-direction:row;flex-wrap:wrap;justify-content:center;border-left:0;border-top:2px dashed #ffffff40}
+.fos-ticket-stub:before,.fos-ticket-stub:after{left:auto;top:-13px}
+.fos-ticket-stub:before{left:-13px}
+.fos-ticket-stub:after{right:-13px;bottom:auto}
 .fos-ticket-meta{grid-template-columns:1fr 1fr}
-.fos-ticket-bottom{grid-template-columns:1fr}
+.fos-modal.fos-modal-wide{width:100%}
 .fos-section{padding:64px 18px}
 .fos-services{grid-template-columns:1fr}
 .fos-steps{flex-direction:column;gap:26px}
