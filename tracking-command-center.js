@@ -23,8 +23,9 @@ const TRAINS=[
  {id:'MAINT-017',type:'maint',label:'Maintenance voie',from:'BOU',to:'LAS',speedRef:20,cap:12,occ:8,delay:0,pax:false}
 ];
 
-const MAP_X0=70,MAP_X1=1130,MAP_Y=155,TOTAL_KM=648;
-const TRK_LANES=[-56,-36,-16,16,36,56];
+const MAP_X0=70,MAP_X1=1130,MAP_Y=155,TOTAL_KM=648,TRACK_Y1=MAP_Y-14,TRACK_Y2=MAP_Y+14;
+const CROSSOVERS=[140,320,500];
+function laneYFor(t,i){return(t.dir>0?TRACK_Y1:TRACK_Y2)+[-6,0,6][i%3]}
 const kmToX=km=>MAP_X0+(km/TOTAL_KM)*(MAP_X1-MAP_X0);
 const SIGNALS=(()=>{const out=[];for(let km=25;km<TOTAL_KM-15;km+=52)out.push({km,state:'green'});return out})();
 
@@ -92,6 +93,7 @@ function svgMap(){
  const stationsHtml=STATIONS.map(s=>{
   const x=kmToX(s.km),above=s.hub;
   return `<g class="trk-station" data-st="${s.id}">
+   <line x1="${x}" y1="${TRACK_Y1}" x2="${x}" y2="${TRACK_Y2}" stroke="#c7d8d2" stroke-width="2"></line>
    <circle class="trk-station-dot${s.hub?' hub':''}" cx="${x}" cy="${MAP_Y}" r="${s.hub?7:5}"></circle>
    <text class="trk-station-label" x="${x}" y="${above?MAP_Y-72:MAP_Y+42}" text-anchor="middle">${s.name}</text>
    <text class="trk-station-sub" x="${x}" y="${above?MAP_Y-60:MAP_Y+54}" text-anchor="middle">PK ${s.km} · ${s.quais} voies</text>
@@ -102,22 +104,28 @@ function svgMap(){
    </g>
   </g>`
  }).join('');
- const signalsHtml=SIGNALS.map((sig,i)=>`<g class="trk-signal" data-sig="${i}" transform="translate(${kmToX(sig.km)},${MAP_Y-24})"><circle r="5"></circle></g>`).join('');
+ const crossoverHtml=CROSSOVERS.map(km=>{const x=kmToX(km);return `<path class="trk-crossover" d="M${x} ${TRACK_Y1} C ${x+22} ${TRACK_Y1} ${x+10} ${TRACK_Y2} ${x+32} ${TRACK_Y2}"></path>`}).join('');
+ const signalsHtml=SIGNALS.map((sig,i)=>{const x=kmToX(sig.km),ty=i%2?TRACK_Y2:TRACK_Y1,sy=ty+(i%2?24:-24);return `<g class="trk-signal" data-sig="${i}" transform="translate(${x},${sy})"><line class="pole" x1="0" y1="0" x2="0" y2="${i%2?-16:16}"></line><circle r="5"></circle></g>`}).join('');
  const trainsHtml=TRAINS.map((t,i)=>{
-  const laneY=MAP_Y+(TRK_LANES[i]||0);
-  return `<g class="trk-train ${t.type}" data-train="${t.id}" style="transform:translate(${kmToX(t.kmPos)}px,${laneY}px)">
+  const y=laneYFor(t,i);
+  return `<g class="trk-train ${t.type}" data-train="${t.id}" style="transform:translate(${kmToX(t.kmPos)}px,${y}px)">
    <circle class="halo" r="11"></circle>
    <rect class="body" x="-16" y="-8" width="32" height="16" rx="4"></rect>
    <text y="4">${t.id.slice(0,3)}</text>
    <text class="tag" y="-13">${t.id}</text>
-   <text class="dwell" y="20" text-anchor="middle" font-size="8" fill="#f5a623">⏸ à quai</text>
+   <text class="dwell" y="20" text-anchor="middle" font-size="8" fill="#c9860f">⏸ à quai</text>
   </g>`
  }).join('');
- return `<svg class="trk-map-svg" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="trkFlow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#13d38e" stop-opacity="0"/><stop offset="50%" stop-color="#13d38e" stop-opacity=".9"/><stop offset="100%" stop-color="#13d38e" stop-opacity="0"/></linearGradient></defs>
-  <path class="trk-track-bed" d="M${MAP_X0} ${MAP_Y} H ${MAP_X1}"></path>
-  <path class="trk-track" d="M${MAP_X0} ${MAP_Y} H ${MAP_X1}"></path>
-  <path class="trk-track-glow" d="M${MAP_X0} ${MAP_Y} H ${MAP_X1}"></path>
+ return `<svg class="trk-map-svg" viewBox="0 0 1200 280" xmlns="http://www.w3.org/2000/svg">
+  <path class="trk-track-bed" d="M${MAP_X0} ${TRACK_Y1} H ${MAP_X1}"></path>
+  <path class="trk-track-bed" d="M${MAP_X0} ${TRACK_Y2} H ${MAP_X1}"></path>
+  <path class="trk-track" d="M${MAP_X0} ${TRACK_Y1} H ${MAP_X1}"></path>
+  <path class="trk-track" d="M${MAP_X0} ${TRACK_Y2} H ${MAP_X1}"></path>
+  ${crossoverHtml}
+  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y1-8}" text-anchor="start">VOIE 1</text>
+  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y2+16}" text-anchor="start">VOIE 2</text>
+  <g class="trk-terminal"><rect x="${MAP_X0-14}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X0-14+59}" y="${MAP_Y+69}">DÉPÔT OWENDO</text></g>
+  <g class="trk-terminal"><rect x="${MAP_X1-104}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X1-104+59}" y="${MAP_Y+69}">TERMINAL FRANCEVILLE</text></g>
   ${signalsHtml}
   ${stationsHtml}
   ${trainsHtml}
@@ -234,8 +242,7 @@ function paint(){
  TRAINS.forEach((t,i)=>{
   const g=ref.trains&&ref.trains[t.id];
   if(!g)return;
-  const laneY=MAP_Y+(TRK_LANES[i]||0);
-  g.el.style.transform=`translate(${kmToX(t.kmPos)}px,${laneY}px)`;
+  g.el.style.transform=`translate(${kmToX(t.kmPos)}px,${laneYFor(t,i)}px)`;
   g.el.classList.toggle('stopped',t.status==='arret')
  });
  SIGNALS.forEach((sig,i)=>{

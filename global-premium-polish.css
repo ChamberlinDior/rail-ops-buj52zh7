@@ -1,0 +1,12 @@
+body{background:#fff}
+.app{background:#fff}
+main{position:relative;background:transparent}
+main:before{content:"";position:fixed;top:0;left:268px;right:0;bottom:0;z-index:0;background:url('public/images/setrag-rail-network-premium-v2.png') center 35%/cover no-repeat;opacity:.05;pointer-events:none}
+.content{position:relative;z-index:1}
+.topbar{position:relative;z-index:2;background:#ffffffe8}
+.card{background:#ffffffed;border:1px solid #e3ebe8;box-shadow:0 14px 34px #06243810;border-radius:18px}
+.kpi:after{opacity:.7}
+.page-head h1{letter-spacing:-.03em}
+.btn.primary{box-shadow:0 10px 22px #0b8a5626}
+.table-card,.card.table-card{background:#ffffffed}
+@media(max-width:760px){main:before{left:0}}
