@@ -1,6 +1,7 @@
 (function(){'use strict';
 const I=n=>`<i data-lucide="${n}"></i>`;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>new Intl.NumberFormat('fr-FR').format(Math.round(n||0));
 function toastMsg(s){if(typeof toast==='function')toast(s)}
 
 /* =====================================================================
@@ -167,104 +168,182 @@ relabelGuideButton();
 
 /* =====================================================================
    PART 2 — Application contrôleur (terminal mobile / TP) sur la page
-   "Contrôles & fraude" : scan QR/NFC, résultat, vente à bord, PV,
-   mode hors ligne avec file de synchronisation.
+   "Contrôles & fraude" : scan QR/NFC, résultat, vente à bord avec
+   billet généré, PV avec document généré, mode hors ligne avec file
+   de synchronisation. Design premium, écran de téléphone réaliste.
    ===================================================================== */
-const CTR_NAMES=[['Nadia Raponda','1re classe','EXP-620 · V2/P18'],['Louis Nziengui','2e classe','OMN-624 · V4/P09'],['Alice Andjoua','VIP','EXP-620 · V1/P04'],['Marc Rombi','2e classe','EXP-773 · V3/P22']];
-let ctr={online:true,queue:0,tab:'scan',log:[]};
-function ctrLogPush(text){
- ctr.log.unshift({text,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})});
- ctr.log=ctr.log.slice(0,6);
+const CTR_NAMES=[
+ ['Nadia Raponda','1re classe','V2 · Place 18'],['Louis Nziengui','2e classe','V4 · Place 09'],
+ ['Alice Andjoua','VIP','V1 · Place 04'],['Marc Rombi','2e classe','V3 · Place 22'],
+ ['Judith Mabika','2e classe','V4 · Place 31'],['Serge Ondo','1re classe','V2 · Place 07'],
+ ['Prisca Boukandou','2e classe','V4 · Place 14'],['Hermann Tchibinda','VIP','V1 · Place 02']
+];
+const CTR_TERMINAL={id:'CT-021',agent:'J-N. Lekogo',mission:'EXP-620',from:'Owendo',to:'Franceville'};
+const CTR_FARES={'VIP':25000,'1re classe':18000,'2e classe':12000};
+const CTR_STOPS=['Booué','Lastourville','Moanda','Franceville'];
+const CTR_OUTCOMES={
+ valide:{cls:'ok',icon:'check-circle-2',label:'Titre valide',weight:.66},
+ invalide:{cls:'bad',icon:'x-circle',label:'Titre invalide',weight:.12},
+ deja:{cls:'bad',icon:'copy-x',label:'Déjà utilisé',weight:.08},
+ doublon:{cls:'warn',icon:'triangle-alert',label:'Doublon détecté',weight:.07},
+ annule:{cls:'warn',icon:'ban',label:'Billet annulé',weight:.07}
+};
+let ctr={screen:'scan',online:true,queue:0,lastKind:null,lastPassenger:null,lastTicket:null,lastPv:null,stats:{controls:0,valid:0,irregular:0,pv:0},log:[]};
+function ctrNow(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function ctrQrUrl(data){return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${encodeURIComponent('SETRAG|'+data+'|CTRL-'+CTR_TERMINAL.id)}`}
+function ctrLogPush(text,icon){
+ ctr.log.unshift({text,icon:icon||'circle-dot',time:ctrNow()});
+ ctr.log=ctr.log.slice(0,8);
  const el=document.getElementById('ctrLog');
- if(el)el.innerHTML=ctrLogHtml()
+ if(el){el.innerHTML=ctrLogHtml();if(window.lucide)lucide.createIcons()}
 }
 function ctrLogHtml(){
  if(!ctr.log.length)return '<p class="ctr-log-empty">Aucune opération pour l’instant.</p>';
- return ctr.log.map(l=>`<div class="ctr-log-row"><i></i><b>${esc(l.text)}</b><span>${l.time}</span></div>`).join('')
+ return ctr.log.map(l=>`<div class="ctr-log-row"><i>${I(l.icon)}</i><b>${esc(l.text)}</b><span>${l.time}</span></div>`).join('')
+}
+function ctrStatsHtml(){
+ const s=ctr.stats;
+ return [['Contrôles',s.controls],['Valides',s.valid],['Irrégularités',s.irregular],['PV émis',s.pv]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+}
+function pickOutcome(){
+ const r=Math.random();let acc=0;
+ for(const k in CTR_OUTCOMES){acc+=CTR_OUTCOMES[k].weight;if(r<=acc)return k}
+ return 'valide'
 }
 function ctrScanScreen(){
- return `<div class="ctr-scan-view"><div class="ctr-viewfinder"><i></i><i></i><i></i><i></i><span>${I('scan-line')} Placez le QR ou approchez la carte NFC</span></div><button class="ctr-scan-btn" data-ctr-scan>${I('scan-line')} Scanner un titre</button></div>`
+ return `<div class="ctr-scan-view"><div class="ctr-viewfinder"><i class="ctr-corner tl"></i><i class="ctr-corner tr"></i><i class="ctr-corner bl"></i><i class="ctr-corner br"></i><i class="ctr-scanline"></i><span>${I('scan-line')} Placez le QR ou approchez la carte NFC</span></div><button class="ctr-scan-btn" data-ctr-scan>${I('scan-line')} Scanner un titre</button></div>`
 }
-function ctrResultScreen(kind){
- const p=CTR_NAMES[Math.floor(Math.random()*CTR_NAMES.length)];
- const meta={
-  valide:{cls:'ok',icon:'check-circle-2',label:'Titre valide'},
-  invalide:{cls:'bad',icon:'x-circle',label:'Titre invalide'},
-  deja:{cls:'bad',icon:'copy-x',label:'Déjà utilisé'},
-  doublon:{cls:'warn',icon:'triangle-alert',label:'Doublon détecté'}
- }[kind];
- return `<div class="ctr-result ${meta.cls}"><i>${I(meta.icon)}</i><h4>${meta.label}</h4><div class="ctr-result-info"><b>${esc(p[0])}</b><span>${esc(p[1])} · ${esc(p[2])}</span></div>${meta.cls!=='ok'?`<div class="ctr-result-actions"><button data-ctr-action="pv">Rédiger un PV</button><button data-ctr-action="sale">Vendre un billet</button></div>`:''}<button class="ghost" data-ctr-action="rescan">Nouveau scan</button></div>`
+function ctrResultScreen(){
+ const kind=ctr.lastKind,p=ctr.lastPassenger,meta=CTR_OUTCOMES[kind];
+ const initials=p[0].split(' ').map(w=>w[0]).slice(0,2).join('');
+ return `<div class="ctr-result ${meta.cls}">
+  <i class="ctr-result-icon">${I(meta.icon)}</i><h4>${meta.label}</h4>
+  <div class="ctr-passenger-card"><span class="ctr-avatar">${esc(initials)}</span><div><b>${esc(p[0])}</b><span>${esc(p[1])} · ${esc(p[2])}</span></div></div>
+  <div class="ctr-result-meta"><span><small>Train</small><b>${CTR_TERMINAL.mission}</b></span><span><small>Heure</small><b>${ctrNow()}</b></span><span><small>Terminal</small><b>${CTR_TERMINAL.id}</b></span></div>
+  ${meta.cls!=='ok'?`<div class="ctr-result-actions"><button data-ctr-action="pv">${I('file-warning')} Rédiger un PV</button><button data-ctr-action="sale">${I('receipt')} Vendre un billet</button></div>`:''}
+  <button class="ghost" data-ctr-action="rescan">${I('scan-line')} Nouveau scan</button>
+ </div>`
 }
 function ctrSaleScreen(){
- return `<div class="ctr-form"><label>Train<b>EXP-620 · Owendo → Franceville</b></label><label>Prochaine gare<select><option>Booué</option><option>Lastourville</option><option>Moanda</option></select></label><label>Classe<select><option>2e classe</option><option>1re classe</option><option>VIP</option></select></label><label>Paiement<select><option>Espèces</option><option>Moov Money</option><option>Airtel Money</option><option>Carte</option></select></label><button data-ctr-issue>${I('receipt')} Émettre le billet (TP)</button></div>`
+ const cls=Object.keys(CTR_FARES);
+ return `<div class="ctr-form"><div class="ctr-form-head"><b>${CTR_TERMINAL.mission}</b><span>${CTR_TERMINAL.from} → ${CTR_TERMINAL.to}</span></div>
+  <label>Gare de descente<select id="ctrSaleStop">${CTR_STOPS.map(s=>`<option>${s}</option>`).join('')}</select></label>
+  <label>Classe<select id="ctrSaleClass">${cls.map(c=>`<option>${c}</option>`).join('')}</select></label>
+  <label>Paiement<select id="ctrSalePay"><option>Espèces</option><option>Moov Money</option><option>Airtel Money</option><option>Carte bancaire</option></select></label>
+  <div class="ctr-fare-preview"><small>Montant à percevoir</small><b id="ctrFarePreview">${fmt(CTR_FARES[cls[0]])} FCFA</b></div>
+  <button data-ctr-issue>${I('receipt')} Émettre le billet (TP)</button>
+ </div>`
+}
+function ctrTicketScreen(){
+ const t=ctr.lastTicket;
+ return `<div class="ctr-doc ctr-ticket"><div class="ctr-doc-head"><span>${I('train-front')} SETRAG</span><b>Billet émis à bord</b></div>
+  <div class="ctr-doc-route"><b>${CTR_TERMINAL.from}</b><i>${I('arrow-right')}</i><b>${esc(t.stop)}</b></div>
+  <div class="ctr-doc-grid"><span><small>Train</small><b>${CTR_TERMINAL.mission}</b></span><span><small>Classe</small><b>${esc(t.cls)}</b></span><span><small>Paiement</small><b>${esc(t.pay)}</b></span><span><small>Montant</small><b>${fmt(t.price)} FCFA</b></span></div>
+  <div class="ctr-doc-foot"><img src="${ctrQrUrl(t.ref)}" alt="QR de vérification"><div><small>N° ${t.ref}</small><span>Émis par ${CTR_TERMINAL.agent} · ${t.time}</span></div></div>
+  <button class="ghost" data-ctr-action="rescan">${I('scan-line')} Nouveau scan</button>
+ </div>`
 }
 function ctrPvScreen(){
- return `<div class="ctr-form"><label>Motif<select><option>Titre invalide</option><option>Sans titre de transport</option><option>Titre déjà utilisé</option><option>Autre irrégularité</option></select></label><label>Montant de l’amende (FCFA)<input type="number" value="25000"></label><button data-ctr-pv>${I('file-warning')} Émettre le PV</button></div>`
+ return `<div class="ctr-form"><div class="ctr-form-head"><b>Rédaction d’un procès-verbal</b><span>${CTR_TERMINAL.mission} · ${CTR_TERMINAL.id}</span></div>
+  <label>Motif<select id="ctrPvMotif"><option>Titre invalide</option><option>Sans titre de transport</option><option>Titre déjà utilisé</option><option>Refus de contrôle</option><option>Autre irrégularité</option></select></label>
+  <label>Montant de l’amende (FCFA)<input id="ctrPvAmount" type="number" value="25000"></label>
+  <button data-ctr-pv>${I('file-warning')} Émettre le PV</button>
+ </div>`
 }
+function ctrPvDocScreen(){
+ const v=ctr.lastPv;
+ return `<div class="ctr-doc ctr-pvdoc"><div class="ctr-doc-head"><span>${I('shield-alert')} SETRAG</span><b>Procès-verbal</b></div>
+  <div class="ctr-doc-grid"><span><small>Référence</small><b>${v.ref}</b></span><span><small>Motif</small><b>${esc(v.motif)}</b></span><span><small>Montant</small><b>${fmt(v.amount)} FCFA</b></span><span><small>Contrôleur</small><b>${CTR_TERMINAL.agent}</b></span></div>
+  <div class="ctr-doc-foot"><img src="${ctrQrUrl(v.ref)}" alt="QR de vérification"><div><small>${CTR_TERMINAL.mission} · ${CTR_TERMINAL.id}</small><span>Émis ${v.time}</span></div></div>
+  <button class="ghost" data-ctr-action="rescan">${I('scan-line')} Nouveau scan</button>
+ </div>`
+}
+function ctrNavKey(){return ctr.screen==='result'?'scan':ctr.screen==='ticket'?'sale':ctr.screen==='pvdoc'?'pv':ctr.screen}
 function ctrPaint(){
  const screen=document.getElementById('ctrScreen');
- if(screen)screen.innerHTML=ctr.tab==='scan'?ctrScanScreen():ctr.tab==='sale'?ctrSaleScreen():ctr.tab==='pv'?ctrPvScreen():ctrResultScreen(ctr.tab);
- document.querySelectorAll('[data-ctr-tab]').forEach(b=>b.classList.toggle('active',b.dataset.ctrTab===ctr.tab));
+ if(screen){
+  const html=ctr.screen==='scan'?ctrScanScreen():ctr.screen==='result'?ctrResultScreen():ctr.screen==='sale'?ctrSaleScreen():ctr.screen==='ticket'?ctrTicketScreen():ctr.screen==='pv'?ctrPvScreen():ctrPvDocScreen();
+  screen.innerHTML=`<div class="ctr-screen-inner">${html}</div>`
+ }
+ document.querySelectorAll('[data-ctr-nav]').forEach(b=>b.classList.toggle('active',b.dataset.ctrNav===ctrNavKey()));
  const conn=document.getElementById('ctrConn');
- if(conn){conn.textContent=(ctr.online?'● En ligne':'● Hors ligne');conn.className='ctr-conn '+(ctr.online?'online':'offline')}
+ if(conn){conn.textContent=ctr.online?'En ligne':'Hors ligne';conn.className='ctr-conn '+(ctr.online?'online':'offline')}
  const sync=document.getElementById('ctrSync');
- if(sync)sync.textContent=ctr.queue?`${ctr.queue} en attente de synchro`:'Synchronisé';
- const toggle=document.getElementById('ctrConnToggle');
- if(toggle)toggle.textContent=ctr.online?'Basculer hors ligne':'Repasser en ligne';
+ if(sync)sync.textContent=ctr.queue?`${ctr.queue} en file`:'Synchronisé';
+ const sw=document.getElementById('ctrConnSwitch');
+ if(sw)sw.classList.toggle('off',!ctr.online);
+ const stats=document.getElementById('ctrStats');
+ if(stats)stats.innerHTML=ctrStatsHtml();
  if(window.lucide)lucide.createIcons();
  wireCtr()
 }
 function wireCtr(){
- document.querySelectorAll('[data-ctr-tab]').forEach(b=>b.onclick=()=>{ctr.tab=b.dataset.ctrTab;ctrPaint()});
+ document.querySelectorAll('[data-ctr-nav]').forEach(b=>b.onclick=()=>{ctr.screen=b.dataset.ctrNav;ctrPaint()});
  const scanBtn=document.getElementById('ctrScreen')?.querySelector('[data-ctr-scan]');
  if(scanBtn)scanBtn.onclick=()=>{
-  const roll=Math.random();
-  const kind=roll<0.72?'valide':roll<0.85?'invalide':roll<0.94?'deja':'doublon';
-  ctr.tab=kind;
+  const kind=pickOutcome(),p=CTR_NAMES[Math.floor(Math.random()*CTR_NAMES.length)];
+  ctr.lastKind=kind;ctr.lastPassenger=p;ctr.screen='result';
+  ctr.stats.controls++;if(kind==='valide')ctr.stats.valid++;else ctr.stats.irregular++;
   ctrPaint();
-  if(ctr.online)ctrLogPush(`Contrôle · résultat ${kind==='valide'?'valide':kind==='invalide'?'invalide':kind==='deja'?'déjà utilisé':'doublon'}`);
-  else{ctr.queue++;ctrLogPush(`Contrôle (hors ligne, en file) · ${kind}`)}
+  const label=CTR_OUTCOMES[kind].label;
+  if(ctr.online)ctrLogPush(`Contrôle ${p[0]} · ${label}`,CTR_OUTCOMES[kind].icon);
+  else{ctr.queue++;ctrLogPush(`Contrôle ${p[0]} (hors ligne) · ${label}`,'cloud-off')}
  };
  document.querySelectorAll('[data-ctr-action]').forEach(b=>b.onclick=()=>{
   const a=b.dataset.ctrAction;
-  if(a==='rescan'){ctr.tab='scan';ctrPaint();return}
-  if(a==='pv'){ctr.tab='pv';ctrPaint();return}
-  if(a==='sale'){ctr.tab='sale';ctrPaint();return}
+  ctr.screen=a==='rescan'?'scan':a==='pv'?'pv':'sale';
+  ctrPaint()
  });
+ const classSel=document.getElementById('ctrSaleClass');
+ if(classSel)classSel.onchange=()=>{const el=document.getElementById('ctrFarePreview');if(el)el.textContent=fmt(CTR_FARES[classSel.value])+' FCFA'};
  const issueBtn=document.getElementById('ctrScreen')?.querySelector('[data-ctr-issue]');
  if(issueBtn)issueBtn.onclick=()=>{
-  if(ctr.online){ctrLogPush('Billet émis à bord · TP · règlement encaissé');toastMsg('Billet émis à bord · document généré et journalisé')}
-  else{ctr.queue++;ctrLogPush('Vente à bord (hors ligne, en file)');toastMsg('Vente enregistrée hors ligne · sera synchronisée')}
-  ctr.tab='scan';ctrPaint()
+  const stop=document.getElementById('ctrSaleStop').value,cls=document.getElementById('ctrSaleClass').value,pay=document.getElementById('ctrSalePay').value;
+  const price=CTR_FARES[cls],ref='TP-'+Math.floor(100000+Math.random()*900000);
+  ctr.lastTicket={stop,cls,pay,price,ref,time:ctrNow()};
+  ctr.screen='ticket';
+  if(ctr.online){ctrLogPush(`Billet émis à bord · ${fmt(price)} FCFA · ${pay}`,'receipt');toastMsg('Billet émis à bord · document généré et journalisé')}
+  else{ctr.queue++;ctrLogPush('Vente à bord (hors ligne, en file)','cloud-off');toastMsg('Vente enregistrée hors ligne · sera synchronisée')}
+  ctrPaint()
  };
  const pvBtn=document.getElementById('ctrScreen')?.querySelector('[data-ctr-pv]');
  if(pvBtn)pvBtn.onclick=()=>{
-  if(ctr.online){ctrLogPush('PV émis · amende consignée');toastMsg('PV émis · amende consignée et journalisée')}
-  else{ctr.queue++;ctrLogPush('PV (hors ligne, en file)');toastMsg('PV enregistré hors ligne · sera synchronisé')}
-  ctr.tab='scan';ctrPaint()
+  const motif=document.getElementById('ctrPvMotif').value,amount=+document.getElementById('ctrPvAmount').value||0;
+  const ref='PV-'+Math.floor(10000+Math.random()*90000);
+  ctr.lastPv={motif,amount,ref,time:ctrNow()};
+  ctr.stats.pv++;ctr.screen='pvdoc';
+  if(ctr.online){ctrLogPush(`PV émis · ${motif} · ${fmt(amount)} FCFA`,'file-warning');toastMsg('PV émis · amende consignée et journalisée')}
+  else{ctr.queue++;ctrLogPush('PV (hors ligne, en file)','cloud-off');toastMsg('PV enregistré hors ligne · sera synchronisé')}
+  ctrPaint()
  };
- const connToggle=document.getElementById('ctrConnToggle');
- if(connToggle)connToggle.onclick=()=>{
+ const connSwitch=document.getElementById('ctrConnSwitch');
+ if(connSwitch)connSwitch.onclick=()=>{
   ctr.online=!ctr.online;
-  if(ctr.online&&ctr.queue){toastMsg(`${ctr.queue} opération(s) synchronisée(s) avec le central`);ctr.queue=0}
+  if(ctr.online&&ctr.queue){toastMsg(`${ctr.queue} opération(s) synchronisée(s) avec le central`);ctrLogPush(`${ctr.queue} opération(s) synchronisée(s) avec le central`,'refresh-cw');ctr.queue=0}
   else if(!ctr.online)toastMsg('Mode hors ligne · les opérations sont mises en file locale');
   ctrPaint()
  };
 }
 function controllerAppSection(){
  return `<div class="cdc-section" style="margin-top:15px"><section class="cdc-card ctr-app">
-  <header><div><h3>${I('smartphone')} Application contrôleur · terminal portable (TP)</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion.</p></div></header>
+  <header><div><h3>${I('smartphone')} Application contrôleur · terminal portable (TP)</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion — scan, vente à bord, PV, synchronisation.</p></div><div class="ctr-stats" id="ctrStats">${ctrStatsHtml()}</div></header>
   <div class="cdc-card-body">
    <div class="ctr-shell">
-    <div class="ctr-phone">
-     <div class="ctr-phone-notch"></div>
-     <div class="ctr-phone-status"><span id="ctrConn" class="ctr-conn online">● En ligne</span><span id="ctrSync" class="ctr-sync">Synchronisé</span></div>
-     <div class="ctr-screen" id="ctrScreen"></div>
+    <div class="ctr-phone"><div class="ctr-phone-notch"></div>
+     <div class="ctr-phone-screen">
+      <div class="ctr-statusbar"><span class="ctr-time">${ctrNow()}</span><span class="ctr-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
+      <div class="ctr-appbar"><b>SETRAG Contrôle</b><span>${CTR_TERMINAL.id} · ${CTR_TERMINAL.agent}</span></div>
+      <div class="ctr-screen" id="ctrScreen"></div>
+      <div class="ctr-bottomnav">
+       <button class="active" data-ctr-nav="scan">${I('scan-line')}<small>Scanner</small></button>
+       <button data-ctr-nav="sale">${I('receipt')}<small>Vente</small></button>
+       <button data-ctr-nav="pv">${I('file-warning')}<small>PV</small></button>
+      </div>
+     </div>
     </div>
     <div class="ctr-side">
-     <div class="ctr-tabs"><button class="active" data-ctr-tab="scan">${I('scan-line')} Scanner</button><button data-ctr-tab="sale">${I('receipt')} Vente à bord</button><button data-ctr-tab="pv">${I('file-warning')} PV / Amende</button></div>
-     <button class="ctr-conn-toggle" id="ctrConnToggle">Basculer hors ligne</button>
-     <div class="ctr-log"><b>Journal du contrôleur · J-N. Lekogo</b><div id="ctrLog">${ctrLogHtml()}</div></div>
+     <div class="ctr-conn-card"><div><span id="ctrConn" class="ctr-conn online">En ligne</span><small id="ctrSync">Synchronisé</small></div><button class="ctr-switch" id="ctrConnSwitch" title="Basculer le mode de connexion"><i></i></button></div>
+     <div class="ctr-log"><b>Journal du contrôleur</b><div id="ctrLog">${ctrLogHtml()}</div></div>
     </div>
    </div>
   </div>
@@ -329,13 +408,13 @@ function install(){
  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
  if(typeof pages.control==='function'&&!pages.control.__ctrWrapped){
   const prevControl=pages.control;
-  const wrapped=()=>prevControl()+controllerAppSection();
+  const wrapped=()=>`<div class="bocd-nobubble">${prevControl()}${controllerAppSection()}</div>`;
   wrapped.__ctrWrapped=true;
   pages.control=wrapped;
  }
  if(typeof pages.sales==='function'&&!pages.sales.__agqWrapped){
   const prevSales=pages.sales;
-  const wrapped=()=>prevSales()+agentQueueSection();
+  const wrapped=()=>`<div class="bocd-nobubble">${prevSales()}${agentQueueSection()}</div>`;
   wrapped.__agqWrapped=true;
   pages.sales=wrapped;
  }
@@ -343,6 +422,7 @@ function install(){
   const old=bind;
   const enhanced=function(){
    old();
+   document.querySelectorAll('.bocd-nobubble').forEach(el=>{if(!el.__bocdStop){el.addEventListener('click',e=>e.stopPropagation());el.__bocdStop=true}});
    if(document.getElementById('ctrScreen'))ctrPaint();
    if(document.getElementById('agqList'))agqRefresh();
   };
