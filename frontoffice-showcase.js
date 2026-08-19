@@ -27,6 +27,7 @@ const stationOptions=sel=>STATIONS.map(s=>`<option value="${s[0]}" ${s[0]===sel?
 
 const ST={o:'OWE',d:'FCV',date:'2026-08-22',pax:1,cls:'2e',train:null,seats:[],pass:{},pay:null};
 const WALLET=[];
+const AGENT_QUEUE=window.SETRAG_SERVICE_REQUESTS=window.SETRAG_SERVICE_REQUESTS||[];
 const kindIcon=k=>({billet:'ticket',bagage:'luggage',colis:'package',taa:'car-front',funeraire:'flower-2',messagerie:'send'}[k]||'file-text');
 function addToWallet(rec){WALLET.unshift(rec);updateWalletBadge()}
 function updateWalletBadge(){const b=document.getElementById('fosWalletBadge');if(!b)return;if(WALLET.length){b.style.display='inline-flex';b.textContent=WALLET.length}else{b.style.display='none'}}
@@ -325,6 +326,7 @@ function openServiceModal(id){
   const ref=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
   const rec={id:ref,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()}`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Statut','Confirmé'],['Date',today()]]};
   addToWallet(rec);
+  AGENT_QUEUE.unshift({ref,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null});
   root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success-doc"><div class="fos-modal-success-head"><i>${I('check')}</i><div><h3>Demande confirmée</h3><p>Ajouté à votre portefeuille · confirmation envoyée par SMS et e-mail.</p></div></div>${docCardHtml(rec)}<div class="fos-ticket-actions" style="margin-top:16px"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button class="gold" data-fos-modal-close>Fermer</button></div></div>`;
   if(window.lucide)lucide.createIcons();
   root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=()=>root.innerHTML='');
