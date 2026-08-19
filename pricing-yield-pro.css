@@ -1,0 +1,145 @@
+.pyx-page{--navy:#092238;--navy2:#0b3159;--green:#087b5b;--gold:#e9b94f;--amber:#c9860f;--red:#e34850;--blue:#2179c9;--purple:#8c5fc9;--muted:#5d717a;--line:#e3ebe8;position:relative;margin:-28px;background:#f6f8f7;color:var(--navy);font-family:Manrope,sans-serif;min-height:100%}
+.pyx-page *{box-sizing:border-box}
+.pyx-page:before{content:"";position:fixed;inset:0;z-index:0;background:url('public/images/setrag-rail-network-premium-v2.png') center 38%/cover no-repeat;opacity:.05;pointer-events:none}
+.pyx-page>*{position:relative;z-index:1}
+
+.pyx-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding:28px clamp(18px,3vw,40px) 4px}
+.pyx-eyebrow{display:block;font:800 10px Manrope,sans-serif;letter-spacing:.08em;color:var(--green);margin-bottom:6px}
+.pyx-head h1{margin:0;font-size:25px;letter-spacing:-.02em;color:var(--navy)}
+.pyx-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.pyx-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pyx-live{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:#eef8f3;border:1px solid #cfe6de;color:var(--green);font-size:11px;font-weight:800}
+.pyx-live i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px #087b5b26;animation:pyx-blink 1.6s ease-in-out infinite}
+@keyframes pyx-blink{0%,100%{opacity:1}50%{opacity:.35}}
+.pyx-actions button{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:10px;padding:9px 14px;background:#fff;color:var(--navy);font:800 11.5px Manrope;cursor:pointer;transition:.2s;box-shadow:0 4px 14px #06243808}
+.pyx-actions button:hover{border-color:#98c8b7;transform:translateY(-1px)}
+.pyx-actions button.primary{background:var(--green);border-color:var(--green);color:#fff}
+.pyx-actions svg{width:14px}
+
+.pyx-proof{margin:14px clamp(18px,3vw,40px) 0;padding:12px 16px;border-radius:12px;background:#eef8f3;border:1px solid #cfe6de;color:var(--navy);font-size:11.5px;line-height:1.5}
+.pyx-proof b{color:var(--green)}
+
+.pyx-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px clamp(18px,3vw,40px) 0}
+.pyx-kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:0 6px 18px #06243808}
+.pyx-kpi small{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.pyx-kpi b{font-size:20px;color:var(--navy)}
+.pyx-kpi span{display:block;color:var(--muted);font-size:10.5px;margin-top:3px}
+
+.pyx-section{padding:18px clamp(18px,3vw,40px) 0}
+.pyx-2col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.pyx-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 10px 26px #06243808}
+.pyx-card h2{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.pyx-card .pyx-sub{margin:0 0 12px;color:var(--muted);font-size:11.5px}
+.pyx-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+.pyx-card-head p{margin:4px 0 0;color:var(--muted);font-size:11.5px}
+.pyx-tools{display:flex;gap:8px;flex-wrap:wrap}
+.pyx-tools input{padding:9px 12px;border:1px solid var(--line);border-radius:9px;font:600 12px Manrope;width:230px;max-width:60vw}
+.pyx-tools button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#f6f8f7;color:var(--navy);font:800 11px Manrope;cursor:pointer}
+.pyx-tools svg{width:13px}
+
+.pyx-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.pyx-tabs button{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:7px 13px;font:800 11px Manrope;cursor:pointer;transition:.15s}
+.pyx-tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.pyx-tabs button:hover:not(.active){border-color:#98c8b7}
+
+.pyx-table-wrap{overflow:auto}
+.pyx-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.pyx-table thead th{text-align:left;padding:9px 12px;font:800 9.5px Manrope,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line);white-space:nowrap}
+.pyx-table td{padding:11px 12px;border-bottom:1px solid #f0f3f2;color:var(--navy);white-space:nowrap}
+.pyx-table tbody tr:hover{background:#f8faf9}
+.pyx-table tr.pyx-hidden{display:none}
+.pyx-code{font-family:monospace;font-weight:700;color:var(--navy2)}
+.pyx-chip{display:inline-block;padding:4px 10px;border-radius:999px;background:#eef8f3;color:var(--green);font:800 10px Manrope;white-space:nowrap}
+.pyx-chip.warn{background:#fdf3e3;color:var(--amber)}
+.pyx-chip.bad{background:#fdf1f1;color:var(--red)}
+.pyx-chip.info{background:#eaf2fb;color:var(--blue)}
+.pyx-menu-btn{border:1px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;display:grid;place-items:center;cursor:pointer;color:var(--navy)}
+.pyx-menu-btn:hover{border-color:#98c8b7}
+.pyx-menu-btn svg{width:14px}
+
+.pyx-row-menu{position:fixed;z-index:260;width:225px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 20px 50px #06243830;padding:6px;display:grid;gap:2px}
+.pyx-row-menu button{display:flex;align-items:center;gap:9px;text-align:left;border:0;background:none;padding:9px 10px;border-radius:8px;font:700 12px Manrope;color:var(--navy);cursor:pointer}
+.pyx-row-menu button:hover{background:#f6f8f7}
+.pyx-row-menu svg{width:14px;color:var(--muted)}
+
+.pyx-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px}
+.pyx-rule{padding:11px 12px;border-radius:12px;background:#f6f8f7;border:1px solid var(--line)}
+.pyx-rule b{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}
+.pyx-rule span{font-size:12.5px;font-weight:800;color:var(--navy)}
+
+.pyx-quota-table td{white-space:normal}
+.pyx-quota-bar{width:100px;height:6px;border-radius:99px;background:#eef1f0;overflow:hidden;margin-bottom:3px}
+.pyx-quota-bar i{display:block;height:100%;background:var(--green)}
+.pyx-quota-table small{color:var(--muted);font-size:10px}
+.pyx-quota-adjust .row-actions{display:flex;gap:6px}
+.pyx-quota-adjust button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;font:800 14px Manrope;cursor:pointer;color:var(--navy)}
+.pyx-quota-adjust button:hover{border-color:#98c8b7;background:#f6f8f7}
+
+.pyx-sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.pyx-sim-grid label{display:grid;gap:6px;font-size:10.5px;font-weight:800;color:#8aa0a6;text-transform:uppercase;letter-spacing:.05em}
+.pyx-sim-grid select,.pyx-sim-grid input[type=range]{padding:9px;border:1px solid var(--line);border-radius:9px;font:700 12px Manrope}
+.pyx-sim-grid input[type=range]{padding:0;height:6px}
+.pyx-sim-grid span{font-size:11px;color:var(--navy);font-weight:800}
+.pyx-price{padding:14px 16px;border-radius:12px;background:#f6f8f7;font-size:12px;color:var(--muted);margin-bottom:10px}
+.pyx-price strong{display:block;font-size:24px;color:var(--navy);margin:4px 0}
+.pyx-full{width:100%}
+.pyx-sim-history{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.pyx-sim-history b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.pyx-sim-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:11.5px;border-bottom:1px solid #f0f3f2}
+.pyx-sim-row:last-child{border-bottom:0}
+.pyx-sim-row span{color:var(--muted)}
+.pyx-empty{color:var(--muted);font-size:11.5px}
+
+.pyx-flow{display:grid;gap:10px;margin-top:10px}
+.pyx-step{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:#f6f8f7;border:1px solid var(--line)}
+.pyx-step.done{background:#eef8f3;border-color:#cfe6de}
+.pyx-step b{font-size:12.5px}
+.pyx-step span{font-size:11px;color:var(--green);font-weight:800}
+.pyx-step button{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:8px;padding:7px 12px;font:800 10.5px Manrope;cursor:pointer}
+.pyx-sub-h{margin:18px 0 8px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pyx-coverage p{margin:0 0 8px;font-size:12px;display:flex;gap:8px;align-items:center;color:var(--navy)}
+.pyx-coverage svg{width:14px;color:var(--green)}
+
+/* modals */
+.pyx-modal-backdrop{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#04152699;padding:20px;backdrop-filter:blur(4px)}
+.pyx-modal{width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:22px;background:#fff;padding:28px;box-shadow:0 40px 90px #04152650}
+.pyx-modal.pyx-modal-wide{width:min(680px,100%)}
+.pyx-modal header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+.pyx-modal-eyebrow{display:block;font:800 9.5px Manrope,sans-serif;letter-spacing:.08em;color:var(--green);margin-bottom:4px}
+.pyx-modal h3{font-size:18px;color:var(--navy);margin:0 0 4px}
+.pyx-modal header p{font-size:12px;color:var(--muted);margin:0;max-width:380px}
+.pyx-modal-close{border:0;background:#f3f7f6;width:30px;height:30px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:14px;flex:none}
+.pyx-modal footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.pyx-modal footer button{border-radius:10px;padding:10px 16px;font:800 12px Manrope;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy)}
+.pyx-modal footer button.primary{background:var(--green);border-color:var(--green);color:#fff}
+.pyx-modal footer button.ghost{background:#fff}
+
+.pyx-progress{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.pyx-progress span{padding:6px 11px;border-radius:999px;background:#f6f8f7;color:var(--muted);font:800 10px Manrope;letter-spacing:.02em}
+.pyx-progress span.active{background:var(--navy);color:#fff}
+.pyx-wstep h4{margin:0 0 12px;font-size:13px;color:var(--navy)}
+.pyx-wstep.pyx-hidden{display:none}
+.pyx-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pyx-form label{display:grid;gap:6px;font-size:10.5px;font-weight:800;color:#8aa0a6;text-transform:uppercase;letter-spacing:.05em}
+.pyx-form input,.pyx-form select{padding:11px;border:1px solid var(--line);border-radius:10px;font:700 12.5px Manrope,sans-serif;color:var(--navy)}
+.pyx-preview{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding:12px 14px;border-radius:12px;background:#f6f8f7;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.pyx-preview b{color:var(--navy)}
+.pyx-preview strong{color:var(--green);font-size:14px}
+.pyx-checks{display:grid;gap:7px;margin-bottom:14px;padding:12px 14px;border-radius:12px;background:#eef8f3;border:1px solid #cfe6de}
+.pyx-checks p{margin:0;display:flex;gap:8px;align-items:center;font-size:11.5px;color:var(--navy)}
+.pyx-checks svg{width:13px;color:var(--green)}
+.pyx-modal .pyx-step-label{font-size:11px;color:var(--muted);font-weight:800;align-self:center;margin-right:auto;margin-left:6px}
+.pyx-modal footer{align-items:center}
+
+.pyx-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.pyx-field{padding:11px 13px;border-radius:12px;background:#f6f8f7;border:1px solid var(--line)}
+.pyx-field small{display:block;color:var(--muted);font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.pyx-field b{font-size:12.5px;color:var(--navy)}
+.pyx-journal{display:grid;gap:10px;max-height:260px;overflow:auto}
+.pyx-journal-row{display:flex;gap:10px;align-items:flex-start}
+.pyx-journal-row i{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:5px;flex:none}
+.pyx-journal-row b{display:block;font-size:12px;color:var(--navy)}
+.pyx-journal-row span{font-size:10.5px;color:var(--muted)}
+
+@media(max-width:1150px){.pyx-kpis{grid-template-columns:repeat(3,1fr)}.pyx-2col{grid-template-columns:1fr}}
+@media(max-width:740px){.pyx-page{margin:-16px}.pyx-head{padding:20px 16px 4px}.pyx-kpis{grid-template-columns:1fr 1fr;padding:14px 16px 0}.pyx-section{padding:14px 16px 0}.pyx-form,.pyx-sim-grid,.pyx-detail-grid{grid-template-columns:1fr}}

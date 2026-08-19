@@ -495,7 +495,7 @@ function tableHtml(){
    <td><span class="trn-status-badge ${t.status}">${statusLabel(t.status)}</span></td>
    <td class="trn-charge-cell">${t.pax?`${fmtNum(t.occ)} / ${fmtNum(t.cap)}<div class="trn-charge-bar"><i style="width:${pct}%"></i></div>`:`${fmtNum(t.occ)} t`}</td>
    <td class="trn-ecart ${t.delay>0?'late':'ontime'}">${t.delay>0?'+'+t.delay+' min':'à l’heure'}</td>
-   <td><div class="trn-row-actions"><button data-expand="${t.id}">${I('layout-list')} Composition</button><button data-locate="${t.id}">${I('map-pin')} Localiser</button></div></td>
+   <td><div class="row-actions trn-row-actions"><button data-expand="${t.id}">${I('layout-list')} Composition</button><button data-locate="${t.id}">${I('map-pin')} Localiser</button></div></td>
   </tr>${expanded===t.id?`<tr class="trn-expand-row"><td colspan="9">${expandHtml(t)}</td></tr>`:''}`
  }).join('');
  return `<table class="trn-table"><thead><tr>
