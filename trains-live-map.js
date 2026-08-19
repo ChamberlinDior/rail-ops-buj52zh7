@@ -359,6 +359,8 @@ const LAST_NAMES=['Ondo','Mba','Ndong','Obiang','Nguema','Ella','Meye','Owono','
 function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
 function mulberry32(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function seededPerson(seed){const r=mulberry32(seed);return `${FIRST_NAMES[Math.floor(r()*FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(r()*LAST_NAMES.length)]}`}
+function boardingKey(trainId,seat){return trainId+':'+seat}
+function boardingRegistry(){return window.SETRAG_BOARDING=window.SETRAG_BOARDING||{}}
 function carPassengers(t,v){
  const[,classe,,assises,debout,,colonnes,bloquees]=v;
  const seedBase=hashStr(t.id+v[0]);
@@ -366,6 +368,7 @@ function carPassengers(t,v){
  const capacity=Math.max(0,assises-(bloquees||0));
  const occupied=Math.max(0,Math.min(capacity,Math.round(capacity*occRatio)));
  const legStations=STATIONS.filter(s=>s.km>=t.min-0.01&&s.km<=t.max+0.01);
+ const boarding=boardingRegistry();
  const rows=[];
  for(let i=0;i<assises;i++){
   const row=Math.floor(i/colonnes)+1,col=String.fromCharCode(65+(i%colonnes)),seat=`${row}${col}`;
@@ -377,7 +380,9 @@ function carPassengers(t,v){
   const oi=legStations.length>1?Math.floor(r()*(legStations.length-1)):0;
   const di=Math.min(legStations.length-1,oi+1+Math.floor(r()*Math.max(1,legStations.length-oi-1)));
   const from=legStations[oi]||stById(t.from),to=legStations[di]||stById(t.to);
-  rows.push({seat,status:'occupied',name,classe,from:from.name,to:to.name,ref:`SETRAG-${String(10000+seedI%89999)}`})
+  const key=boardingKey(t.id,seat);
+  if(boarding[key]===undefined)boarding[key]=mulberry32(seedI+911)()>0.09;
+  rows.push({seat,status:'occupied',name,classe,from:from.name,to:to.name,ref:`SETRAG-${String(10000+seedI%89999)}`,boarded:boarding[key]})
  }
  const standing=[];
  for(let i=0;i<Math.min(debout,8);i++)standing.push(seededPerson(seedBase+5000+i*53));
@@ -387,16 +392,24 @@ function passengerModal(t,v){
  const[code,classe,serie,assises,debout,rangees,colonnes,bloquees]=v;
  const man=carPassengers(t,v);
  const occCount=man.rows.filter(r=>r.status==='occupied').length,freeCount=man.rows.filter(r=>r.status==='free').length;
- const rowsHtml=man.rows.map(r=>r.status==='occupied'?`<tr><td class="seat">${r.seat}</td><td>${esc(r.name)}</td><td>${esc(r.classe)}</td><td>${esc(r.from)} → ${esc(r.to)}</td><td class="ref">${r.ref}</td></tr>`:r.status==='blocked'?`<tr class="blocked"><td class="seat">${r.seat}</td><td colspan="4">Place bloquée · consignée par contrôle</td></tr>`:`<tr class="free"><td class="seat">${r.seat}</td><td colspan="4">Libre</td></tr>`).join('');
+ const absentCount=man.rows.filter(r=>r.status==='occupied'&&!r.boarded).length;
+ const rowsHtml=man.rows.map(r=>r.status==='occupied'?`<tr class="${r.boarded?'':'absent'}"><td class="seat">${r.seat}</td><td>${esc(r.name)}</td><td>${esc(r.classe)}</td><td>${esc(r.from)} → ${esc(r.to)}</td><td class="ref">${r.ref}</td><td>${r.boarded?'<span class="trn-board ok">Embarqué</span>':'<span class="trn-board warn">Absent · non scanné</span>'}</td></tr>`:r.status==='blocked'?`<tr class="blocked"><td class="seat">${r.seat}</td><td colspan="5">Place bloquée · consignée par contrôle</td></tr>`:`<tr class="free"><td class="seat">${r.seat}</td><td colspan="5">Libre</td></tr>`).join('');
  const standingHtml=man.standingTotal?`<div class="trn-car-standing"><b>${man.standingTotal} voyageur${man.standingTotal>1?'s':''} debout</b><span>${man.standing.join(' · ')}${man.standingTotal>man.standing.length?` · +${man.standingTotal-man.standing.length} autres`:''}</span></div>`:'';
  return `<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal trn-modal-wide" onclick="event.stopPropagation()">
   <header><div><span class="trn-modal-eyebrow">FICHE VOITURE · ${esc(t.id)}</span><h3>${esc(code)} · ${esc(classe)}</h3><p>${esc(serie)} · ${rangees}×${colonnes} · ${assises} assises${debout?` · ${debout} places debout`:''}</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
-  <div class="trn-car-stats"><span><b>${occCount}</b>occupées</span><span><b>${freeCount}</b>libres</span><span><b>${bloquees||0}</b>bloquées</span></div>
-  <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>Place</th><th>Voyageur</th><th>Classe</th><th>Trajet</th><th>Réf. billet</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
+  <div class="trn-car-stats"><span><b>${occCount}</b>occupées</span><span><b>${freeCount}</b>libres</span><span><b>${bloquees||0}</b>bloquées</span><span class="${absentCount?'warn':''}"><b>${absentCount}</b>absents non scannés</span></div>
+  ${absentCount?`<p class="trn-car-note">${I('shield-alert')} Ces voyageurs ont un billet mais n’ont pas scanné à l’embarquement — à vérifier lors du contrôle à bord (anti-fraude).</p>`:''}
+  <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>Place</th><th>Voyageur</th><th>Classe</th><th>Trajet</th><th>Réf. billet</th><th>Embarquement</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
   ${standingHtml}
   <footer><button class="btn ghost" data-trn-modal-close>Fermer</button><button class="btn primary" data-block-car="${t.id}:${code}">${bloquees?'Débloquer la place':'Bloquer une place'}</button></footer>
  </div></div>`
 }
+window.SETRAG_TRAIN_API={
+ trains:TRAINS,
+ stations:STATIONS,
+ getPassengers:(trainId,code)=>{const t=TRAINS.find(x=>x.id===trainId);const v=t&&t.voitures&&t.voitures.find(x=>x[0]===code);return t&&v?carPassengers(t,v):null},
+ setBoarding:(trainId,seat,val)=>{boardingRegistry()[boardingKey(trainId,seat)]=val}
+};
 function techCarModal(t,v){
  const[code,classe,serie]=v;
  const seedBase=hashStr(t.id+code);
@@ -511,11 +524,13 @@ function footHtml(){
  const reds=SIGNALS.filter(s=>s.state==='red').length;
  const ambers=SIGNALS.filter(s=>s.state==='amber').length;
  const arret=TRAINS.filter(t=>t.status==='arret').length;
+ const incidents=(window.SETRAG_INCIDENTS||[]).filter(x=>!x.resolved);
  const items=[
   [I('shield-check'),`${SIGNALS.length} signaux tricolores · protection automatique des cantons active`,''],
   [I('circle-pause'),`${arret} train${arret>1?'s':''} à quai en gare`,''],
   reds?[I('octagon-alert'),`${reds} train${reds>1?'s':''} à l’arrêt au signal rouge`,'bad']:null,
-  ambers?[I('triangle-alert'),`${ambers} signal${ambers>1?'aux':''} d’approche en vigilance`,'']:null
+  ambers?[I('triangle-alert'),`${ambers} signal${ambers>1?'aux':''} d’approche en vigilance`,'']:null,
+  incidents.length?[I('flame'),`${incidents.length} alerte${incidents.length>1?'s':''} terrain active${incidents.length>1?'s':''} · ${incidents[0].label} PK ${incidents[0].pk} (${incidents[0].agent})`,'bad']:null
  ].filter(Boolean);
  return items.map(x=>`<span class="trn-foot-pill ${x[2]}">${x[0]} ${x[1]}</span>`).join('')
 }

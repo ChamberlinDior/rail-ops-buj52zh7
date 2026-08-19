@@ -47,13 +47,17 @@ const CDC_GUIDE={
   ['Position, retard et composition','Carte schématique avec trains animés : locomotive + wagons'],
   ['Signalisation','Signaux tricolores réagissant à l’occupation des cantons'],
   ['Voitures et wagons détaillés','Clic sur une voiture ou un wagon → manifeste complet (places, passagers, fret)'],
+  ['« Bloquer une place »','Sur la fiche d’une voiture, un bouton bloque/débloque un siège précis — utile pour une panne, une réservation officielle ou la sécurité, sans toucher au reste de la vente.'],
+  ['Détection des absents à l’embarquement','La fiche voiture affiche qui a un billet mais n’a pas scanné pour monter — synchronisé avec le scan d’embarquement du contrôleur (page Contrôles & fraude), sert à repérer les fraudes et les retardataires.'],
+  ['Alertes terrain sur le réseau','Un incident signalé par un agent de terrain (arbre sur la voie, obstacle…) apparaît en bandeau au bas de la carte tant qu’il n’est pas résolu.'],
   ['Création et détail d’une circulation','Bouton « Nouveau train » : formulaire complet et fonctionnel']
  ]},
  capacity:{eyebrow:'VOITURES & PLACES · CDC',intro:'Le CDC exige une disponibilité exacte des places par classe et par segment de trajet.',items:[
   ['VIP / 1re / 2e, assises / debout','Plan de places par voiture avec classes'],
   ['Disponibles / vendues / bloquées','Code couleur des sièges et compteurs'],
   ['Libération par segment','Disponibilité recalculée à chaque gare (Owendo–Booué–Franceville…)'],
-  ['Occupation par voiture','Tableau détaillé assises / debout / vendues / bloquées / disponibles']
+  ['Occupation par voiture','Tableau détaillé assises / debout / vendues / bloquées / disponibles'],
+  ['« Bloquer une place »','Empêche la vente d’un siège précis (panne, réservation officielle, mobilité réduite, mesure de sécurité) sans annuler le train ; motif, agent et heure sont consignés — la place redevient vendable dès qu’elle est débloquée.']
  ]},
  pricing:{eyebrow:'TARIFICATION & YIELD · CDC',intro:'Catalogue réglementaire, quotas et publication contrôlée du prix, avec prévision de la demande.',items:[
   ['Général / réduit / enfant / groupes / militaires','Catalogue tarifaire avec familles et périmètres'],
@@ -105,10 +109,12 @@ const CDC_GUIDE={
  ]},
  control:{eyebrow:'CONTRÔLES & FRAUDE · CDC',intro:'Le CDC demande de démontrer précisément comment un contrôleur valide un titre à bord, en ligne ou hors connexion.',items:[
   ['Valides / invalides / doublons / annulés / déjà utilisés','Journal des contrôles avec exactement ces statuts'],
-  ['PV, amende','Colonne PV/amende et écran « PV / Amende » du terminal contrôleur'],
-  ['Contrôleur, terminal, heure, train, passager','Toutes ces colonnes dans le journal des contrôles'],
-  ['Parcours contrôleur online/offline','Mockup d’écran mobile : bascule En ligne / Hors ligne et file de synchronisation'],
-  ['Vente à bord et billet manuel pré-imprimé','Écran « Vente à bord (TP) » du terminal contrôleur, billet émis instantanément']
+  ['PV, amende','Colonne PV/amende et écran « PV / Amende » du terminal contrôleur, document généré avec QR'],
+  ['Contrôleur, terminal, heure, train, passager','Toutes ces colonnes dans le journal, et sur chaque écran du terminal mobile'],
+  ['Parcours contrôleur online/offline','Bascule En ligne / Hors ligne : les opérations se mettent en file et se synchronisent au retour du réseau'],
+  ['Vente à bord et billet manuel pré-imprimé','Écran « Vente à bord (TP) » du terminal contrôleur, billet premium généré instantanément avec QR'],
+  ['Embarquement et anti-fraude','Écran « Embarquement » : le contrôleur scanne les voyageurs qui montent voiture par voiture ; ceux qui ont un billet mais n’ont pas scanné restent « absents » et remontent directement sur la fiche de la voiture (page Trains & circulations).'],
+  ['Agent de terrain et remontée d’incident','Second poste mobile dédié : un agent au sol signale un incident (arbre sur la voie, signal en panne…) avec repère kilométrique et gravité ; l’alerte apparaît aussitôt sur la carte de Trains & circulations.']
  ]},
  reports:{eyebrow:'RAPPORTS & KPI · CDC',intro:'Le CDC demande des rapports disponibles sur tous les domaines métier, filtrables et programmables.',items:[
   ['Tous domaines métier','Neuf catégories de rapports dans la bibliothèque'],
@@ -188,7 +194,7 @@ const CTR_OUTCOMES={
  doublon:{cls:'warn',icon:'triangle-alert',label:'Doublon détecté',weight:.07},
  annule:{cls:'warn',icon:'ban',label:'Billet annulé',weight:.07}
 };
-let ctr={screen:'scan',online:true,queue:0,lastKind:null,lastPassenger:null,lastTicket:null,lastPv:null,stats:{controls:0,valid:0,irregular:0,pv:0},log:[]};
+let ctr={screen:'scan',online:true,queue:0,lastKind:null,lastPassenger:null,lastTicket:null,lastPv:null,boardCar:null,stats:{controls:0,valid:0,irregular:0,pv:0},log:[]};
 function ctrNow(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
 function ctrQrUrl(data){return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${encodeURIComponent('SETRAG|'+data+'|CTRL-'+CTR_TERMINAL.id)}`}
 function ctrLogPush(text,icon){
@@ -258,11 +264,26 @@ function ctrPvDocScreen(){
   <button class="ghost" data-ctr-action="rescan">${I('scan-line')} Nouveau scan</button>
  </div>`
 }
+function ctrBoardScreen(){
+ const api=window.SETRAG_TRAIN_API;
+ if(!api)return `<p class="ctr-log-empty">Manifeste indisponible.</p>`;
+ const t=api.trains.find(x=>x.id===CTR_TERMINAL.mission);
+ const paxCars=t&&t.voitures?t.voitures.filter(v=>v[3]||v[4]):[];
+ if(!paxCars.length)return `<p class="ctr-log-empty">Train sans voitures voyageurs.</p>`;
+ if(!ctr.boardCar||!paxCars.some(v=>v[0]===ctr.boardCar))ctr.boardCar=paxCars[0][0];
+ const man=api.getPassengers(t.id,ctr.boardCar);
+ const occRows=man?man.rows.filter(r=>r.status==='occupied'):[];
+ const boarded=occRows.filter(r=>r.boarded).length;
+ return `<div class="ctr-board-view">
+  <div class="ctr-board-head"><b>${boarded}/${occRows.length} embarqués</b><select id="ctrBoardCar">${paxCars.map(v=>`<option value="${v[0]}"${v[0]===ctr.boardCar?' selected':''}>${v[0]} · ${v[1]}</option>`).join('')}</select></div>
+  <div class="ctr-board-list">${occRows.length?occRows.map(r=>`<button class="ctr-board-seat ${r.boarded?'in':'out'}" data-ctr-board-seat="${r.seat}"><span class="seat">${r.seat}</span><span class="name">${esc(r.name)}</span><span class="tag">${r.boarded?I('check'):I('x')} ${r.boarded?'Embarqué':'Absent'}</span></button>`).join(''):'<p class="ctr-log-empty">Aucun passager sur cette voiture.</p>'}</div>
+ </div>`
+}
 function ctrNavKey(){return ctr.screen==='result'?'scan':ctr.screen==='ticket'?'sale':ctr.screen==='pvdoc'?'pv':ctr.screen}
 function ctrPaint(){
  const screen=document.getElementById('ctrScreen');
  if(screen){
-  const html=ctr.screen==='scan'?ctrScanScreen():ctr.screen==='result'?ctrResultScreen():ctr.screen==='sale'?ctrSaleScreen():ctr.screen==='ticket'?ctrTicketScreen():ctr.screen==='pv'?ctrPvScreen():ctrPvDocScreen();
+  const html=ctr.screen==='scan'?ctrScanScreen():ctr.screen==='result'?ctrResultScreen():ctr.screen==='board'?ctrBoardScreen():ctr.screen==='sale'?ctrSaleScreen():ctr.screen==='ticket'?ctrTicketScreen():ctr.screen==='pv'?ctrPvScreen():ctrPvDocScreen();
   screen.innerHTML=`<div class="ctr-screen-inner">${html}</div>`
  }
  document.querySelectorAll('[data-ctr-nav]').forEach(b=>b.classList.toggle('active',b.dataset.ctrNav===ctrNavKey()));
@@ -296,6 +317,19 @@ function wireCtr(){
  });
  const classSel=document.getElementById('ctrSaleClass');
  if(classSel)classSel.onchange=()=>{const el=document.getElementById('ctrFarePreview');if(el)el.textContent=fmt(CTR_FARES[classSel.value])+' FCFA'};
+ const boardCarSel=document.getElementById('ctrBoardCar');
+ if(boardCarSel)boardCarSel.onchange=()=>{ctr.boardCar=boardCarSel.value;ctrPaint()};
+ document.querySelectorAll('[data-ctr-board-seat]').forEach(b=>b.onclick=()=>{
+  const api=window.SETRAG_TRAIN_API;
+  const t=api&&api.trains.find(x=>x.id===CTR_TERMINAL.mission);
+  const man=t&&api.getPassengers(t.id,ctr.boardCar);
+  const row=man&&man.rows.find(r=>r.seat===b.dataset.ctrBoardSeat);
+  if(!row)return;
+  const next=!row.boarded;
+  api.setBoarding(t.id,row.seat,next);
+  ctrLogPush(`${next?'Embarquement':'Marqué absent'} · ${row.name} · ${ctr.boardCar}/${row.seat}`,next?'user-check':'user-x');
+  ctrPaint()
+ });
  const issueBtn=document.getElementById('ctrScreen')?.querySelector('[data-ctr-issue]');
  if(issueBtn)issueBtn.onclick=()=>{
   const stop=document.getElementById('ctrSaleStop').value,cls=document.getElementById('ctrSaleClass').value,pay=document.getElementById('ctrSalePay').value;
@@ -326,7 +360,7 @@ function wireCtr(){
 }
 function controllerAppSection(){
  return `<div class="cdc-section" style="margin-top:15px"><section class="cdc-card ctr-app">
-  <header><div><h3>${I('smartphone')} Application contrôleur · terminal portable (TP)</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion — scan, vente à bord, PV, synchronisation.</p></div><div class="ctr-stats" id="ctrStats">${ctrStatsHtml()}</div></header>
+  <header><div><h3>${I('smartphone')} Application contrôleur · terminal portable (TP)</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion — scan, embarquement, vente à bord, PV, synchronisation.</p></div><div class="ctr-stats" id="ctrStats">${ctrStatsHtml()}</div></header>
   <div class="cdc-card-body">
    <div class="ctr-shell">
     <div class="ctr-phone"><div class="ctr-phone-notch"></div>
@@ -336,6 +370,7 @@ function controllerAppSection(){
       <div class="ctr-screen" id="ctrScreen"></div>
       <div class="ctr-bottomnav">
        <button class="active" data-ctr-nav="scan">${I('scan-line')}<small>Scanner</small></button>
+       <button data-ctr-nav="board">${I('users')}<small>Embarq.</small></button>
        <button data-ctr-nav="sale">${I('receipt')}<small>Vente</small></button>
        <button data-ctr-nav="pv">${I('file-warning')}<small>PV</small></button>
       </div>
@@ -344,6 +379,109 @@ function controllerAppSection(){
     <div class="ctr-side">
      <div class="ctr-conn-card"><div><span id="ctrConn" class="ctr-conn online">En ligne</span><small id="ctrSync">Synchronisé</small></div><button class="ctr-switch" id="ctrConnSwitch" title="Basculer le mode de connexion"><i></i></button></div>
      <div class="ctr-log"><b>Journal du contrôleur</b><div id="ctrLog">${ctrLogHtml()}</div></div>
+    </div>
+   </div>
+  </div>
+ </section></div>`
+}
+
+/* =====================================================================
+   PART 2b — Agent de terrain (second poste mobile) : signalement d’un
+   incident (arbre sur la voie, signal en panne…) avec PK et gravité,
+   remonté immédiatement au centre des opérations (bandeau sur la page
+   Trains & circulations).
+   ===================================================================== */
+const FLD_AGENT={id:'AG-014',name:'Serge Ondo'};
+const FLD_INCIDENT_TYPES=[
+ ['tree','Arbre sur la voie','tree-deciduous'],
+ ['signal','Signal en panne','octagon-alert'],
+ ['obstacle','Obstacle sur la voie','ban'],
+ ['flood','Voie inondée','cloud-rain'],
+ ['vandalism','Dégradation constatée','shield-alert'],
+ ['other','Autre situation à risque','circle-alert']
+];
+let fld={screen:'report'};
+function fldIncidents(){return window.SETRAG_INCIDENTS=window.SETRAG_INCIDENTS||[]}
+function fldStatsHtml(){
+ const list=fldIncidents();
+ const active=list.filter(x=>!x.resolved).length,resolved=list.filter(x=>x.resolved).length;
+ return [['Alertes actives',active],['Résolues',resolved]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+}
+function fldLogPush(text,icon){
+ fld.log=fld.log||[];
+ fld.log.unshift({text,icon:icon||'circle-dot',time:ctrNow()});
+ fld.log=fld.log.slice(0,8);
+ const el=document.getElementById('fldLog');
+ if(el){el.innerHTML=fldLogHtml();if(window.lucide)lucide.createIcons()}
+}
+function fldLogHtml(){
+ if(!fld.log||!fld.log.length)return '<p class="ctr-log-empty">Aucune alerte envoyée pour l’instant.</p>';
+ return fld.log.map(l=>`<div class="ctr-log-row"><i>${I(l.icon)}</i><b>${esc(l.text)}</b><span>${l.time}</span></div>`).join('')
+}
+function fldReportScreen(){
+ return `<div class="ctr-form"><div class="ctr-form-head"><b>Nouveau signalement</b><span>${FLD_AGENT.id} · position GPS active</span></div>
+  <label>Type d’incident<select id="fldType">${FLD_INCIDENT_TYPES.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select></label>
+  <label>Repère kilométrique (PK)<input id="fldPk" type="number" value="184" min="0" max="648"></label>
+  <label>Gravité<select id="fldSeverity"><option value="bad">Élevée · circulation compromise</option><option value="warn">Moyenne · ralentissement</option><option value="">Faible · à surveiller</option></select></label>
+  <label>Description<input id="fldDesc" placeholder="Ex. arbre tombé après l’orage"></label>
+  <button data-fld-send>${I('send')} Envoyer l’alerte</button>
+ </div>`
+}
+function fldActiveScreen(){
+ const list=fldIncidents();
+ if(!list.length)return `<div class="ctr-scan-view"><p class="ctr-log-empty">Aucune alerte active.</p></div>`;
+ return `<div class="ctr-board-list">${list.map(x=>`<div class="fld-incident ${x.severity}"><b>${esc(x.label)}</b><span>PK ${x.pk} · ${x.time}</span><p>${esc(x.desc)}</p>${!x.resolved?`<button data-fld-resolve="${x.id}">${I('check')} Marquer résolu</button>`:`<span class="fld-resolved">${I('check')} Résolu</span>`}</div>`).join('')}</div>`
+}
+function fldNavKey(){return fld.screen}
+function fldPaint(){
+ const screen=document.getElementById('fldScreen');
+ if(screen)screen.innerHTML=`<div class="ctr-screen-inner">${fld.screen==='report'?fldReportScreen():fldActiveScreen()}</div>`;
+ document.querySelectorAll('[data-fld-nav]').forEach(b=>b.classList.toggle('active',b.dataset.fldNav===fldNavKey()));
+ const stats=document.getElementById('fldStats');
+ if(stats)stats.innerHTML=fldStatsHtml();
+ if(window.lucide)lucide.createIcons();
+ wireFld()
+}
+function wireFld(){
+ document.querySelectorAll('[data-fld-nav]').forEach(b=>b.onclick=()=>{fld.screen=b.dataset.fldNav;fldPaint()});
+ const sendBtn=document.getElementById('fldScreen')?.querySelector('[data-fld-send]');
+ if(sendBtn)sendBtn.onclick=()=>{
+  const type=document.getElementById('fldType').value,pk=+document.getElementById('fldPk').value||0,severity=document.getElementById('fldSeverity').value,desc=(document.getElementById('fldDesc').value||'').trim();
+  const meta=FLD_INCIDENT_TYPES.find(x=>x[0]===type);
+  const inc={id:'INC-'+Math.floor(1000+Math.random()*9000),type,label:meta[1],pk,severity,desc:desc||meta[1],time:ctrNow(),agent:FLD_AGENT.name,resolved:false};
+  fldIncidents().unshift(inc);
+  fldLogPush(`Alerte envoyée · ${meta[1]} · PK ${pk}`,meta[2]);
+  toastMsg(`Alerte transmise au centre des opérations · ${inc.id}`);
+  fld.screen='active';
+  fldPaint()
+ };
+ document.querySelectorAll('[data-fld-resolve]').forEach(b=>b.onclick=()=>{
+  const inc=fldIncidents().find(x=>x.id===b.dataset.fldResolve);
+  if(!inc)return;
+  inc.resolved=true;
+  fldLogPush(`Alerte résolue · ${inc.label} · PK ${inc.pk}`,'check');
+  toastMsg(`${inc.id} marquée résolue`);
+  fldPaint()
+ });
+}
+function fieldAgentSection(){
+ return `<div class="cdc-section" style="margin-top:15px"><section class="cdc-card ctr-app fld-app">
+  <header><div><h3>${I('map-pin')} Agent de terrain · signalement d’incidents</h3><p>Second poste mobile : un agent au sol signale un incident et l’alerte remonte aussitôt au centre des opérations et sur la carte de Trains &amp; circulations.</p></div><div class="ctr-stats" id="fldStats">${fldStatsHtml()}</div></header>
+  <div class="cdc-card-body">
+   <div class="ctr-shell">
+    <div class="ctr-phone"><div class="ctr-phone-notch"></div>
+     <div class="ctr-phone-screen">
+      <div class="ctr-statusbar"><span class="ctr-time">${ctrNow()}</span><span class="ctr-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
+      <div class="ctr-appbar"><b>SETRAG Terrain</b><span>${FLD_AGENT.id} · ${FLD_AGENT.name}</span></div>
+      <div class="ctr-screen" id="fldScreen"></div>
+      <div class="ctr-bottomnav">
+       <button class="active" data-fld-nav="report">${I('triangle-alert')}<small>Signaler</small></button>
+       <button data-fld-nav="active">${I('list')}<small>Alertes</small></button>
+      </div>
+     </div>
+    </div>
+    <div class="ctr-side">
+     <div class="ctr-log"><b>Alertes envoyées</b><div id="fldLog">${fldLogHtml()}</div></div>
     </div>
    </div>
   </div>
@@ -408,7 +546,7 @@ function install(){
  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
  if(typeof pages.control==='function'&&!pages.control.__ctrWrapped){
   const prevControl=pages.control;
-  const wrapped=()=>`<div class="bocd-nobubble">${prevControl()}${controllerAppSection()}</div>`;
+  const wrapped=()=>`<div class="bocd-nobubble">${prevControl()}${controllerAppSection()}${fieldAgentSection()}</div>`;
   wrapped.__ctrWrapped=true;
   pages.control=wrapped;
  }
@@ -424,6 +562,7 @@ function install(){
    old();
    document.querySelectorAll('.bocd-nobubble').forEach(el=>{if(!el.__bocdStop){el.addEventListener('click',e=>e.stopPropagation());el.__bocdStop=true}});
    if(document.getElementById('ctrScreen'))ctrPaint();
+   if(document.getElementById('fldScreen'))fldPaint();
    if(document.getElementById('agqList'))agqRefresh();
   };
   enhanced.__bocdWrapped=true;

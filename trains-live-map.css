@@ -85,6 +85,14 @@ table.trn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1
 .trn-car-stats{display:flex;gap:10px;margin-bottom:14px}
 .trn-car-stats span{flex:1;display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;background:#f6f8f7;font:700 10px Manrope,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .trn-car-stats span b{font-size:18px;color:var(--navy);font-weight:800;letter-spacing:0;text-transform:none}
+.trn-car-stats span.warn{background:#fdf1f1;color:var(--red)}
+.trn-car-stats span.warn b{color:var(--red)}
+.trn-car-note{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:9px 12px;border-radius:10px;background:#fff4df;color:#8a5a06;font-size:11px}
+.trn-car-note svg{width:14px;flex:none}
+.trn-car-table tr.absent td{background:#fdf6f0}
+.trn-board{display:inline-block;padding:3px 9px;border-radius:999px;font:800 9.5px Manrope,sans-serif}
+.trn-board.ok{background:#eef8f3;color:var(--green)}
+.trn-board.warn{background:#fdf1f1;color:var(--red)}
 .trn-car-table-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px}
 .trn-car-table{width:100%;border-collapse:collapse;font-size:12px}
 .trn-car-table thead th{position:sticky;top:0;background:#f6f8f7;text-align:left;padding:9px 12px;font:800 9.5px Manrope,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)}
