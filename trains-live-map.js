@@ -60,15 +60,118 @@ function consistSvg(t){
  return s
 }
 
-function init(){
- TRAINS.forEach(t=>{
-  const a=stById(t.from),b=stById(t.to);
-  t.min=Math.min(a.km,b.km);t.max=Math.max(a.km,b.km);
-  t.kmPos=a.km;t.dir=a.km<=b.km?1:-1;
-  t.status='roulant';t.dwell=0;t.lastStation=t.from
- })
+function initTrain(t){
+ const a=stById(t.from),b=stById(t.to);
+ t.min=Math.min(a.km,b.km);t.max=Math.max(a.km,b.km);
+ t.kmPos=a.km;t.dir=a.km<=b.km?1:-1;
+ t.status='roulant';t.dwell=0;t.lastStation=t.from
 }
+function init(){TRAINS.forEach(initTrain)}
 init();
+
+/* ---------- new-train creation ---------- */
+const TYPE_META={
+ exp:{line:'pax',pax:true,speed:65,defLabel:'Express voyageurs'},
+ omn:{line:'pax',pax:true,speed:45,defLabel:'Omnibus voyageurs'},
+ fret:{line:'fret',pax:false,speed:45,defLabel:'Fret général'},
+ maint:{line:'maint',pax:false,speed:20,defLabel:'Maintenance voie'}
+};
+function trainIdSuggest(type){
+ const prefix={exp:'EXP',omn:'OMN',fret:'FRET',maint:'MAINT'}[type]||'TRN';
+ let id;do{id=`${prefix}-${100+Math.floor(Math.random()*900)}`}while(TRAINS.some(t=>t.id===id));
+ return id
+}
+function stationOptionsForType(type){
+ return type==='maint'?STATIONS.filter(s=>s.id==='BOU'||s.id==='LAS'):STATIONS
+}
+function buildVoitures(n,mix){
+ const out=[];
+ for(let i=0;i<n;i++){
+  const cls=mix==='confort'?(i===0?'VIP':i<3?'1re classe':'2e classe'):mix==='standard'?(i===0?'1re classe':'2e classe'):'2e classe';
+  const assises=cls==='VIP'?36:cls==='1re classe'?44:66;
+  const debout=cls==='2e classe'?16:0;
+  out.push([`V${i+1}`,cls,`CAR-${9000+Math.floor(Math.random()*900)}`,assises,debout,Math.ceil(assises/4),4,0])
+ }
+ return out
+}
+function newTrainModal(){
+ const root=document.querySelector('#modalRoot');
+ if(!root)return;
+ let type='exp';
+ const render=()=>{
+  const meta=TYPE_META[type],opts=stationOptionsForType(type);
+  root.innerHTML=`<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal" onclick="event.stopPropagation()">
+   <header><div><span class="trn-modal-eyebrow">CRÉATION · CIRCULATION</span><h3>Nouveau train</h3><p>Informations nécessaires à la mise en service — conforme au périmètre CDC §7.3</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
+   <div class="trn-modal-body">
+    <label>Type de circulation<select id="ntType">
+     <option value="exp">Express / Spécial voyageurs</option>
+     <option value="omn">Omnibus voyageurs</option>
+     <option value="fret">Fret / Minerai</option>
+     <option value="maint">Maintenance voie</option>
+    </select></label>
+    <label>Désignation<input id="ntLabel" placeholder="ex. Express voyageurs" value="${meta.defLabel}"></label>
+    <div class="trn-modal-grid2">
+     <label>Identifiant<input id="ntId" value="${trainIdSuggest(type)}"></label>
+     <label>Livret horaire<input id="ntLivret" value="LH-${type.toUpperCase().slice(0,3)}-${new Date().getFullYear()}"></label>
+    </div>
+    <div class="trn-modal-grid2">
+     <label>Gare de départ<select id="ntFrom">${opts.map((s,i)=>`<option value="${s.id}"${i===0?' selected':''}>${s.name}</option>`).join('')}</select></label>
+     <label>Gare d’arrivée<select id="ntTo">${opts.map((s,i)=>`<option value="${s.id}"${i===opts.length-1?' selected':''}>${s.name}</option>`).join('')}</select></label>
+    </div>
+    <div class="trn-modal-grid2">
+     <label>Vitesse de référence (km/h)<input id="ntSpeed" type="number" value="${meta.speed}" min="15" max="120"></label>
+     <label>${meta.pax?'Nombre de voitures':'Nombre de wagons'}<input id="ntUnits" type="number" value="${meta.pax?6:20}" min="1" max="${meta.pax?10:50}"></label>
+    </div>
+    ${meta.pax?`<label>Composition<select id="ntMix"><option value="confort">Confort — VIP + 1re + 2e classe</option><option value="standard" selected>Standard — 1re + 2e classe</option><option value="eco">Économique — 2e classe uniquement</option></select></label>`
+      :`<label>Nature du chargement<input id="ntCargo" value="${type==='fret'?'Vrac / minerai':'Équipe technique · matériel de voie'}"></label>`}
+   </div>
+   <footer><button class="btn ghost" data-trn-modal-close>Annuler</button><button class="btn primary" id="ntSubmit">${I('plus')} Créer et mettre en service</button></footer>
+  </div></div>`;
+  if(window.lucide)lucide.createIcons();
+  root.querySelectorAll('[data-trn-modal-close]').forEach(x=>x.onclick=()=>{root.innerHTML=''});
+  document.getElementById('ntType').value=type;
+  document.getElementById('ntType').onchange=e=>{type=e.target.value;render()};
+  document.getElementById('ntSubmit').onclick=submit;
+ };
+ const submit=()=>{
+  const meta=TYPE_META[type];
+  const id=(document.getElementById('ntId').value||'').trim().toUpperCase();
+  const label=(document.getElementById('ntLabel').value||'').trim();
+  const from=document.getElementById('ntFrom').value,to=document.getElementById('ntTo').value;
+  const speedRef=Math.max(10,+document.getElementById('ntSpeed').value||meta.speed);
+  const livret=(document.getElementById('ntLivret').value||'—').trim();
+  if(!id||TRAINS.some(t=>t.id===id)){if(typeof toast==='function')toast('Identifiant invalide ou déjà utilisé');return}
+  if(from===to){if(typeof toast==='function')toast('Gare de départ et d’arrivée identiques');return}
+  const t={id,type,line:meta.line,label:label||meta.defLabel,livret,from,to,speedRef,delay:0,pax:meta.pax};
+  if(meta.pax){
+   const n=Math.max(1,Math.min(10,+document.getElementById('ntUnits').value||6));
+   const mix=document.getElementById('ntMix').value;
+   t.voitures=buildVoitures(n,mix);
+   t.cap=t.voitures.reduce((a,v)=>a+v[3]+v[4],0);
+   t.occ=Math.round(t.cap*(0.35+Math.random()*0.25));
+   t.composition=`${n} voiture${n>1?'s':''} · ${t.cap} pl.`
+  }else{
+   const n=Math.max(1,Math.min(50,+document.getElementById('ntUnits').value||20));
+   const cargo=(document.getElementById('ntCargo').value||'Chargement').trim();
+   t.wagons=[[type==='maint'?'Voiture technique':'Wagons trémie',String(n),cargo]];
+   t.cap=n*(type==='maint'?12:45);
+   t.occ=Math.round(t.cap*(0.5+Math.random()*0.3));
+   t.composition=`${n} wagon${n>1?'s':''}`
+  }
+  initTrain(t);
+  TRAINS.push(t);
+  selected=t.id;
+  mountDynamic();
+  const kpis=document.getElementById('trnKpis');if(kpis)kpis.innerHTML=kpisHtml();
+  const wrap=document.getElementById('trnTableWrap');if(wrap){wrap.innerHTML=tableHtml();wireTable()}
+  selectTrain(t.id);
+  if(window.lucide)lucide.createIcons();
+  root.innerHTML='';
+  if(typeof toast==='function')toast(`${t.id} créé et mis en service · ${stById(from).name} → ${stById(to).name}`)
+ };
+ render();
+ if(!root.__trnModalStop){root.addEventListener('click',e=>e.stopPropagation());root.__trnModalStop=true}
+}
 
 function fmtNum(n){return new Intl.NumberFormat('fr-FR').format(Math.round(n))}
 function nextStation(t){
@@ -424,7 +527,7 @@ function wire(){
  wireTable();
  if(window.lucide)lucide.createIcons();
  root.querySelectorAll('[data-trn-refresh]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Réseau actualisé')});
- root.querySelectorAll('[data-trn-new]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Assistant de création de circulation · démonstration')});
+ root.querySelectorAll('[data-trn-new]').forEach(b=>b.onclick=()=>newTrainModal());
  selectTrain(selected);
  if(tickHandle)clearInterval(tickHandle);
  tickHandle=setInterval(tick,1500);
