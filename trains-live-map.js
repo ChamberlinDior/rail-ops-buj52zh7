@@ -354,8 +354,8 @@ function kpisHtml(){
 }
 
 /* ---------- passenger / cargo manifests ---------- */
-const FIRST_NAMES=['Jean-Pierre','Alice','Patrick','Nadia','Louis','Grâce','Marc','Paul','Aline','Christian','Sarah','Diane','Rose','Éric','Clovis','Serge','Alain','David','Mireille','Judith','Steevy','Prisca','Yannick','Larissa','Ornella','Franck','Bertrand','Sandrine','Guy-Roger','Rachel','Fabrice','Nadège','Hermann'];
-const LAST_NAMES=['Agondjo','Lekogo','Mavoungou','Okoumba','Raponda','Nziengui','Andjoua','Rombi','Mounguengui','Lekabi','Mabika','Moukagni','Obiang','Ndong Ella','Ngoua','Mba','Ondo','Assoumou','Mihindou','Ivala','Boussamba','Ogandaga','Moussavou','Bekale'];
+const FIRST_NAMES=['Jean-Pierre','Alice','Patrick','Nadia','Louis','Grâce','Marc','Paul','Aline','Christian','Sarah','Diane','Rose','Éric','Clovis','Serge','Alain','David','Mireille','Judith','Steevy','Prisca','Yannick','Larissa','Ornella','Franck','Bertrand','Sandrine','Guy-Roger','Rachel','Fabrice','Nadège','Hermann','Divine','Brice','Carelle','Ghislain','Stessy','Reine','Landry','Christelle','Ulrich','Sylvie','Wilfried','Chimène','Régis','Édwige','Steve','Émeraude','Junior','Odette'];
+const LAST_NAMES=['Ondo','Mba','Ndong','Obiang','Nguema','Ella','Meye','Owono','Moussounda','Mouyabi','Diyoka','Moutsinga','Yembi','Mackaya','Moulomba','Mouloungui','Boukandou','Iwenga','Mavoungou','Moundounga','Ntoutoume','Rapontchombo','Adande','Rerambyath','Avaro','Raponda','Sima','Ollandet','Okombi','Ngari','Moussirou','Djimbi','Nzoughe','Mouketou','Ivala','Tchibinda','Bitsindou','Loembe','Agondjo','Lekogo','Mabika','Ngoua','Assoumou','Mihindou','Boussamba','Ogandaga','Moussavou','Bekale','Lekabi','Mounguengui','Andjoua'];
 function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
 function mulberry32(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function seededPerson(seed){const r=mulberry32(seed);return `${FIRST_NAMES[Math.floor(r()*FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(r()*LAST_NAMES.length)]}`}
