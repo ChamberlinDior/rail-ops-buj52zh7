@@ -353,22 +353,133 @@ function kpisHtml(){
  ].map(k=>`<div class="trn-kpi ${k[3]}"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')
 }
 
+/* ---------- passenger / cargo manifests ---------- */
+const FIRST_NAMES=['Jean-Pierre','Alice','Patrick','Nadia','Louis','Grâce','Marc','Paul','Aline','Christian','Sarah','Diane','Rose','Éric','Clovis','Serge','Alain','David','Mireille','Judith','Steevy','Prisca','Yannick','Larissa','Ornella','Franck','Bertrand','Sandrine','Guy-Roger','Rachel','Fabrice','Nadège','Hermann'];
+const LAST_NAMES=['Agondjo','Lekogo','Mavoungou','Okoumba','Raponda','Nziengui','Andjoua','Rombi','Mounguengui','Lekabi','Mabika','Moukagni','Obiang','Ndong Ella','Ngoua','Mba','Ondo','Assoumou','Mihindou','Ivala','Boussamba','Ogandaga','Moussavou','Bekale'];
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function mulberry32(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function seededPerson(seed){const r=mulberry32(seed);return `${FIRST_NAMES[Math.floor(r()*FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(r()*LAST_NAMES.length)]}`}
+function carPassengers(t,v){
+ const[,classe,,assises,debout,,colonnes,bloquees]=v;
+ const seedBase=hashStr(t.id+v[0]);
+ const occRatio=t.cap?Math.min(0.97,t.occ/t.cap):0.7;
+ const capacity=Math.max(0,assises-(bloquees||0));
+ const occupied=Math.max(0,Math.min(capacity,Math.round(capacity*occRatio)));
+ const legStations=STATIONS.filter(s=>s.km>=t.min-0.01&&s.km<=t.max+0.01);
+ const rows=[];
+ for(let i=0;i<assises;i++){
+  const row=Math.floor(i/colonnes)+1,col=String.fromCharCode(65+(i%colonnes)),seat=`${row}${col}`;
+  if(i<(bloquees||0)){rows.push({seat,status:'blocked'});continue}
+  if(i-(bloquees||0)>=occupied){rows.push({seat,status:'free'});continue}
+  const seedI=seedBase+i*97;
+  const r=mulberry32(seedI);
+  const name=`${FIRST_NAMES[Math.floor(r()*FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(r()*LAST_NAMES.length)]}`;
+  const oi=legStations.length>1?Math.floor(r()*(legStations.length-1)):0;
+  const di=Math.min(legStations.length-1,oi+1+Math.floor(r()*Math.max(1,legStations.length-oi-1)));
+  const from=legStations[oi]||stById(t.from),to=legStations[di]||stById(t.to);
+  rows.push({seat,status:'occupied',name,classe,from:from.name,to:to.name,ref:`SETRAG-${String(10000+seedI%89999)}`})
+ }
+ const standing=[];
+ for(let i=0;i<Math.min(debout,8);i++)standing.push(seededPerson(seedBase+5000+i*53));
+ return{rows,standing,standingTotal:debout}
+}
+function passengerModal(t,v){
+ const[code,classe,serie,assises,debout,rangees,colonnes,bloquees]=v;
+ const man=carPassengers(t,v);
+ const occCount=man.rows.filter(r=>r.status==='occupied').length,freeCount=man.rows.filter(r=>r.status==='free').length;
+ const rowsHtml=man.rows.map(r=>r.status==='occupied'?`<tr><td class="seat">${r.seat}</td><td>${esc(r.name)}</td><td>${esc(r.classe)}</td><td>${esc(r.from)} → ${esc(r.to)}</td><td class="ref">${r.ref}</td></tr>`:r.status==='blocked'?`<tr class="blocked"><td class="seat">${r.seat}</td><td colspan="4">Place bloquée · consignée par contrôle</td></tr>`:`<tr class="free"><td class="seat">${r.seat}</td><td colspan="4">Libre</td></tr>`).join('');
+ const standingHtml=man.standingTotal?`<div class="trn-car-standing"><b>${man.standingTotal} voyageur${man.standingTotal>1?'s':''} debout</b><span>${man.standing.join(' · ')}${man.standingTotal>man.standing.length?` · +${man.standingTotal-man.standing.length} autres`:''}</span></div>`:'';
+ return `<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal trn-modal-wide" onclick="event.stopPropagation()">
+  <header><div><span class="trn-modal-eyebrow">FICHE VOITURE · ${esc(t.id)}</span><h3>${esc(code)} · ${esc(classe)}</h3><p>${esc(serie)} · ${rangees}×${colonnes} · ${assises} assises${debout?` · ${debout} places debout`:''}</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
+  <div class="trn-car-stats"><span><b>${occCount}</b>occupées</span><span><b>${freeCount}</b>libres</span><span><b>${bloquees||0}</b>bloquées</span></div>
+  <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>Place</th><th>Voyageur</th><th>Classe</th><th>Trajet</th><th>Réf. billet</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
+  ${standingHtml}
+  <footer><button class="btn ghost" data-trn-modal-close>Fermer</button><button class="btn primary" data-block-car="${t.id}:${code}">${bloquees?'Débloquer la place':'Bloquer une place'}</button></footer>
+ </div></div>`
+}
+function techCarModal(t,v){
+ const[code,classe,serie]=v;
+ const seedBase=hashStr(t.id+code);
+ if(classe==='Bagages'){
+  const r=mulberry32(seedBase),n=6+Math.floor(r()*8);
+  const items=Array.from({length:n},(_,i)=>{
+   const rr=mulberry32(seedBase+i*71+1);
+   const name=`${FIRST_NAMES[Math.floor(rr()*FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(rr()*LAST_NAMES.length)]}`;
+   const poids=(4+rr()*26).toFixed(1);
+   return `<tr><td class="ref">BG-${String(1000+(seedBase+i*71)%9000)}</td><td>${esc(name)}</td><td>${poids} kg</td><td>Enregistré</td></tr>`
+  }).join('');
+  return `<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal trn-modal-wide" onclick="event.stopPropagation()">
+   <header><div><span class="trn-modal-eyebrow">FICHE VOITURE · ${esc(t.id)}</span><h3>${esc(code)} · Bagages</h3><p>${esc(serie)} · fourgon à bagages</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
+   <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>N° tag</th><th>Propriétaire</th><th>Poids</th><th>Statut</th></tr></thead><tbody>${items}</tbody></table></div>
+   <footer><button class="btn primary" data-trn-modal-close>Fermer</button></footer>
+  </div></div>`
+ }
+ const crew=['Chef de bord','Contrôleur','Agent commercial','Agent de sécurité'].map((role,i)=>({role,name:seededPerson(seedBase+i*131+2)}));
+ const items=crew.map(c=>`<tr><td>${c.role}</td><td>${esc(c.name)}</td><td>En service</td></tr>`).join('');
+ return `<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal trn-modal-wide" onclick="event.stopPropagation()">
+  <header><div><span class="trn-modal-eyebrow">FICHE VOITURE · ${esc(t.id)}</span><h3>${esc(code)} · ${esc(classe||'Voiture technique')}</h3><p>${esc(serie)}</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
+  <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>Fonction</th><th>Agent</th><th>Statut</th></tr></thead><tbody>${items}</tbody></table></div>
+  <footer><button class="btn primary" data-trn-modal-close>Fermer</button></footer>
+ </div></div>`
+}
+function cargoModal(t,w){
+ const[nom,qte,nature]=w,total=parseInt(qte,10)||1,n=Math.min(12,total);
+ const seedBase=hashStr(t.id+nom);
+ const rows=Array.from({length:n},(_,i)=>{
+  const r=mulberry32(seedBase+i*61+3);
+  return `<tr><td class="ref">${t.id}-W${String(i+1).padStart(2,'0')}</td><td>${esc(nature)}</td><td>${(18+r()*22).toFixed(1)} t</td><td>Plombé · conforme</td></tr>`
+ }).join('');
+ const extra=total>n?`<p class="trn-car-more">+ ${total-n} autres wagons de composition identique</p>`:'';
+ return `<div class="trn-modal-backdrop" data-trn-modal-close><div class="trn-modal trn-modal-wide" onclick="event.stopPropagation()">
+  <header><div><span class="trn-modal-eyebrow">FICHE WAGONS · ${esc(t.id)}</span><h3>${esc(nom)}</h3><p>${qte} unités · ${esc(nature)}</p></div><button class="trn-modal-close" data-trn-modal-close>×</button></header>
+  <div class="trn-car-table-wrap"><table class="trn-car-table"><thead><tr><th>N° wagon</th><th>Contenu</th><th>Poids</th><th>Statut</th></tr></thead><tbody>${rows}</tbody></table></div>
+  ${extra}
+  <footer><button class="btn primary" data-trn-modal-close>Fermer</button></footer>
+ </div></div>`
+}
+function openCarDetail(trainId,code){
+ const t=TRAINS.find(x=>x.id===trainId);
+ if(!t)return;
+ const root=document.querySelector('#modalRoot');
+ if(!root)return;
+ if(t.pax){
+  const v=t.voitures.find(x=>x[0]===code);
+  if(!v)return;
+  root.innerHTML=(v[3]||v[4])?passengerModal(t,v):techCarModal(t,v)
+ }else{
+  const w=t.wagons.find(x=>x[0]===code);
+  if(!w)return;
+  root.innerHTML=cargoModal(t,w)
+ }
+ if(window.lucide)lucide.createIcons();
+ root.querySelectorAll('[data-trn-modal-close]').forEach(x=>x.onclick=()=>{root.innerHTML=''});
+ root.querySelectorAll('[data-block-car]').forEach(b=>b.onclick=()=>{
+  const[tid,c]=b.dataset.blockCar.split(':'),tt=TRAINS.find(x=>x.id===tid),vv=tt&&tt.voitures.find(x=>x[0]===c);
+  if(!vv)return;
+  vv[7]=vv[7]?0:1;
+  if(typeof toast==='function')toast(vv[7]?`Place bloquée · ${c} · motif consigné`:`Place débloquée · ${c}`);
+  const wrap=document.getElementById('trnTableWrap');if(wrap){wrap.innerHTML=tableHtml();wireTable()}
+  openCarDetail(tid,c)
+ });
+ if(!root.__trnModalStop){root.addEventListener('click',e=>e.stopPropagation());root.__trnModalStop=true}
+}
+
 /* ---------- circulations table ---------- */
 function carCardHtml(t,v){
  const[code,classe,serie,assises,debout,rangees,colonnes,bloquees]=v;
- if(!assises&&!debout)return `<div class="trn-car"><b>${code} · ${classe}</b><small>${serie}</small><div class="meta"><span>Voiture technique</span></div></div>`;
- return `<div class="trn-car"><b>${code} · ${classe}</b><small>${serie} · ${rangees}×${colonnes}</small><div class="meta"><span>${assises} assises</span><span>${debout} debout</span></div><button data-block-car="${t.id}:${code}" class="${bloquees?'blocked':''}">${bloquees?bloquees+' place(s) bloquée(s) · débloquer':'Bloquer une place'}</button></div>`
+ if(!assises&&!debout)return `<div class="trn-car" data-car-open="${t.id}:${code}"><b>${code} · ${classe}</b><small>${serie}</small><div class="meta"><span>Voiture technique</span></div></div>`;
+ return `<div class="trn-car" data-car-open="${t.id}:${code}"><b>${code} · ${classe}</b><small>${serie} · ${rangees}×${colonnes}</small><div class="meta"><span>${assises} assises</span><span>${debout} debout</span></div><button data-block-car="${t.id}:${code}" class="${bloquees?'blocked':''}">${bloquees?bloquees+' place(s) bloquée(s) · débloquer':'Bloquer une place'}</button></div>`
 }
 function expandHtml(t){
  if(t.pax){
   return `<div class="trn-expand">
-   <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Livret horaire ${t.livret} · type ${typeLabel(t.type)}</span></div>
+   <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Livret horaire ${t.livret} · type ${typeLabel(t.type)} · cliquer une voiture pour la fiche détaillée</span></div>
    <div class="trn-consist">${t.voitures.map(v=>carCardHtml(t,v)).join('')}</div>
   </div>`
  }
  return `<div class="trn-expand">
-  <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Type ${typeLabel(t.type)}</span></div>
-  <div class="trn-consist">${t.wagons.map(w=>`<div class="trn-car"><b>${w[0]}</b><small>${w[2]}</small><div class="meta"><span>${w[1]} unités</span></div></div>`).join('')}</div>
+  <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Type ${typeLabel(t.type)} · cliquer un groupe de wagons pour le manifeste</span></div>
+  <div class="trn-consist">${t.wagons.map(w=>`<div class="trn-car" data-car-open="${t.id}:${w[0]}"><b>${w[0]}</b><small>${w[2]}</small><div class="meta"><span>${w[1]} unités</span></div></div>`).join('')}</div>
  </div>`
 }
 function tableHtml(){
@@ -505,6 +616,7 @@ function wireTable(){
  document.querySelectorAll('.trn-table tbody tr[data-row]').forEach(tr=>tr.onclick=e=>{if(e.target.closest('button'))return;selectTrain(tr.dataset.row)});
  document.querySelectorAll('[data-expand]').forEach(b=>b.onclick=e=>{e.stopPropagation();toggleExpand(b.dataset.expand)});
  document.querySelectorAll('[data-locate]').forEach(b=>b.onclick=e=>{e.stopPropagation();locateTrain(b.dataset.locate)});
+ document.querySelectorAll('[data-car-open]').forEach(el=>el.onclick=e=>{if(e.target.closest('button'))return;e.stopPropagation();const[tid,code]=el.dataset.carOpen.split(':');openCarDetail(tid,code)});
  document.querySelectorAll('[data-block-car]').forEach(b=>b.onclick=e=>{
   e.stopPropagation();
   const[tid,code]=b.dataset.blockCar.split(':');
