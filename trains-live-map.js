@@ -14,20 +14,31 @@ const STATIONS=[
 ];
 const stById=id=>STATIONS.find(s=>s.id===id);
 
-const TRAINS=[
- {id:'EXP-620',type:'exp',label:'Express voyageurs',composition:'8 voitures · 450 pl.',from:'OWE',to:'FCV',speedRef:72,cap:450,occ:382,delay:6,pax:true},
- {id:'OMN-218',type:'omn',label:'Omnibus voyageurs',composition:'6 voitures · 390 pl.',from:'FCV',to:'OWE',speedRef:45,cap:390,occ:301,delay:0,pax:true},
- {id:'SPE-551',type:'exp',label:'Spécial voyageurs',composition:'4 voitures · 210 pl.',from:'OWE',to:'NTM',speedRef:55,cap:210,occ:138,delay:0,pax:true},
- {id:'FRET-332',type:'fret',label:'Fret général',composition:'28 wagons',from:'OWE',to:'FCV',speedRef:48,cap:1200,occ:840,delay:3,pax:false},
- {id:'MIN-641',type:'fret',label:'Minerai · manganèse',composition:'40 wagons',from:'MOA',to:'OWE',speedRef:34,cap:3400,occ:3150,delay:9,pax:false},
- {id:'MAINT-477',type:'maint',label:'Maintenance voie',composition:'Rame technique',from:'BOU',to:'LAS',speedRef:20,cap:12,occ:8,delay:0,pax:false}
+const BRANCHES=[
+ {km:14,side:1,len:78,label:'PORT / DÉPÔT OWENDO'},
+ {km:357,side:1,len:64,label:'ATELIER MAINTENANCE'},
+ {km:560,side:-1,len:82,label:'EMBRANCHEMENT COMILOG'},
+ {km:620,side:1,len:60,label:'TERMINAL FRET'}
 ];
 
-const MAP_X0=70,MAP_X1=1130,MAP_Y=155,TOTAL_KM=648,TRACK_Y1=MAP_Y-14,TRACK_Y2=MAP_Y+14,BLOCK_GAP=20;
-const CROSSOVERS=[140,320,500];
-function laneYFor(t,i){return(t.dir>0?TRACK_Y1:TRACK_Y2)+[-6,0,6][i%3]}
-const kmToX=km=>MAP_X0+(km/TOTAL_KM)*(MAP_X1-MAP_X0);
-const SIGNALS=(()=>{const out=[];for(let km=25;km<TOTAL_KM-15;km+=52)out.push({km,state:'green'});return out})();
+const TRAINS=[
+ {id:'EXP-620',type:'exp',label:'Express voyageurs',livret:'LH-EXP-S2-2026',composition:'8 voitures · 450 pl.',from:'OWE',to:'FCV',speedRef:72,cap:450,occ:382,delay:6,pax:true,
+  voitures:[['V1','VIP','CAR-2041',36,0,9,4,0],['V2','1re classe','CAR-2042',48,0,12,4,3],['V3','1re classe','CAR-2043',48,0,12,4,0],['V4','2e classe','CAR-2044',72,10,18,4,3],['V5','2e classe','CAR-2045',72,10,18,4,0],['V6','2e classe','CAR-2046',72,10,18,4,1],['B1','Bagages','CAR-2047',0,0,0,0,0],['S1','Service','CAR-2048',0,0,0,0,0]]},
+ {id:'OMN-218',type:'omn',label:'Omnibus voyageurs',livret:'LH-OMN-S1-2026',composition:'6 voitures · 390 pl.',from:'FCV',to:'OWE',speedRef:45,cap:390,occ:301,delay:0,pax:true,
+  voitures:[['V1','1re classe','CAR-3011',40,0,10,4,0],['V2','2e classe','CAR-3012',64,20,16,4,2],['V3','2e classe','CAR-3013',64,20,16,4,0],['V4','2e classe','CAR-3014',64,20,16,4,1],['V5','2e classe','CAR-3015',64,20,16,4,0],['B1','Bagages','CAR-3016',0,0,0,0,0]]},
+ {id:'SPE-551',type:'exp',label:'Spécial voyageurs',livret:'LH-SPE-S3-2026',composition:'4 voitures · 210 pl.',from:'OWE',to:'NTM',speedRef:55,cap:210,occ:138,delay:0,pax:true,
+  voitures:[['V1','1re classe','CAR-4001',40,0,10,4,0],['V2','2e classe','CAR-4002',60,10,15,4,0],['V3','2e classe','CAR-4003',60,10,15,4,1],['V4','Service','CAR-4004',0,0,0,0,0]]},
+ {id:'FRET-332',type:'fret',label:'Fret général',livret:'—',composition:'28 wagons',from:'OWE',to:'FCV',speedRef:48,cap:1200,occ:840,delay:3,pax:false,
+  wagons:[['Wagons trémie','24','Vrac / minerai'],['Wagons plats','4','Conteneurs']]},
+ {id:'MIN-641',type:'fret',label:'Minerai · manganèse',livret:'—',composition:'40 wagons',from:'MOA',to:'OWE',speedRef:34,cap:3400,occ:3150,delay:9,pax:false,
+  wagons:[['Wagons trémie manganèse','38','Comilog'],['Wagons frein','2','Sécurité convoi']]},
+ {id:'MAINT-477',type:'maint',label:'Maintenance voie',livret:'—',composition:'Rame technique',from:'BOU',to:'LAS',speedRef:20,cap:12,occ:8,delay:0,pax:false,
+  wagons:[['Voiture technique','1','Équipe 8 agents'],['Wagon outillage','1','Matériel de voie']]}
+];
+
+const MAP_X0=70,MAP_X1=1130,MAP_Y=170,TOTAL_KM=648,BLOCK_GAP=20,LANE=9;
+const SIGNAL_KMS=(()=>{const out=[];for(let km=25;km<TOTAL_KM-15;km+=52)out.push(km);return out})();
+const SIGNALS=SIGNAL_KMS.map(km=>({km,state:'green'}));
 
 function init(){
  TRAINS.forEach(t=>{
@@ -45,11 +56,13 @@ function nextStation(t){
  return forward[0]||stById(t.dir>0?(t.max===stById(t.to).km?t.to:t.from):(t.min===stById(t.to).km?t.to:t.from))
 }
 function statusLabel(s){return{roulant:'En circulation',arret:'À quai',attente_signal:'Attente signal',incident:'Incident'}[s]||s}
-function typeLabel(ty){return{exp:'Voyageurs',omn:'Voyageurs',fret:'Fret',maint:'Maintenance'}[ty]||ty}
+function typeLabel(ty){return{exp:'EXPRESS',omn:'OMNIBUS',fret:'FRET',maint:'MAINTENANCE'}[ty]||ty}
 
 let selected='EXP-620';
+let expanded=null;
 let tickHandle=null;
 
+/* ---------- simulation ---------- */
 function tick(){
  TRAINS.forEach(t=>{
   if(t.status==='arret'){t.dwell--;if(t.dwell<=0)t.status='roulant'}
@@ -97,61 +110,107 @@ function tick(){
  paint()
 }
 
-const ref={};
-function svgMap(){
+/* ---------- curved geometry (uses the real DOM path, filled in after mount) ---------- */
+const geo={trunk:null,len:0};
+function pointAtKm(km){
+ if(!geo.trunk)return{x:MAP_X0+(km/TOTAL_KM)*(MAP_X1-MAP_X0),y:MAP_Y};
+ return geo.trunk.getPointAtLength(Math.max(0,Math.min(1,km/TOTAL_KM))*geo.len)
+}
+function tangentAt(km){
+ if(!geo.trunk)return 0;
+ const f=Math.max(0,Math.min(1,km/TOTAL_KM))*geo.len;
+ const p1=geo.trunk.getPointAtLength(Math.max(0,f-3)),p2=geo.trunk.getPointAtLength(Math.min(geo.len,f+3));
+ return Math.atan2(p2.y-p1.y,p2.x-p1.x)
+}
+function laneOffset(km,side){
+ const a=tangentAt(km);
+ return{x:-Math.sin(a)*side,y:Math.cos(a)*side}
+}
+function trainPoint(t,i){
+ const p=pointAtKm(t.kmPos);
+ const off=laneOffset(t.kmPos,(t.dir>0?1:-1)*LANE+((i%3)-1)*3);
+ return{x:p.x+off.x,y:p.y+off.y,angle:tangentAt(t.kmPos)*180/Math.PI}
+}
+
+/* ---------- map svg shell (paths only; stations/signals/trains mounted after DOM insert) ---------- */
+function trunkPath(){
+ return `M${MAP_X0} ${MAP_Y-8} C 260 ${MAP_Y-55}, 340 ${MAP_Y+58}, 470 ${MAP_Y+10} S 700 ${MAP_Y-52}, 780 ${MAP_Y+6} S 980 ${MAP_Y+46}, ${MAP_X1} ${MAP_Y-14}`
+}
+function svgShell(){
+ return `<svg class="trn-map-svg" viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">
+  <path class="trn-track-bed" d="${trunkPath()}"></path>
+  <path id="trnTrunk" class="trn-track" d="${trunkPath()}"></path>
+  <g id="trnBranches"></g>
+  <g id="trnDynamic"></g>
+ </svg>`
+}
+function mountDynamic(){
+ const svg=document.querySelector('.trn-map-svg');
+ if(!svg)return;
+ geo.trunk=document.getElementById('trnTrunk');
+ if(!geo.trunk)return;
+ geo.len=geo.trunk.getTotalLength();
+
+ const branchesHtml=BRANCHES.map(b=>{
+  const p=pointAtKm(b.km),a=tangentAt(b.km);
+  const nx=-Math.sin(a),ny=Math.cos(a);
+  const midX=p.x+nx*b.side*b.len*.55+Math.cos(a)*b.len*.35, midY=p.y+ny*b.side*b.len*.55+Math.sin(a)*b.len*.35;
+  const endX=p.x+nx*b.side*b.len+Math.cos(a)*b.len*.55, endY=p.y+ny*b.side*b.len+Math.sin(a)*b.len*.55;
+  const d=`M${p.x.toFixed(1)} ${p.y.toFixed(1)} Q ${midX.toFixed(1)} ${midY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}`;
+  return `<g><path class="trn-branch-bed" d="${d}"></path><path class="trn-branch" d="${d}"></path><circle class="trn-branch-end" cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="4"></circle><text class="trn-branch-label" x="${endX.toFixed(1)}" y="${(endY+(b.side>0?15:-9)).toFixed(1)}" text-anchor="middle">${b.label}</text></g>`
+ }).join('');
+ document.getElementById('trnBranches').innerHTML=branchesHtml;
+
  const stationsHtml=STATIONS.map(s=>{
-  const x=kmToX(s.km),above=s.hub;
+  const p=pointAtKm(s.km),above=s.hub;
   return `<g class="trn-station" data-st="${s.id}">
-   <line x1="${x}" y1="${TRACK_Y1}" x2="${x}" y2="${TRACK_Y2}" stroke="#c7d8d2" stroke-width="2"></line>
-   <circle class="trn-station-dot${s.hub?' hub':''}" cx="${x}" cy="${MAP_Y}" r="${s.hub?7:5}"></circle>
-   <text class="trn-station-label" x="${x}" y="${above?MAP_Y-72:MAP_Y+42}" text-anchor="middle">${s.name}</text>
-   <text class="trn-station-sub" x="${x}" y="${above?MAP_Y-60:MAP_Y+54}" text-anchor="middle">PK ${s.km} · ${s.quais} voies</text>
-   <g class="trn-station-badge" transform="translate(${x-30},${above?MAP_Y-52:MAP_Y+8})" data-badge="${s.id}">
+   <g class="trn-house" transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">
+    <rect class="body${s.hub?' hub':''}" x="-9" y="-3" width="18" height="12" rx="1.5"></rect>
+    <path class="roof" d="M-11 -3 L0 -13 L11 -3 Z"></path>
+    <rect class="door" x="-2.5" y="2.5" width="5" height="6.5"></rect>
+   </g>
+   <text class="trn-station-label" x="${p.x.toFixed(1)}" y="${(above?p.y-42:p.y+38).toFixed(1)}" text-anchor="middle">${s.name}</text>
+   <text class="trn-station-sub" x="${p.x.toFixed(1)}" y="${(above?p.y-30:p.y+50).toFixed(1)}" text-anchor="middle">PK ${s.km} · ${s.quais} voies</text>
+   <g class="trn-station-badge" transform="translate(${(p.x-30).toFixed(1)},${(above?p.y-24:p.y+16).toFixed(1)})" data-badge="${s.id}">
     <rect x="0" y="0" width="60" height="18" rx="6"></rect>
     <text x="8" y="12"><tspan class="w" data-w="${s.id}">${s.waiting}</tspan></text>
     <text x="34" y="12"><tspan class="b" data-b="${s.id}">${s.boarded}</tspan></text>
    </g>
   </g>`
  }).join('');
- const crossoverHtml=CROSSOVERS.map(km=>{const x=kmToX(km);return `<path class="trn-crossover" d="M${x} ${TRACK_Y1} C ${x+22} ${TRACK_Y1} ${x+10} ${TRACK_Y2} ${x+32} ${TRACK_Y2}"></path>`}).join('');
+
  const signalsHtml=SIGNALS.map((sig,i)=>{
-  const x=kmToX(sig.km),onLine1=i%2===0,trackY=onLine1?TRACK_Y1:TRACK_Y2,out=onLine1?-1:1,poleLen=20,headH=24;
-  const headY=out<0?-(poleLen+headH):poleLen;
-  return `<g class="trn-signal" data-sig="${i}" transform="translate(${x},${trackY})">
-   <line class="pole" x1="0" y1="0" x2="0" y2="${out*poleLen}"></line>
-   <rect class="head" x="-6" y="${headY}" width="12" height="${headH}" rx="3"></rect>
-   <circle class="lamp red" cx="0" cy="${headY+6}" r="2.8"></circle>
-   <circle class="lamp amber" cx="0" cy="${headY+12}" r="2.8"></circle>
-   <circle class="lamp green" cx="0" cy="${headY+18}" r="2.8"></circle>
+  const p=pointAtKm(sig.km),a=tangentAt(sig.km),side=i%2===0?-1:1;
+  const nx=-Math.sin(a),ny=Math.cos(a),poleLen=20;
+  const tipX=p.x+nx*side*poleLen, tipY=p.y+ny*side*poleLen;
+  return `<g class="trn-signal" data-sig="${i}" transform="translate(${tipX.toFixed(1)},${tipY.toFixed(1)})">
+   <line class="pole" x1="0" y1="0" x2="${(p.x-tipX).toFixed(1)}" y2="${(p.y-tipY).toFixed(1)}"></line>
+   <rect class="head" x="-6" y="-11" width="12" height="22" rx="3"></rect>
+   <circle class="lamp red" cx="0" cy="-6" r="2.6"></circle>
+   <circle class="lamp amber" cx="0" cy="0" r="2.6"></circle>
+   <circle class="lamp green" cx="0" cy="6" r="2.6"></circle>
   </g>`
  }).join('');
+
  const trainsHtml=TRAINS.map((t,i)=>{
-  const y=laneYFor(t,i);
-  return `<g class="trn-train ${t.type}" data-train="${t.id}" style="transform:translate(${kmToX(t.kmPos)}px,${y}px)">
+  const p=trainPoint(t,i);
+  return `<g class="trn-train ${t.type}" data-train="${t.id}" style="transform:translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)">
    <circle class="halo" r="11"></circle>
-   <rect class="body" x="-16" y="-8" width="32" height="16" rx="4"></rect>
-   <text y="4">${t.id.slice(0,3)}</text>
-   <text class="tag" y="-13">${t.id}</text>
-   <text class="dwell" y="20" text-anchor="middle" font-size="8" fill="#c9860f">⏸ à quai</text>
-   <text class="waitsig" y="20" text-anchor="middle" font-size="8" fill="#e34850">⛔ signal</text>
+   <g transform="rotate(${p.angle.toFixed(1)})"><rect class="body" x="-16" y="-8" width="32" height="16" rx="4"></rect><text y="4">${t.id.slice(0,3)}</text></g>
+   <text class="tag" y="-15">${t.id}</text>
+   <text class="dwell" y="21" text-anchor="middle" font-size="8" fill="#c9860f">⏸ à quai</text>
+   <text class="waitsig" y="21" text-anchor="middle" font-size="8" fill="#e34850">⛔ signal</text>
   </g>`
  }).join('');
- return `<svg class="trn-map-svg" viewBox="0 0 1200 280" xmlns="http://www.w3.org/2000/svg">
-  <path class="trn-track-bed" d="M${MAP_X0} ${TRACK_Y1} H ${MAP_X1}"></path>
-  <path class="trn-track-bed" d="M${MAP_X0} ${TRACK_Y2} H ${MAP_X1}"></path>
-  <path class="trn-track" d="M${MAP_X0} ${TRACK_Y1} H ${MAP_X1}"></path>
-  <path class="trn-track" d="M${MAP_X0} ${TRACK_Y2} H ${MAP_X1}"></path>
-  ${crossoverHtml}
-  <text class="trn-line-label" x="${MAP_X0-4}" y="${TRACK_Y1-8}" text-anchor="start">VOIE 1</text>
-  <text class="trn-line-label" x="${MAP_X0-4}" y="${TRACK_Y2+16}" text-anchor="start">VOIE 2</text>
-  <g class="trn-terminal"><rect x="${MAP_X0-14}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X0-14+59}" y="${MAP_Y+69}">DÉPÔT OWENDO</text></g>
-  <g class="trn-terminal"><rect x="${MAP_X1-104}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X1-104+59}" y="${MAP_Y+69}">TERMINAL FRANCEVILLE</text></g>
-  ${signalsHtml}
-  ${stationsHtml}
-  ${trainsHtml}
- </svg>`
+
+ document.getElementById('trnDynamic').innerHTML=stationsHtml+signalsHtml+trainsHtml;
+ ref.trains={};ref.signals=[];
+ document.querySelectorAll('.trn-train').forEach(g=>{ref.trains[g.dataset.train]={el:g}});
+ document.querySelectorAll('.trn-signal').forEach((g,i)=>{ref.signals[i]=g});
+ document.querySelectorAll('.trn-train').forEach(g=>g.onclick=()=>selectTrain(g.dataset.train));
 }
 
+/* ---------- KPIs ---------- */
 function kpisHtml(){
  const paxTrains=TRAINS.filter(t=>t.pax);
  const aBord=paxTrains.reduce((a,t)=>a+t.occ,0);
@@ -170,20 +229,47 @@ function kpisHtml(){
  ].map(k=>`<div class="trn-kpi ${k[3]}"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')
 }
 
-function rosterHtml(){
- return TRAINS.map(t=>{
+/* ---------- circulations table ---------- */
+function carCardHtml(t,v){
+ const[code,classe,serie,assises,debout,rangees,colonnes,bloquees]=v;
+ if(!assises&&!debout)return `<div class="trn-car"><b>${code} · ${classe}</b><small>${serie}</small><div class="meta"><span>Voiture technique</span></div></div>`;
+ return `<div class="trn-car"><b>${code} · ${classe}</b><small>${serie} · ${rangees}×${colonnes}</small><div class="meta"><span>${assises} assises</span><span>${debout} debout</span></div><button data-block-car="${t.id}:${code}" class="${bloquees?'blocked':''}">${bloquees?bloquees+' place(s) bloquée(s) · débloquer':'Bloquer une place'}</button></div>`
+}
+function expandHtml(t){
+ if(t.pax){
+  return `<div class="trn-expand">
+   <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Livret horaire ${t.livret} · type ${typeLabel(t.type)}</span></div>
+   <div class="trn-consist">${t.voitures.map(v=>carCardHtml(t,v)).join('')}</div>
+  </div>`
+ }
+ return `<div class="trn-expand">
+  <div class="trn-expand-head"><b>Composition détaillée · ${t.composition}</b><span>Type ${typeLabel(t.type)}</span></div>
+  <div class="trn-consist">${t.wagons.map(w=>`<div class="trn-car"><b>${w[0]}</b><small>${w[2]}</small><div class="meta"><span>${w[1]} unités</span></div></div>`).join('')}</div>
+ </div>`
+}
+function tableHtml(){
+ const rows=TRAINS.map(t=>{
   const ns=nextStation(t);
-  const endClass=t.delay>15?'stop':t.delay>0?'late':'';
-  return `<button class="trn-roster-row${t.id===selected?' active':''}" data-select="${t.id}">
-   <i class="${t.type}"></i>
-   <span class="trn-roster-mid"><b>${t.id}</b><small>${t.label} · ${statusLabel(t.status)}</small></span>
-   <span class="trn-roster-end ${endClass}"><b>${ns?ns.name:'—'}</b><small>${t.delay>0?'+'+t.delay+' min':'à l’heure'}</small></span>
-  </button>`
- }).join('')
+  const pct=t.pax?Math.round(t.occ/t.cap*100):null;
+  return `<tr class="${t.id===selected?'active':''}" data-row="${t.id}">
+   <td><div class="trn-cell-id"><i class="${t.type}"></i><div><b>${t.id}</b><small>${t.label}</small></div></div></td>
+   <td><span class="trn-type-badge ${t.type}">${typeLabel(t.type)}</span></td>
+   <td>${t.composition}</td>
+   <td class="trn-route-cell">${stById(t.from).name} → ${stById(t.to).name}<small>Livret ${t.livret}</small></td>
+   <td>${ns?ns.name:'—'}<small style="color:#8aa0a6;font-size:9.5px">PK ${Math.round(t.kmPos)}</small></td>
+   <td><span class="trn-status-badge ${t.status}">${statusLabel(t.status)}</span></td>
+   <td class="trn-charge-cell">${t.pax?`${fmtNum(t.occ)} / ${fmtNum(t.cap)}<div class="trn-charge-bar"><i style="width:${pct}%"></i></div>`:`${fmtNum(t.occ)} t`}</td>
+   <td class="trn-ecart ${t.delay>0?'late':'ontime'}">${t.delay>0?'+'+t.delay+' min':'à l’heure'}</td>
+   <td><div class="trn-row-actions"><button data-expand="${t.id}">${I('layout-list')} Composition</button><button data-locate="${t.id}">${I('map-pin')} Localiser</button></div></td>
+  </tr>${expanded===t.id?`<tr class="trn-expand-row"><td colspan="9">${expandHtml(t)}</td></tr>`:''}`
+ }).join('');
+ return `<table class="trn-table"><thead><tr>
+  <th>Train</th><th>Type</th><th>Composition</th><th>Trajet</th><th>Position</th><th>Statut</th><th>Charge</th><th>Écart</th><th>Actions</th>
+ </tr></thead><tbody>${rows}</tbody></table>`
 }
 
 function flowHtml(){
- return STATIONS.map(s=>`<div class="trn-flow-row"><span><b>${s.name}</b><small>PK ${s.km} · ${s.quais} voies</small></span><span class="w">${s.waiting}<small style="display:block;font-weight:600;color:#7f97a2">attente</small></span><span class="b">${s.boarded}<small style="display:block;font-weight:600;color:#7f97a2">embarqués</small></span></div>`).join('')
+ return STATIONS.map(s=>`<span class="trn-flow-chip">${I('map-pin')}<b>${s.name}</b><span class="w">${s.waiting} attente</span> · <span class="b">${s.boarded} embarqués</span></span>`).join('')
 }
 
 function footHtml(){
@@ -199,71 +285,78 @@ function footHtml(){
  return items.map(x=>`<span class="trn-foot-pill ${x[2]}">${x[0]} ${x[1]}</span>`).join('')
 }
 
-function detailHtml(){
- const t=TRAINS.find(x=>x.id===selected);
- if(!t)return `<div class="trn-detail-empty">Sélectionnez un train sur la carte ou dans la liste.</div>`;
- const ns=nextStation(t);
- const pct=Math.round(t.occ/t.cap*100);
- const stopped=t.status==='arret'||t.status==='attente_signal';
- return `<div class="trn-detail-head"><b>${t.id}</b><span class="${t.status}">${statusLabel(t.status)}</span></div>
- <p class="sub" style="margin:0">${t.label} · ${stById(t.from).name} → ${stById(t.to).name}</p>
- <div class="trn-detail-grid">
-  <span><small>Position</small><b>PK ${Math.round(t.kmPos)}</b></span>
-  <span><small>Vitesse</small><b>${stopped?'0':Math.round(t.speedRef)} km/h</b></span>
-  <span><small>Prochaine étape</small><b>${ns?ns.name:'—'}</b></span>
-  <span><small>Écart</small><b>${t.delay>0?'+'+t.delay+' min':'à l’heure'}</b></span>
-  <span><small>Composition</small><b>${t.composition}</b></span>
-  <span><small>${t.pax?'Occupation':typeLabel(t.type)}</small><b>${t.pax?pct+' %':fmtNum(t.occ)+' t'}</b></span>
- </div>
- ${t.pax?`<div class="trn-occ-bar"><i style="width:${pct}%"></i></div>`:''}`
-}
-
 function render(){
  return `<div class="trn-page">
  <div class="trn-head">
-  <div><h1>Trains &amp; circulations</h1><p>Réseau Transgabonais en direct — voies, signalisation tricolore, arrêts en gare et charge des circulations.</p></div>
+  <div><h1>Trains &amp; circulations</h1><p>Réseau Transgabonais en direct — voies, embranchements, signalisation tricolore et charge des circulations.</p></div>
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
    <span class="trn-live"><i></i> Réseau connecté</span>
    <div class="trn-actions"><button data-trn-refresh>${I('refresh-cw')} Actualiser</button><button data-trn-new>${I('plus')} Nouveau train</button></div>
   </div>
  </div>
  <div class="trn-kpis" id="trnKpis">${kpisHtml()}</div>
- <div class="trn-body">
+
+ <div class="trn-section">
+  <div class="trn-table-card">
+   <div class="trn-table-head">
+    <div><h2>Circulations en temps réel</h2><p>Composition, voitures, classes, places et disponibilité — conforme au périmètre CDC §7.3</p></div>
+    <div class="trn-table-tools"><input placeholder="Rechercher un train…" id="trnSearch"><select><option>Tous types</option><option>EXPRESS</option><option>OMNIBUS</option><option>SPÉCIAL</option><option>FRET</option><option>MAINTENANCE</option></select></div>
+   </div>
+   <div class="trn-table-wrap" id="trnTableWrap">${tableHtml()}</div>
+  </div>
+ </div>
+
+ <div class="trn-section">
   <div class="trn-map-card">
    <div class="trn-map-head">
-    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · 12 signaux tricolores · double voie</p></div>
+    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · embranchements fret/mine/maintenance · 12 signaux tricolores</p></div>
     <div class="trn-legend">
      <span><i class="exp"></i> Voyageurs</span><span><i class="omn"></i> Omnibus</span><span><i class="fret"></i> Fret</span><span><i class="maint"></i> Maintenance</span>
      <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>
     </div>
    </div>
-   <div class="trn-map-wrap" id="trnMapWrap">${svgMap()}</div>
+   <div class="trn-map-wrap" id="trnMapWrap">${svgShell()}</div>
    <div class="trn-map-foot" id="trnFoot">${footHtml()}</div>
   </div>
-  <div class="trn-panel">
-   <div class="trn-card"><h3>${I('users-round')} Flux gares · temps réel</h3><p class="sub">Voyageurs en attente et embarqués depuis l’ouverture</p><div class="trn-station-flow" id="trnFlow">${flowHtml()}</div></div>
-   <div class="trn-card"><h3>${I('train-front')} Circulations</h3><p class="sub">${TRAINS.length} trains suivis en direct</p><div class="trn-roster" id="trnRoster">${rosterHtml()}</div></div>
-   <div class="trn-card"><h3>${I('radar')} Détail circulation</h3><div id="trnDetail">${detailHtml()}</div></div>
+ </div>
+
+ <div class="trn-section">
+  <div class="trn-map-card">
+   <div class="trn-map-head"><div><h2>${I('users-round')} Flux gares · temps réel</h2><p>Voyageurs en attente et embarqués depuis l’ouverture</p></div></div>
+   <div class="trn-map-foot" id="trnFlow" style="border-top:none">${flowHtml()}</div>
   </div>
  </div>
  </div>`
 }
 
+/* ---------- interaction ---------- */
 function selectTrain(id){
  selected=id;
  document.querySelectorAll('.trn-train').forEach(x=>x.classList.toggle('selected',x.dataset.train===id));
- document.querySelectorAll('.trn-roster-row').forEach(x=>x.classList.toggle('active',x.dataset.select===id));
- const d=document.getElementById('trnDetail');if(d)d.innerHTML=detailHtml();
+ document.querySelectorAll('.trn-table tbody tr[data-row]').forEach(x=>x.classList.toggle('active',x.dataset.row===id));
+}
+function toggleExpand(id){
+ expanded=expanded===id?null:id;
+ selectTrain(id);
+ const wrap=document.getElementById('trnTableWrap');
+ if(wrap){wrap.innerHTML=tableHtml();wireTable()}
  if(window.lucide)lucide.createIcons()
+}
+function locateTrain(id){
+ selectTrain(id);
+ document.getElementById('trnMapWrap')?.scrollIntoView({behavior:'smooth',block:'center'});
+ if(typeof toast==='function')toast(`${id} localisé sur la carte`)
 }
 
 function paint(){
  const root=document.querySelector('.trn-page');
- if(!root)return;
+ if(!root||!geo.trunk)return;
  TRAINS.forEach((t,i)=>{
   const g=ref.trains&&ref.trains[t.id];
   if(!g)return;
-  g.el.style.transform=`translate(${kmToX(t.kmPos)}px,${laneYFor(t,i)}px)`;
+  const p=trainPoint(t,i);
+  g.el.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;
+  const inner=g.el.querySelector('g');if(inner)inner.setAttribute('transform',`rotate(${p.angle.toFixed(1)})`);
   g.el.classList.toggle('stopped',t.status==='arret');
   g.el.classList.toggle('waiting',t.status==='attente_signal')
  });
@@ -280,13 +373,25 @@ function paint(){
  const kpis=document.getElementById('trnKpis');if(kpis)kpis.innerHTML=kpisHtml();
  const foot=document.getElementById('trnFoot');if(foot)foot.innerHTML=footHtml();
  const flow=document.getElementById('trnFlow');if(flow)flow.innerHTML=flowHtml();
- const roster=document.getElementById('trnRoster');if(roster){roster.innerHTML=rosterHtml();wireRoster()}
- const detail=document.getElementById('trnDetail');if(detail&&selected)detail.innerHTML=detailHtml();
+ const wrap=document.getElementById('trnTableWrap');if(wrap){wrap.innerHTML=tableHtml();wireTable()}
  if(window.lucide)lucide.createIcons()
 }
 
-function wireRoster(){
- document.querySelectorAll('.trn-roster-row').forEach(b=>b.onclick=()=>selectTrain(b.dataset.select))
+function wireTable(){
+ document.querySelectorAll('.trn-table tbody tr[data-row]').forEach(tr=>tr.onclick=e=>{if(e.target.closest('button'))return;selectTrain(tr.dataset.row)});
+ document.querySelectorAll('[data-expand]').forEach(b=>b.onclick=e=>{e.stopPropagation();toggleExpand(b.dataset.expand)});
+ document.querySelectorAll('[data-locate]').forEach(b=>b.onclick=e=>{e.stopPropagation();locateTrain(b.dataset.locate)});
+ document.querySelectorAll('[data-block-car]').forEach(b=>b.onclick=e=>{
+  e.stopPropagation();
+  const[tid,code]=b.dataset.blockCar.split(':');
+  const t=TRAINS.find(x=>x.id===tid);
+  const v=t&&t.voitures&&t.voitures.find(x=>x[0]===code);
+  if(!v)return;
+  v[7]=v[7]?0:1;
+  if(typeof toast==='function')toast(v[7]?`Place bloquée · ${code} · motif consigné`:`Place débloquée · ${code}`);
+  const wrap=document.getElementById('trnTableWrap');if(wrap){wrap.innerHTML=tableHtml();wireTable()}
+  if(window.lucide)lucide.createIcons()
+ })
 }
 
 function wire(){
@@ -294,20 +399,17 @@ function wire(){
  const root=document.querySelector('.trn-page');
  if(!root)return;
  if(!root.__trnStop){root.addEventListener('click',e=>e.stopPropagation());root.__trnStop=true}
+ mountDynamic();
+ wireTable();
  if(window.lucide)lucide.createIcons();
- ref.trains={};ref.signals=[];
- root.querySelectorAll('.trn-train').forEach(g=>{ref.trains[g.dataset.train]={el:g}});
- root.querySelectorAll('.trn-signal').forEach((g,i)=>{ref.signals[i]=g});
- root.querySelectorAll('.trn-train').forEach(g=>g.onclick=()=>selectTrain(g.dataset.train));
- wireRoster();
- selectTrain(selected);
  root.querySelectorAll('[data-trn-refresh]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Réseau actualisé')});
  root.querySelectorAll('[data-trn-new]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Assistant de création de circulation · démonstration')});
- paint();
+ selectTrain(selected);
  if(tickHandle)clearInterval(tickHandle);
  tickHandle=setInterval(tick,1500);
 }
 
+const ref={};
 const install=()=>{
  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
  pages.trains=render;
