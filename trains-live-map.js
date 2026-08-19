@@ -14,31 +14,51 @@ const STATIONS=[
 ];
 const stById=id=>STATIONS.find(s=>s.id===id);
 
-const BRANCHES=[
- {km:14,side:1,len:78,label:'PORT / DÉPÔT OWENDO'},
- {km:357,side:1,len:64,label:'ATELIER MAINTENANCE'},
- {km:560,side:-1,len:82,label:'EMBRANCHEMENT COMILOG'},
- {km:620,side:1,len:60,label:'TERMINAL FRET'}
-];
+/* schematic straight-segment lines — NYC control-room style: each route is its own
+   polyline of straight (but variously angled) segments, sharing only interchange points */
+const LINES={
+ pax:{kmMin:0,kmMax:648,label:'Ligne voyageurs',points:[[70,220],[127,150],[328,220],[495,150],[654,220],[822,150],[986,220],[1130,185]]},
+ fret:{kmMin:0,kmMax:648,label:'Ligne fret / mine',points:[[70,220],[280,292],[560,322],[840,292],[1130,185]]},
+ maint:{kmMin:357,kmMax:460,label:'Ligne maintenance',points:[[654,220],[738,266],[822,150]]}
+};
 
 const TRAINS=[
- {id:'EXP-620',type:'exp',label:'Express voyageurs',livret:'LH-EXP-S2-2026',composition:'8 voitures · 450 pl.',from:'OWE',to:'FCV',speedRef:72,cap:450,occ:382,delay:6,pax:true,
+ {id:'EXP-620',type:'exp',line:'pax',label:'Express voyageurs',livret:'LH-EXP-S2-2026',composition:'8 voitures · 450 pl.',from:'OWE',to:'FCV',speedRef:72,cap:450,occ:382,delay:6,pax:true,
   voitures:[['V1','VIP','CAR-2041',36,0,9,4,0],['V2','1re classe','CAR-2042',48,0,12,4,3],['V3','1re classe','CAR-2043',48,0,12,4,0],['V4','2e classe','CAR-2044',72,10,18,4,3],['V5','2e classe','CAR-2045',72,10,18,4,0],['V6','2e classe','CAR-2046',72,10,18,4,1],['B1','Bagages','CAR-2047',0,0,0,0,0],['S1','Service','CAR-2048',0,0,0,0,0]]},
- {id:'OMN-218',type:'omn',label:'Omnibus voyageurs',livret:'LH-OMN-S1-2026',composition:'6 voitures · 390 pl.',from:'FCV',to:'OWE',speedRef:45,cap:390,occ:301,delay:0,pax:true,
+ {id:'OMN-218',type:'omn',line:'pax',label:'Omnibus voyageurs',livret:'LH-OMN-S1-2026',composition:'6 voitures · 390 pl.',from:'FCV',to:'OWE',speedRef:45,cap:390,occ:301,delay:0,pax:true,
   voitures:[['V1','1re classe','CAR-3011',40,0,10,4,0],['V2','2e classe','CAR-3012',64,20,16,4,2],['V3','2e classe','CAR-3013',64,20,16,4,0],['V4','2e classe','CAR-3014',64,20,16,4,1],['V5','2e classe','CAR-3015',64,20,16,4,0],['B1','Bagages','CAR-3016',0,0,0,0,0]]},
- {id:'SPE-551',type:'exp',label:'Spécial voyageurs',livret:'LH-SPE-S3-2026',composition:'4 voitures · 210 pl.',from:'OWE',to:'NTM',speedRef:55,cap:210,occ:138,delay:0,pax:true,
+ {id:'SPE-551',type:'exp',line:'pax',label:'Spécial voyageurs',livret:'LH-SPE-S3-2026',composition:'4 voitures · 210 pl.',from:'OWE',to:'NTM',speedRef:55,cap:210,occ:138,delay:0,pax:true,
   voitures:[['V1','1re classe','CAR-4001',40,0,10,4,0],['V2','2e classe','CAR-4002',60,10,15,4,0],['V3','2e classe','CAR-4003',60,10,15,4,1],['V4','Service','CAR-4004',0,0,0,0,0]]},
- {id:'FRET-332',type:'fret',label:'Fret général',livret:'—',composition:'28 wagons',from:'OWE',to:'FCV',speedRef:48,cap:1200,occ:840,delay:3,pax:false,
+ {id:'FRET-332',type:'fret',line:'fret',label:'Fret général',livret:'—',composition:'28 wagons',from:'OWE',to:'FCV',speedRef:48,cap:1200,occ:840,delay:3,pax:false,
   wagons:[['Wagons trémie','24','Vrac / minerai'],['Wagons plats','4','Conteneurs']]},
- {id:'MIN-641',type:'fret',label:'Minerai · manganèse',livret:'—',composition:'40 wagons',from:'MOA',to:'OWE',speedRef:34,cap:3400,occ:3150,delay:9,pax:false,
+ {id:'MIN-641',type:'fret',line:'fret',label:'Minerai · manganèse',livret:'—',composition:'40 wagons',from:'MOA',to:'OWE',speedRef:34,cap:3400,occ:3150,delay:9,pax:false,
   wagons:[['Wagons trémie manganèse','38','Comilog'],['Wagons frein','2','Sécurité convoi']]},
- {id:'MAINT-477',type:'maint',label:'Maintenance voie',livret:'—',composition:'Rame technique',from:'BOU',to:'LAS',speedRef:20,cap:12,occ:8,delay:0,pax:false,
+ {id:'MAINT-477',type:'maint',line:'maint',label:'Maintenance voie',livret:'—',composition:'Rame technique',from:'BOU',to:'LAS',speedRef:20,cap:12,occ:8,delay:0,pax:false,
   wagons:[['Voiture technique','1','Équipe 8 agents'],['Wagon outillage','1','Matériel de voie']]}
 ];
 
-const MAP_X0=70,MAP_X1=1130,MAP_Y=170,TOTAL_KM=648,BLOCK_GAP=20,LANE=9;
+const TOTAL_KM=648,BLOCK_GAP=20,LANE=9;
 const SIGNAL_KMS=(()=>{const out=[];for(let km=25;km<TOTAL_KM-15;km+=52)out.push(km);return out})();
 const SIGNALS=SIGNAL_KMS.map(km=>({km,state:'green'}));
+
+function wagonCount(t){
+ if(t.pax)return Math.max(3,Math.min(6,t.voitures.length));
+ if(t.type==='fret')return 5;
+ return 3;
+}
+function consistSvg(t){
+ const n=wagonCount(t);
+ let s='';
+ for(let i=0;i<n;i++){
+  const cx=-(i*13);
+  if(i===0){
+   s+=`<rect class="trn-loco" x="${(cx-7).toFixed(1)}" y="-7" width="14" height="14" rx="3"></rect><rect class="trn-cab" x="${(cx+2).toFixed(1)}" y="-3" width="5" height="6" rx="1"></rect>`
+  }else{
+   s+=`<line class="trn-coupler" x1="${(cx+7).toFixed(1)}" y1="0" x2="${(cx+13).toFixed(1)}" y2="0"></line><rect class="trn-wagon" x="${(cx-6).toFixed(1)}" y="-6" width="12" height="12" rx="2"></rect>`
+  }
+ }
+ return s
+}
 
 function init(){
  TRAINS.forEach(t=>{
@@ -71,7 +91,7 @@ function tick(){
   if(t.status==='arret')return;
   let blocked=false;
   TRAINS.forEach(o=>{
-   if(o===t||o.dir!==t.dir)return;
+   if(o===t||o.dir!==t.dir||o.line!==t.line)return;
    const ahead=t.dir>0?o.kmPos-t.kmPos:t.kmPos-o.kmPos;
    if(ahead>0.4&&ahead<BLOCK_GAP)blocked=true
   });
@@ -99,6 +119,7 @@ function tick(){
  });
  SIGNALS.forEach(sig=>{sig.state='green'});
  TRAINS.forEach(t=>{
+  if(t.line!=='pax')return;
   if(t.status==='attente_signal'){
    let nearest=null,nd=Infinity;
    SIGNALS.forEach(sig=>{const ahead=t.dir>0?sig.km-t.kmPos:t.kmPos-sig.km;if(ahead>=-4&&ahead<nd){nd=ahead;nearest=sig}});
@@ -110,59 +131,59 @@ function tick(){
  paint()
 }
 
-/* ---------- curved geometry (uses the real DOM path, filled in after mount) ---------- */
-const geo={trunk:null,len:0};
-function pointAtKm(km){
- if(!geo.trunk)return{x:MAP_X0+(km/TOTAL_KM)*(MAP_X1-MAP_X0),y:MAP_Y};
- return geo.trunk.getPointAtLength(Math.max(0,Math.min(1,km/TOTAL_KM))*geo.len)
+/* ---------- schematic geometry: one real SVG <path> per line, straight segments only ---------- */
+const geo={};
+function pointAtKm(line,km){
+ const g=geo[line],cfg=LINES[line];
+ if(!g||!g.el)return{x:cfg.points[0][0],y:cfg.points[0][1]};
+ const frac=(km-cfg.kmMin)/(cfg.kmMax-cfg.kmMin);
+ return g.el.getPointAtLength(Math.max(0,Math.min(1,frac))*g.len)
 }
-function tangentAt(km){
- if(!geo.trunk)return 0;
- const f=Math.max(0,Math.min(1,km/TOTAL_KM))*geo.len;
- const p1=geo.trunk.getPointAtLength(Math.max(0,f-3)),p2=geo.trunk.getPointAtLength(Math.min(geo.len,f+3));
+function tangentAt(line,km){
+ const g=geo[line],cfg=LINES[line];
+ if(!g||!g.el)return 0;
+ const frac=(km-cfg.kmMin)/(cfg.kmMax-cfg.kmMin);
+ const f=Math.max(0,Math.min(1,frac))*g.len;
+ const p1=g.el.getPointAtLength(Math.max(0,f-3)),p2=g.el.getPointAtLength(Math.min(g.len,f+3));
  return Math.atan2(p2.y-p1.y,p2.x-p1.x)
 }
-function laneOffset(km,side){
- const a=tangentAt(km);
+function laneOffset(line,km,side){
+ const a=tangentAt(line,km);
  return{x:-Math.sin(a)*side,y:Math.cos(a)*side}
 }
 function trainPoint(t,i){
- const p=pointAtKm(t.kmPos);
- const off=laneOffset(t.kmPos,(t.dir>0?1:-1)*LANE+((i%3)-1)*3);
- return{x:p.x+off.x,y:p.y+off.y,angle:tangentAt(t.kmPos)*180/Math.PI}
+ const p=pointAtKm(t.line,t.kmPos);
+ const off=laneOffset(t.line,t.kmPos,(t.dir>0?1:-1)*LANE+((i%3)-1)*3);
+ const tangent=tangentAt(t.line,t.kmPos)*180/Math.PI;
+ return{x:p.x+off.x,y:p.y+off.y,angle:t.dir>0?tangent:tangent+180}
 }
 
 /* ---------- map svg shell (paths only; stations/signals/trains mounted after DOM insert) ---------- */
-function trunkPath(){
- return `M${MAP_X0} ${MAP_Y-8} C 260 ${MAP_Y-55}, 340 ${MAP_Y+58}, 470 ${MAP_Y+10} S 700 ${MAP_Y-52}, 780 ${MAP_Y+6} S 980 ${MAP_Y+46}, ${MAP_X1} ${MAP_Y-14}`
+function linePath(line){
+ return LINES[line].points.map((p,i)=>`${i===0?'M':'L'}${p[0]} ${p[1]}`).join(' ')
 }
 function svgShell(){
- return `<svg class="trn-map-svg" viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">
-  <path class="trn-track-bed" d="${trunkPath()}"></path>
-  <path id="trnTrunk" class="trn-track" d="${trunkPath()}"></path>
-  <g id="trnBranches"></g>
+ return `<svg class="trn-map-svg" viewBox="0 0 1200 350" xmlns="http://www.w3.org/2000/svg">
+  <path class="trn-track-bed" d="${linePath('fret')}"></path>
+  <path class="trn-track-bed" d="${linePath('maint')}"></path>
+  <path class="trn-track-bed" d="${linePath('pax')}"></path>
+  <path id="trnLineFret" class="trn-track fret" d="${linePath('fret')}"></path>
+  <path id="trnLineMaint" class="trn-track maint" d="${linePath('maint')}"></path>
+  <path id="trnLinePax" class="trn-track pax" d="${linePath('pax')}"></path>
   <g id="trnDynamic"></g>
  </svg>`
 }
 function mountDynamic(){
  const svg=document.querySelector('.trn-map-svg');
  if(!svg)return;
- geo.trunk=document.getElementById('trnTrunk');
- if(!geo.trunk)return;
- geo.len=geo.trunk.getTotalLength();
+ ['pax','fret','maint'].forEach(line=>{
+  const el=document.getElementById('trnLine'+line[0].toUpperCase()+line.slice(1));
+  if(el)geo[line]={el,len:el.getTotalLength()}
+ });
+ if(!geo.pax)return;
 
- const branchesHtml=BRANCHES.map(b=>{
-  const p=pointAtKm(b.km),a=tangentAt(b.km);
-  const nx=-Math.sin(a),ny=Math.cos(a);
-  const midX=p.x+nx*b.side*b.len*.55+Math.cos(a)*b.len*.35, midY=p.y+ny*b.side*b.len*.55+Math.sin(a)*b.len*.35;
-  const endX=p.x+nx*b.side*b.len+Math.cos(a)*b.len*.55, endY=p.y+ny*b.side*b.len+Math.sin(a)*b.len*.55;
-  const d=`M${p.x.toFixed(1)} ${p.y.toFixed(1)} Q ${midX.toFixed(1)} ${midY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}`;
-  return `<g><path class="trn-branch-bed" d="${d}"></path><path class="trn-branch" d="${d}"></path><circle class="trn-branch-end" cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="4"></circle><text class="trn-branch-label" x="${endX.toFixed(1)}" y="${(endY+(b.side>0?15:-9)).toFixed(1)}" text-anchor="middle">${b.label}</text></g>`
- }).join('');
- document.getElementById('trnBranches').innerHTML=branchesHtml;
-
- const stationsHtml=STATIONS.map(s=>{
-  const p=pointAtKm(s.km),above=s.hub;
+ const stationsHtml=STATIONS.map((s,i)=>{
+  const p=pointAtKm('pax',s.km),above=(i%2===1)||s.id==='FCV';
   return `<g class="trn-station" data-st="${s.id}">
    <g class="trn-house" transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)})">
     <rect class="body${s.hub?' hub':''}" x="-9" y="-3" width="18" height="12" rx="1.5"></rect>
@@ -180,7 +201,7 @@ function mountDynamic(){
  }).join('');
 
  const signalsHtml=SIGNALS.map((sig,i)=>{
-  const p=pointAtKm(sig.km),a=tangentAt(sig.km),side=i%2===0?-1:1;
+  const p=pointAtKm('pax',sig.km),a=tangentAt('pax',sig.km),side=i%2===0?-1:1;
   const nx=-Math.sin(a),ny=Math.cos(a),poleLen=20;
   const tipX=p.x+nx*side*poleLen, tipY=p.y+ny*side*poleLen;
   return `<g class="trn-signal" data-sig="${i}" transform="translate(${tipX.toFixed(1)},${tipY.toFixed(1)})">
@@ -196,10 +217,10 @@ function mountDynamic(){
   const p=trainPoint(t,i);
   return `<g class="trn-train ${t.type}" data-train="${t.id}" style="transform:translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)">
    <circle class="halo" r="11"></circle>
-   <g transform="rotate(${p.angle.toFixed(1)})"><rect class="body" x="-16" y="-8" width="32" height="16" rx="4"></rect><text y="4">${t.id.slice(0,3)}</text></g>
+   <g class="consist" transform="rotate(${p.angle.toFixed(1)})">${consistSvg(t)}</g>
    <text class="tag" y="-15">${t.id}</text>
-   <text class="dwell" y="21" text-anchor="middle" font-size="8" fill="#c9860f">⏸ à quai</text>
-   <text class="waitsig" y="21" text-anchor="middle" font-size="8" fill="#e34850">⛔ signal</text>
+   <text class="dwell" y="24" text-anchor="middle" font-size="8" fill="#c9860f">⏸ à quai</text>
+   <text class="waitsig" y="24" text-anchor="middle" font-size="8" fill="#e34850">⛔ signal</text>
   </g>`
  }).join('');
 
@@ -207,7 +228,7 @@ function mountDynamic(){
  ref.trains={};ref.signals=[];
  document.querySelectorAll('.trn-train').forEach(g=>{ref.trains[g.dataset.train]={el:g}});
  document.querySelectorAll('.trn-signal').forEach((g,i)=>{ref.signals[i]=g});
- document.querySelectorAll('.trn-train').forEach(g=>g.onclick=()=>selectTrain(g.dataset.train));
+ document.querySelectorAll('.trn-train').forEach(g=>g.onclick=()=>{toggleExpand(g.dataset.train);document.getElementById('trnTableWrap')?.scrollIntoView({behavior:'smooth',block:'center'})});
 }
 
 /* ---------- KPIs ---------- */
@@ -309,9 +330,9 @@ function render(){
  <div class="trn-section">
   <div class="trn-map-card">
    <div class="trn-map-head">
-    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · embranchements fret/mine/maintenance · 12 signaux tricolores</p></div>
+    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · 3 lignes schématiques (voyageurs / fret-mine / maintenance) · 12 signaux tricolores</p></div>
     <div class="trn-legend">
-     <span><i class="exp"></i> Voyageurs</span><span><i class="omn"></i> Omnibus</span><span><i class="fret"></i> Fret</span><span><i class="maint"></i> Maintenance</span>
+     <span><i class="line-pax"></i> Ligne voyageurs</span><span><i class="line-fret"></i> Ligne fret / mine</span><span><i class="line-maint"></i> Ligne maintenance</span>
      <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>
     </div>
    </div>
@@ -350,13 +371,13 @@ function locateTrain(id){
 
 function paint(){
  const root=document.querySelector('.trn-page');
- if(!root||!geo.trunk)return;
+ if(!root||!geo.pax)return;
  TRAINS.forEach((t,i)=>{
   const g=ref.trains&&ref.trains[t.id];
   if(!g)return;
   const p=trainPoint(t,i);
   g.el.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;
-  const inner=g.el.querySelector('g');if(inner)inner.setAttribute('transform',`rotate(${p.angle.toFixed(1)})`);
+  const inner=g.el.querySelector('.consist');if(inner)inner.setAttribute('transform',`rotate(${p.angle.toFixed(1)})`);
   g.el.classList.toggle('stopped',t.status==='arret');
   g.el.classList.toggle('waiting',t.status==='attente_signal')
  });

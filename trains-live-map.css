@@ -93,21 +93,19 @@ table.trn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1
 .trn-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:10px;color:var(--muted)}
 .trn-legend span{display:flex;align-items:center;gap:6px}
 .trn-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
-.trn-legend i.exp{background:var(--green)}
-.trn-legend i.omn{background:var(--blue)}
-.trn-legend i.fret{background:var(--gold)}
-.trn-legend i.maint{background:var(--purple)}
+.trn-legend i.line-pax{background:var(--navy2)}
+.trn-legend i.line-fret{background:var(--gold)}
+.trn-legend i.line-maint{background:var(--purple)}
 .trn-legend i.sig-g{background:var(--green);border-radius:50%}
 .trn-legend i.sig-r{background:var(--red);border-radius:50%}
 
 .trn-map-wrap{position:relative;padding:20px 8px 6px;overflow-x:auto}
 .trn-map-svg{display:block;width:100%;min-width:960px;height:auto;filter:drop-shadow(0 12px 22px #06243812)}
-.trn-track-bed{fill:none;stroke:#dde8e4;stroke-width:9;stroke-linecap:round}
-.trn-track{fill:none;stroke:#0b3159;stroke-opacity:.6;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:2 7}
-.trn-branch-bed{fill:none;stroke:#e5edea;stroke-width:6;stroke-linecap:round}
-.trn-branch{fill:none;stroke:#9bb6c7;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:1 6}
-.trn-branch-label{fill:#8aa0a6;font:800 7.5px Manrope,sans-serif;letter-spacing:.03em}
-.trn-branch-end{fill:#fff;stroke:#9bb6c7;stroke-width:1.6}
+.trn-track-bed{fill:none;stroke:#dde8e4;stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.trn-track{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 7}
+.trn-track.pax{stroke:#0b3159;stroke-opacity:.65}
+.trn-track.fret{stroke:var(--gold);stroke-opacity:.75}
+.trn-track.maint{stroke:var(--purple);stroke-opacity:.75}
 .trn-terminal rect{fill:var(--navy);opacity:.92}
 .trn-terminal text{fill:#fff;font:800 8.5px Manrope,sans-serif;text-anchor:middle}
 .trn-house .roof{fill:var(--navy2)}
@@ -130,15 +128,20 @@ table.trn-table{width:100%;border-collapse:separate;border-spacing:0;min-width:1
 .trn-train.omn{color:var(--blue)}
 .trn-train.fret{color:var(--gold)}
 .trn-train.maint{color:var(--purple)}
-.trn-train rect.body{fill:var(--green);stroke:#fff;stroke-width:1.6}
-.trn-train.omn rect.body{fill:var(--blue)}
-.trn-train.fret rect.body{fill:var(--gold)}
-.trn-train.maint rect.body{fill:var(--purple)}
-.trn-train.selected rect.body{stroke:var(--navy);stroke-width:2.2}
+.trn-train .trn-loco{fill:var(--green);stroke:#fff;stroke-width:1.4}
+.trn-train.omn .trn-loco{fill:var(--blue)}
+.trn-train.fret .trn-loco{fill:var(--gold)}
+.trn-train.maint .trn-loco{fill:var(--purple)}
+.trn-train .trn-cab{fill:#fff;opacity:.85}
+.trn-train .trn-wagon{fill:#fff;stroke:currentColor;stroke-width:1.3}
+.trn-train .trn-coupler{stroke:#8aa0a6;stroke-width:1.6}
+.trn-train.selected .trn-loco{stroke:var(--navy);stroke-width:2}
+.trn-train.selected .trn-wagon{stroke:var(--navy);stroke-width:1.8}
 .trn-train.selected{filter:drop-shadow(0 0 9px currentColor)}
 .trn-train .halo{fill:none;stroke:currentColor;opacity:.4}
 .trn-train.stopped .halo,.trn-train.waiting .halo{animation:trn-ring 1.6s ease-out infinite}
-.trn-train.waiting rect.body{fill:var(--red)!important}
+.trn-train.waiting .trn-loco{fill:var(--red)!important}
+.trn-train.waiting .trn-wagon{stroke:var(--red)!important}
 .trn-train text{font:900 8px Manrope,sans-serif;fill:#fff;text-anchor:middle}
 .trn-train .tag{font:800 8.5px Manrope,sans-serif;fill:var(--navy);text-anchor:middle}
 .trn-train .dwell,.trn-train .waitsig{opacity:0;transition:opacity .3s}
