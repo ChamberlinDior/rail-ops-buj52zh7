@@ -363,7 +363,7 @@ function wireFap(){
   const rec={id,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()} (mobile)`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Canal','Application mobile'],['Statut','Confirmé']]};
   addToWallet(rec);
   const q=window.SETRAG_SERVICE_REQUESTS;
-  if(q)q.unshift({ref:id,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null});
+  if(q)q.unshift({ref:id,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',fields:vals,summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null,channel:'Application mobile'});
   fap.lastRec={id,title:s.title};
   fap.screen='svcdone';fapPaint();
   if(typeof toast==='function')toast('Demande envoyée depuis l’application mobile')
@@ -489,7 +489,7 @@ function openServiceModal(id){
   const ref=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
   const rec={id:ref,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()}`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Statut','Confirmé'],['Date',today()]]};
   addToWallet(rec);
-  AGENT_QUEUE.unshift({ref,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null});
+  AGENT_QUEUE.unshift({ref,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',fields:vals,summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null,channel:'Portail web'});
   root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success-doc"><div class="fos-modal-success-head"><i>${I('check')}</i><div><h3>Demande confirmée</h3><p>Ajouté à votre portefeuille · confirmation envoyée par SMS et e-mail.</p></div></div>${docCardHtml(rec)}<div class="fos-ticket-actions" style="margin-top:16px"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button class="gold" data-fos-modal-close>Fermer</button></div></div>`;
   if(window.lucide)lucide.createIcons();
   root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=()=>root.innerHTML='');

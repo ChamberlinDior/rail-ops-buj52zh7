@@ -33,7 +33,8 @@ const CDC_GUIDE={
   ['Documents liés','Billet ↔ bagage associé ↔ reçu de paiement ; TAA ↔ billet conducteur','§7.1.2 / §7.1.4'],
   ['Fiscalité et paiement','HT, TVA, CSS, TTC, perçu, à payer, référence opérateur','§7.2 / §7.5'],
   ['Contrôle complet','Statut, agent, terminal, chronologie, journal et QR online/offline','§7.7'],
-  ['Réponse aux demandes reçues du Front Office','Nouvelle carte « File de demandes clients » : réception, prise en charge, confirmation par un agent','§7.1 · Parcours agent']
+  ['Réponse aux demandes reçues du Front Office','Carte « File de demandes clients » : réception, prise en charge, confirmation ou rejet par un agent','§7.1 · Parcours agent'],
+  ['Poste vendeur sur tablette','Simulation complète de l’application caissier : champs CDC par prestation, tarif calculé, agent et paiement affectés, document généré avec QR','§7.1 · Poste de vente']
  ]},
  frontoffice:{eyebrow:'FRONT OFFICE VOYAGEUR · CDC §3',intro:'Le canal client (web et mobile) doit permettre au voyageur d’accéder seul aux six prestations, en autonomie complète.',items:[
   ['Six prestations en libre-service','Portail unique : billets, bagages, colis express, TAA, funéraire, messagerie','§3.1–3.6'],
@@ -494,22 +495,46 @@ function fieldAgentSection(){
    (bagage, colis, TAA, funéraire, messagerie).
    ===================================================================== */
 const AGQ_ICON={bagage:'luggage',colis:'package',taa:'car-front',funeraire:'flower-2',messagerie:'send',ticket:'ticket'};
+const AGT_AGENTS=['Grâce Mavoungou','Paul Mounguengui','Aline Lekabi'];
+const AGT_PAYMENTS=['Espèces','Airtel Money','Moov Money','Click&Pay','Visa','Mastercard'];
 function agqSeed(){
  const q=window.SETRAG_SERVICE_REQUESTS=window.SETRAG_SERVICE_REQUESTS||[];
  if(!q.length){
   q.push(
-   {ref:'COL-260817-4471',service:'Colis express',kind:'colis',client:'Judith Mabika',summary:'Expéditeur : Judith Mabika · Destinataire : Serge Ondo · Poids (kg) : 14',time:'08:12',status:'nouvelle',agent:null},
-   {ref:'BAG-260817-9021',service:'Bagages',kind:'bagage',client:'SET-260817-2201',summary:'Numéro de billet voyageur : SET-260817-2201 · Poids (kg) : 22',time:'08:26',status:'nouvelle',agent:null},
-   {ref:'FUN-260817-0092',service:'Transport funéraire',kind:'funeraire',client:'Famille Ntoutoume',summary:'Expéditeur / famille : Famille Ntoutoume · Téléphone : +241 06 12 34 56',time:'08:41',status:'en_cours',agent:'Grâce Mavoungou'}
+   {ref:'COL-260817-4471',service:'Colis express',kind:'colis',client:'Judith Mabika',fields:[['Expéditeur','Judith Mabika'],['Destinataire','Serge Ondo'],['Téléphone destinataire','+241 06 12 90 44'],['Poids (kg)','14']],summary:'Expéditeur : Judith Mabika · Destinataire : Serge Ondo · Poids (kg) : 14',time:'08:12',status:'nouvelle',agent:null,channel:'Portail web'},
+   {ref:'BAG-260817-9021',service:'Bagages',kind:'bagage',client:'SET-260817-2201',fields:[['Numéro de billet voyageur','SET-260817-2201'],['Poids (kg)','22'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],summary:'Numéro de billet voyageur : SET-260817-2201 · Poids (kg) : 22',time:'08:26',status:'nouvelle',agent:null,channel:'Application mobile'},
+   {ref:'FUN-260817-0092',service:'Transport funéraire',kind:'funeraire',client:'Famille Ntoutoume',fields:[['Expéditeur / famille','Famille Ntoutoume'],['Téléphone','+241 06 12 34 56'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],summary:'Expéditeur / famille : Famille Ntoutoume · Téléphone : +241 06 12 34 56',time:'08:41',status:'en_cours',agent:'Grâce Mavoungou',channel:'Portail web'}
   )
  }
  return q
 }
-function agqStatusLabel(s){return{nouvelle:'Nouvelle',en_cours:'En cours',traitee:'Traitée'}[s]||s}
+function agqStatusLabel(s){return{nouvelle:'Nouvelle',en_cours:'En cours',traitee:'Traitée',rejetee:'Rejetée'}[s]||s}
+function agqFieldVal(r,part){const f=(r.fields||[]).find(x=>x[0].toLowerCase().includes(part.toLowerCase()));return f?f[1]:null}
+function agqPricing(r){
+ if(r.kind==='bagage'){
+  const poids=+(agqFieldVal(r,'poids')||20);
+  const montant=poids<=30?490:700;
+  return{montant,detail:`${poids} kg · franchise 30 kg · ${poids<=30?'0–190 km':'≥200 km'}`,code:poids<=30?'BAG-Z1':'BAG-Z2'}
+ }
+ if(r.kind==='colis'){
+  const poids=+(agqFieldVal(r,'poids')||10);
+  const montant=Math.max(1500,Math.round(poids*650/100)*100);
+  return{montant,detail:`${poids} kg · zone standard COLIRAIL`,code:'COL-Z1'}
+ }
+ if(r.kind==='taa'){
+  const t=+(agqFieldVal(r,'tonnage')||1.5);
+  const montant=Math.max(20000,Math.round(t*35000/500)*500);
+  return{montant,detail:`${t} t · porte-auto`,code:'TAA-Z6'}
+ }
+ if(r.kind==='funeraire')return{montant:150000,detail:'Forfait national · dossier à accès restreint',code:'FUN-01'};
+ if(r.kind==='messagerie')return{montant:1500,detail:'Pli standard · régime voyageurs',code:'MSG-01'};
+ return{montant:0,detail:'',code:'—'}
+}
 function agqRowHtml(r){
- return `<div class="agq-row" data-agq-ref="${esc(r.ref)}"><div class="agq-icon">${I(AGQ_ICON[r.kind]||'file-text')}</div><div class="agq-main"><b>${esc(r.service)} · ${esc(r.ref)}</b><span>${esc(r.summary)}</span></div><div class="agq-meta"><small>Reçu à ${esc(r.time)}</small><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div><div class="agq-actions row-actions">${
+ return `<div class="agq-row" data-agq-ref="${esc(r.ref)}"><div class="agq-icon">${I(AGQ_ICON[r.kind]||'file-text')}</div><div class="agq-main"><b>${esc(r.service)} · ${esc(r.ref)}</b><span>${esc(r.summary)}</span></div><div class="agq-meta"><small>Reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</small><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div><div class="agq-actions row-actions">${
   r.status==='nouvelle'?`<button data-agq-act="treat">Prendre en charge</button>`:
-  r.status==='en_cours'?`<button data-agq-act="confirm">Confirmer &amp; générer</button>`:
+  r.status==='en_cours'?`<button data-agq-act="tablet">${I('tablet')} Traiter sur la tablette ↓</button>`:
+  r.status==='rejetee'?`<span class="agq-rejected">${I('x')} Rejetée</span>`:
   `<span class="agq-done">${I('check')} Traitée par ${esc(r.agent||'agent')}</span>`
  }</div></div>`
 }
@@ -522,22 +547,112 @@ function agqRefresh(){
  const el=document.getElementById('agqList');
  if(el){el.innerHTML=agqListHtml();if(window.lucide)lucide.createIcons();wireAgq()}
  const count=document.getElementById('agqCount');
- if(count){const n=agqSeed().filter(r=>r.status!=='traitee').length;count.textContent=`${n} demande${n>1?'s':''} à traiter`}
+ if(count){const n=agqSeed().filter(r=>r.status==='nouvelle'||r.status==='en_cours').length;count.textContent=`${n} demande${n>1?'s':''} à traiter`}
 }
 function wireAgq(){
  document.querySelectorAll('[data-agq-act]').forEach(b=>b.onclick=()=>{
   const row=b.closest('[data-agq-ref]'),ref=row.dataset.agqRef;
   const q=agqSeed(),r=q.find(x=>x.ref===ref);
   if(!r)return;
-  if(b.dataset.agqAct==='treat'){r.status='en_cours';r.agent='Grâce Mavoungou';toastMsg(`${ref} pris en charge par Grâce Mavoungou`)}
-  else if(b.dataset.agqAct==='confirm'){r.status='traitee';toastMsg(`${ref} confirmé · document généré · client notifié par SMS`)}
-  agqRefresh();
+  if(b.dataset.agqAct==='treat'){r.status='en_cours';r.agent='Grâce Mavoungou';toastMsg(`${ref} pris en charge par Grâce Mavoungou`);agqRefresh()}
+  else if(b.dataset.agqAct==='tablet'){agt.selected=ref;agtPaint();document.getElementById('agtTablet')?.scrollIntoView({behavior:'smooth',block:'center'})}
  });
 }
 function agentQueueSection(){
  return `<div style="margin-top:15px"><section class="cdc-card agq-queue">
   <header><div><h3>${I('inbox')} File de demandes clients · agents &amp; guichets</h3><p>Demandes reçues depuis le Front Office (bagage, colis, TAA, funéraire, messagerie) — à traiter par un agent.</p></div><span class="agq-count" id="agqCount"></span></header>
   <div class="cdc-card-body"><div class="agq-list" id="agqList">${agqListHtml()}</div></div>
+ </section></div>`
+}
+
+/* ---------- Part 3b : tablette caissier · application vendeur Front Office ---------- */
+let agt={selected:null};
+function agtListHtml(){
+ const q=agqSeed();
+ if(!q.length)return `<p class="ctr-log-empty">Aucune demande.</p>`;
+ return q.map(r=>`<button class="agt-row ${r.ref===agt.selected?'active':''}" data-agt-select="${esc(r.ref)}"><span class="agt-row-icon">${I(AGQ_ICON[r.kind]||'file-text')}</span><div><b>${esc(r.service)}</b><small>${esc(r.ref)} · ${esc(r.time)}</small></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></button>`).join('')
+}
+function agtDetailHtml(){
+ const q=agqSeed();
+ const r=q.find(x=>x.ref===agt.selected)||q.find(x=>x.status==='nouvelle'||x.status==='en_cours')||q[0];
+ if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
+ agt.selected=r.ref;
+ const pricing=agqPricing(r);
+ if(r.status==='traitee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)} · reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')||'<div><small>Détails</small><b>—</b></div>'}</div>
+  <div class="agt-calc"><div><small>Code tarifaire</small><b>${esc(pricing.code)}</b></div><div><small>Application</small><b>${esc(pricing.detail)}</b></div><div><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></div></div>
+  <div class="agt-form-row">
+   <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
+   <label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>
+  </div>
+  <div class="agt-actions"><button class="ghost" data-agt-reject="${esc(r.ref)}">${I('x')} Rejeter la demande</button><button class="primary" data-agt-confirm="${esc(r.ref)}">${I('badge-check')} Confirmer et générer le document</button></div>
+ </div>`
+}
+function agtDoneHtml(r,pricing){
+ const rejected=r.status==='rejetee';
+ return `<div class="agt-doc ${rejected?'rejected':''}">
+  <div class="agt-doc-head"><span>${I(rejected?'x-circle':'badge-check')} SETRAG</span><b>${esc(r.service)} · ${rejected?'demande rejetée':'document généré'}</b></div>
+  ${rejected?'':`<div class="agt-doc-qr"><img src="${ctrQrUrl(r.ref)}" alt="QR de vérification"></div>`}
+  <div class="agt-doc-grid">${(r.fields||[]).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(f[1])}</b></span>`).join('')}${rejected?'':`<span><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></span><span><small>Paiement</small><b>${esc(r.payMethod||'—')}</b></span>`}</div>
+  <small class="agt-doc-id">${esc(r.ref)} · ${rejected?'Rejetée':'Traitée'} par ${esc(r.agent||'agent')} · ${esc(r.processedAt||r.time)}</small>
+ </div>`
+}
+function agtStatsHtml(){
+ const q=agqSeed();
+ const nouvelles=q.filter(x=>x.status==='nouvelle').length,traitees=q.filter(x=>x.status==='traitee').length;
+ return[['À traiter',nouvelles],['Traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+}
+function agtPaint(){
+ const list=document.getElementById('agtList');
+ if(list)list.innerHTML=agtListHtml();
+ const detail=document.getElementById('agtDetail');
+ if(detail)detail.innerHTML=`<div class="ctr-screen-inner">${agtDetailHtml()}</div>`;
+ const stats=document.getElementById('agtStats');
+ if(stats)stats.innerHTML=agtStatsHtml();
+ if(window.lucide)lucide.createIcons();
+ wireAgt()
+}
+function wireAgt(){
+ document.querySelectorAll('[data-agt-select]').forEach(b=>b.onclick=()=>{agt.selected=b.dataset.agtSelect;agtPaint()});
+ const confirmBtn=document.getElementById('agtDetail')?.querySelector('[data-agt-confirm]');
+ if(confirmBtn)confirmBtn.onclick=()=>{
+  const ref=confirmBtn.dataset.agtConfirm,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.status='traitee';
+  r.agent=document.getElementById('agtAgent').value;
+  r.payMethod=document.getElementById('agtPay').value;
+  r.processedAt=ctrNow();
+  toastMsg(`${ref} confirmé · document généré · client notifié par SMS`);
+  agtPaint();agqRefresh()
+ };
+ const rejectBtn=document.getElementById('agtDetail')?.querySelector('[data-agt-reject]');
+ if(rejectBtn)rejectBtn.onclick=()=>{
+  const ref=rejectBtn.dataset.agtReject,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.status='rejetee';
+  r.processedAt=ctrNow();
+  toastMsg(`${ref} rejeté · motif à consigner dans le journal d’audit`);
+  agtPaint();agqRefresh()
+ };
+}
+function agentTabletSection(){
+ return `<div style="margin-top:15px" id="agtTablet"><section class="cdc-card agt-app">
+  <header><div><h3>${I('tablet')} Poste vendeur · tablette caissier</h3><p>Ce que voit l’agent en gare ou en agence, dans l’application vendeur du Front Office, pour traiter une demande reçue.</p></div><div class="ctr-stats" id="agtStats">${agtStatsHtml()}</div></header>
+  <div class="cdc-card-body">
+   <div class="agt-tablet">
+    <div class="agt-tablet-bezel">
+     <div class="agt-tablet-screen">
+      <div class="agt-tablet-bar"><b>SETRAG Vendeur</b><span>POS-OW-01 · Grâce Mavoungou</span></div>
+      <div class="agt-tablet-body">
+       <div class="agt-list" id="agtList">${agtListHtml()}</div>
+       <div class="agt-panel" id="agtDetail"></div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
  </section></div>`
 }
 
@@ -552,7 +667,7 @@ function install(){
  }
  if(typeof pages.sales==='function'&&!pages.sales.__agqWrapped){
   const prevSales=pages.sales;
-  const wrapped=()=>`<div class="bocd-nobubble">${prevSales()}${agentQueueSection()}</div>`;
+  const wrapped=()=>`<div class="bocd-nobubble">${prevSales()}${agentQueueSection()}${agentTabletSection()}</div>`;
   wrapped.__agqWrapped=true;
   pages.sales=wrapped;
  }
@@ -564,6 +679,7 @@ function install(){
    if(document.getElementById('ctrScreen'))ctrPaint();
    if(document.getElementById('fldScreen'))fldPaint();
    if(document.getElementById('agqList'))agqRefresh();
+   if(document.getElementById('agtList'))agtPaint();
   };
   enhanced.__bocdWrapped=true;
   bind=enhanced;
