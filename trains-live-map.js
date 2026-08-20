@@ -408,7 +408,8 @@ window.SETRAG_TRAIN_API={
  trains:TRAINS,
  stations:STATIONS,
  getPassengers:(trainId,code)=>{const t=TRAINS.find(x=>x.id===trainId);const v=t&&t.voitures&&t.voitures.find(x=>x[0]===code);return t&&v?carPassengers(t,v):null},
- setBoarding:(trainId,seat,val)=>{boardingRegistry()[boardingKey(trainId,seat)]=val}
+ setBoarding:(trainId,seat,val)=>{boardingRegistry()[boardingKey(trainId,seat)]=val},
+ ensureTicking:()=>{if(!tickHandle)tickHandle=setInterval(tick,1500)}
 };
 function techCarModal(t,v){
  const[code,classe,serie]=v;

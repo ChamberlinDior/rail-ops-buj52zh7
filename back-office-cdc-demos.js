@@ -1069,6 +1069,183 @@ function agentTabletSection(){
  </section></div>`
 }
 
+/* =====================================================================
+   PART 4 — Terminal conducteur (pupitre de conduite), sur la page
+   "Centre des opérations" : prise de service, conduite en ligne avec
+   mini-carte de progression sur la ligne, gestion des arrêts en gare
+   et signalement au centre des opérations.
+   ===================================================================== */
+const DRV_AGENT={id:'MEC-008',name:'Serge Nzamba'};
+const DRV_CHECKLIST=['Essai de freinage effectué','Signalisation et voie contrôlées','Portes et intercirculation vérifiées','Présence du chef de bord confirmée'];
+const DRV_INCIDENT_TYPES=[['obstacle','Obstacle sur la voie'],['signal','Anomalie de signalisation'],['freinage','Anomalie de freinage'],['sante','Malaise voyageur à bord'],['autre','Autre situation à risque']];
+let drv={trainId:null,screen:'poste',started:false,startTime:null,doors:'closed',checks:DRV_CHECKLIST.map(()=>false),log:[]};
+function drvTrains(){const api=window.SETRAG_TRAIN_API;return api?api.trains.filter(t=>t.pax):[]}
+function drvCurrentTrain(){
+ const trains=drvTrains();
+ if(!drv.trainId||!trains.some(t=>t.id===drv.trainId))drv.trainId=trains[0]?.id||null;
+ return trains.find(t=>t.id===drv.trainId)||null
+}
+function drvStName(id){const api=window.SETRAG_TRAIN_API;const s=api&&api.stations.find(x=>x.id===id);return s?s.name:id}
+function drvNow(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function drvLogPush(text,icon){
+ drv.log.unshift({text,icon:icon||'circle-dot',time:drvNow()});
+ drv.log=drv.log.slice(0,8);
+ const el=document.getElementById('drvLog');
+ if(el){el.innerHTML=drvLogHtml();if(window.lucide)lucide.createIcons()}
+}
+function drvLogHtml(){
+ if(!drv.log.length)return '<p class="ctr-log-empty">Aucune opération pour l’instant.</p>';
+ return drv.log.map(l=>`<div class="ctr-log-row"><i>${I(l.icon)}</i><b>${esc(l.text)}</b><span>${l.time}</span></div>`).join('')
+}
+function drvNextStation(t){
+ const api=window.SETRAG_TRAIN_API;
+ const forward=api.stations.filter(s=>t.dir>0?s.km>t.kmPos+0.5:s.km<t.kmPos-0.5).sort((a,b)=>t.dir>0?a.km-b.km:b.km-a.km);
+ return forward[0]||null
+}
+function drvProgressHtml(t){
+ const api=window.SETRAG_TRAIN_API;
+ const stations=api.stations.filter(s=>s.km>=t.min-0.01&&s.km<=t.max+0.01).sort((a,b)=>a.km-b.km);
+ const span=(t.max-t.min)||1;
+ const pct=Math.max(0,Math.min(100,(t.kmPos-t.min)/span*100));
+ return `<div class="drv-map">
+  <div class="drv-map-head"><span>${esc(drvStName(t.dir>0?t.from:t.to))}</span><span>${esc(drvStName(t.dir>0?t.to:t.from))}</span></div>
+  <div class="drv-map-track"><i class="drv-map-fill" style="width:${pct}%"></i>
+   ${stations.map(s=>{const p=(s.km-t.min)/span*100;const passed=t.dir>0?s.km<=t.kmPos+0.5:s.km>=t.kmPos-0.5;return `<span class="drv-map-stop ${passed?'passed':''}" style="left:${p}%" title="${esc(s.name)}"><i></i></span>`}).join('')}
+   <span class="drv-map-marker" style="left:${pct}%">${I('train-front')}</span>
+  </div>
+  <div class="drv-map-foot"><b>PK ${Math.round(t.kmPos)}</b><span>${Math.round(t.max-t.min)} km au total · ${Math.round(pct)}% parcourus</span></div>
+ </div>`
+}
+function drvPosteScreen(){
+ const t=drvCurrentTrain();
+ if(!t)return `<p class="ctr-log-empty">Aucun train voyageurs disponible pour l’instant.</p>`;
+ const allChecked=drv.checks.every(Boolean);
+ if(!drv.started){
+  return `<div class="ctr-form">
+   <div class="ctr-form-head"><b>${esc(t.id)} · ${esc(t.label||'Train voyageurs')}</b><span>${esc(drvStName(t.from))} → ${esc(drvStName(t.to))} · ${esc(t.composition||'')}</span></div>
+   <div class="agt-docs"><b>${I('clipboard-check')} Contrôles avant départ</b>${DRV_CHECKLIST.map((c,i)=>`<label class="agt-doc-check ${drv.checks[i]?'ok':'missing'}"><input type="checkbox" data-drv-check="${i}" ${drv.checks[i]?'checked':''}><span>${esc(c)}</span><i>${drv.checks[i]?I('check'):I('triangle-alert')}</i></label>`).join('')}</div>
+   ${allChecked?'':`<p class="agt-doc-warn">${I('triangle-alert')} Tous les contrôles doivent être validés avant la prise de poste.</p>`}
+   <button class="ctr-scan-btn" data-drv-start ${allChecked?'':'disabled'}>${I('play')} Prendre le poste et démarrer le service</button>
+  </div>`
+ }
+ return `<div class="ctr-result ok">
+  <i class="ctr-result-icon">${I('badge-check')}</i><h4>En service</h4>
+  <div class="ctr-passenger-card"><span class="ctr-avatar">${esc(DRV_AGENT.name.split(' ').map(w=>w[0]).join(''))}</span><div><b>${esc(DRV_AGENT.name)}</b><span>${DRV_AGENT.id} · Conducteur affecté à ${esc(t.id)}</span></div></div>
+  <div class="ctr-result-meta"><span><small>Prise de poste</small><b>${esc(drv.startTime||drvNow())}</b></span><span><small>Trajet</small><b>${esc(drvStName(t.from))} → ${esc(drvStName(t.to))}</b></span><span><small>Composition</small><b>${esc(t.composition||'—')}</b></span></div>
+  <button class="ghost" data-drv-end>${I('log-out')} Terminer le service</button>
+ </div>`
+}
+function drvConduiteScreen(){
+ const t=drvCurrentTrain();
+ if(!t)return `<p class="ctr-log-empty">Aucune circulation disponible.</p>`;
+ if(!drv.started)return `<div class="ctr-scan-view"><p class="ctr-log-empty">Prenez le poste depuis l’onglet « Poste » pour démarrer la conduite.</p></div>`;
+ const next=drvNextStation(t);
+ const isTerminus=Math.abs(t.kmPos-t.max)<0.5||Math.abs(t.kmPos-t.min)<0.5;
+ const speed=t.status==='roulant'?t.speedRef:0;
+ const remaining=next?Math.abs(next.km-t.kmPos):0;
+ const etaMin=speed?Math.max(1,Math.round(remaining/speed*60)):null;
+ return `<div class="drv-conduite">
+  <div class="drv-status-row">
+   <div class="drv-speed"><b>${speed}</b><small>KM/H</small></div>
+   <div class="drv-signal ${t.status==='attente_signal'?'red':t.status==='arret'?'amber':'green'}"><i></i><span>${t.status==='attente_signal'?'Signal fermé · attente':t.status==='arret'?'À quai':'Voie libre'}</span></div>
+   <div class="drv-delay ${t.delay?'late':''}"><small>Écart horaire</small><b>${t.delay?'+'+t.delay+' min':'À l’heure'}</b></div>
+  </div>
+  ${drvProgressHtml(t)}
+  ${t.status==='arret'?
+   (isTerminus?`<div class="agt-convocation ok"><i>${I('flag')}</i><div><b>Terminus atteint</b><span>${esc(drvStName(t.lastStation))} · fin de trajet, préparez la relève ou le retour.</span></div></div>`
+   :`<div class="agt-convocation"><i>${I('door-open')}</i><div><b>Arrêt en gare · ${esc(drvStName(t.lastStation))}</b><span>Reprise dans ${Math.max(0,t.dwell)} min · portes ${drv.doors==='open'?'ouvertes':'fermées'}</span></div></div>`)
+   :`<div class="agt-convocation ok"><i>${I('navigation')}</i><div><b>En route vers ${next?esc(next.name):'—'}</b><span>${next?Math.round(remaining)+' km restants':''}${etaMin?' · arrivée estimée dans '+etaMin+' min':''}</span></div></div>`
+  }
+  <div class="agt-actions">
+   ${t.status==='arret'?`<button class="${drv.doors==='open'?'danger':'primary'}" data-drv-doors>${I(drv.doors==='open'?'door-closed':'door-open')} ${drv.doors==='open'?'Fermer les portes':'Ouvrir les portes'}</button><button class="ghost" data-drv-announce>${I('megaphone')} Annoncer le prochain arrêt</button>`
+   :`<button class="ghost" data-drv-signal>${I('radio')} Contacter le poste d’aiguillage</button>`}
+  </div>
+ </div>`
+}
+function drvAlertesScreen(){
+ const t=drvCurrentTrain();
+ return `<div class="ctr-form">
+  <div class="ctr-form-head"><b>Signalement conducteur</b><span>${t?esc(t.id)+' · PK '+Math.round(t.kmPos):'—'}</span></div>
+  <label>Type de signalement<select id="drvIncType">${DRV_INCIDENT_TYPES.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select></label>
+  <label>Description<input id="drvIncDesc" placeholder="Ex. ralentissement nécessaire au PK 240"></label>
+  <button data-drv-alert>${I('send')} Envoyer l’alerte au centre des opérations</button>
+ </div>
+ <div class="ctr-log" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)"><b>Journal conducteur</b><div id="drvLog">${drvLogHtml()}</div></div>`
+}
+function drvStatsHtml(){
+ const t=drvCurrentTrain();
+ const speed=t&&t.status==='roulant'?t.speedRef:0;
+ return[['Vitesse',speed+' km/h'],['Service',drv.started?'En cours':'Arrêté'],['Portes',drv.doors==='open'?'Ouvertes':'Fermées']].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+}
+function drvPaint(){
+ const screen=document.getElementById('drvScreen');
+ if(screen)screen.innerHTML=`<div class="ctr-screen-inner">${drv.screen==='poste'?drvPosteScreen():drv.screen==='conduite'?drvConduiteScreen():drvAlertesScreen()}</div>`;
+ document.querySelectorAll('[data-drv-nav]').forEach(b=>b.classList.toggle('active',b.dataset.drvNav===drv.screen));
+ document.querySelectorAll('[data-drv-train]').forEach(b=>b.classList.toggle('active',b.dataset.drvTrain===drv.trainId));
+ const stats=document.getElementById('drvStats');
+ if(stats)stats.innerHTML=drvStatsHtml();
+ if(window.lucide)lucide.createIcons();
+ wireDrv()
+}
+function wireDrv(){
+ document.querySelectorAll('[data-drv-nav]').forEach(b=>b.onclick=()=>{drv.screen=b.dataset.drvNav;drvPaint()});
+ document.querySelectorAll('[data-drv-train]').forEach(b=>b.onclick=()=>{drv.trainId=b.dataset.drvTrain;drvPaint()});
+ document.querySelectorAll('[data-drv-check]').forEach(cb=>cb.onchange=()=>{drv.checks[+cb.dataset.drvCheck]=cb.checked;drvPaint()});
+ const startBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-start]');
+ if(startBtn)startBtn.onclick=()=>{drv.started=true;drv.startTime=drvNow();drvLogPush('Prise de poste · contrôles avant départ validés','badge-check');toastMsg('Service démarré · conduite active');drv.screen='conduite';drvPaint()};
+ const endBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-end]');
+ if(endBtn)endBtn.onclick=()=>{drv.started=false;drv.checks=DRV_CHECKLIST.map(()=>false);drvLogPush('Fin de service','log-out');toastMsg('Service terminé');drvPaint()};
+ const doorsBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-doors]');
+ if(doorsBtn)doorsBtn.onclick=()=>{drv.doors=drv.doors==='open'?'closed':'open';drvLogPush(drv.doors==='open'?'Ouverture des portes':'Fermeture des portes',drv.doors==='open'?'door-open':'door-closed');drvPaint()};
+ const announceBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-announce]');
+ if(announceBtn)announceBtn.onclick=()=>{const t=drvCurrentTrain(),next=t&&drvNextStation(t);toastMsg(`Annonce diffusée : prochain arrêt ${next?next.name:'terminus'}`);drvLogPush('Annonce diffusée aux voyageurs','megaphone')};
+ const signalBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-signal]');
+ if(signalBtn)signalBtn.onclick=()=>{toastMsg('Poste d’aiguillage contacté · voie confirmée libre');drvLogPush('Contact poste d’aiguillage','radio')};
+ const alertBtn=document.getElementById('drvScreen')?.querySelector('[data-drv-alert]');
+ if(alertBtn)alertBtn.onclick=()=>{
+  const type=document.getElementById('drvIncType').value,desc=(document.getElementById('drvIncDesc').value||'').trim();
+  const t=drvCurrentTrain(),meta=DRV_INCIDENT_TYPES.find(x=>x[0]===type);
+  const inc={id:'INC-'+Math.floor(1000+Math.random()*9000),type,label:meta[1],pk:t?Math.round(t.kmPos):0,severity:'warn',desc:desc||meta[1],time:drvNow(),agent:DRV_AGENT.name+' (conducteur)',resolved:false};
+  (window.SETRAG_INCIDENTS=window.SETRAG_INCIDENTS||[]).unshift(inc);
+  drvLogPush(`Alerte envoyée · ${meta[1]}`,'triangle-alert');
+  toastMsg('Alerte transmise au centre des opérations');
+  const desci=document.getElementById('drvIncDesc');if(desci)desci.value=''
+ };
+}
+if(!window.__drvTimer){
+ window.__drvTimer=true;
+ setInterval(()=>{if(document.getElementById('drvScreen')&&drv.screen==='conduite')drvPaint()},1500);
+ setInterval(()=>{const el=document.getElementById('drvClock');if(el)el.textContent=drvNow()},1000);
+}
+function driverTerminalSection(){
+ if(window.SETRAG_TRAIN_API&&window.SETRAG_TRAIN_API.ensureTicking)window.SETRAG_TRAIN_API.ensureTicking();
+ const trains=drvTrains();
+ return `<div class="cdc-section" style="margin-top:15px"><section class="cdc-card ctr-app">
+  <header><div><h3>${I('gauge')} Terminal conducteur · pupitre de conduite</h3><p>Ce que voit le conducteur à bord : prise de service, conduite en ligne avec progression sur la ligne, gestion des arrêts en gare et signalement au centre des opérations.</p></div><div class="ctr-stats" id="drvStats">${drvStatsHtml()}</div></header>
+  <div class="cdc-card-body">
+   <div class="drv-station">
+    <div class="drv-console-bezel">
+     <div class="drv-console-vents"></div>
+     <div class="drv-console-screen">
+      <div class="drv-console-bar">
+       <div class="drv-console-brand"><b>SETRAG Conduite</b><span>${DRV_AGENT.id} · ${esc(DRV_AGENT.name)}</span></div>
+       <div class="drv-console-picker">${trains.map(t=>`<button class="${t.id===drv.trainId?'active':''}" data-drv-train="${t.id}">${esc(t.id)}</button>`).join('')}</div>
+       <span class="drv-console-clock" id="drvClock">${drvNow()}</span>
+      </div>
+      <div class="drv-console-tabs">
+       <button class="${drv.screen==='poste'?'active':''}" data-drv-nav="poste">${I('log-in')} Poste</button>
+       <button class="${drv.screen==='conduite'?'active':''}" data-drv-nav="conduite">${I('gauge')} Conduite</button>
+       <button class="${drv.screen==='alertes'?'active':''}" data-drv-nav="alertes">${I('triangle-alert')} Alertes</button>
+      </div>
+      <div class="drv-console-body" id="drvScreen"><div class="ctr-screen-inner">${drv.screen==='poste'?drvPosteScreen():drv.screen==='conduite'?drvConduiteScreen():drvAlertesScreen()}</div></div>
+     </div>
+     <div class="drv-console-foot"><span class="drv-led"></span><small>SETRAG · PUPITRE DE CONDUITE · CAB-08</small></div>
+    </div>
+   </div>
+  </div>
+ </section></div>`
+}
+
 /* ---------- install: append the two new sections to their pages ---------- */
 function install(){
  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
@@ -1084,6 +1261,12 @@ function install(){
   wrapped.__agqWrapped=true;
   pages.sales=wrapped;
  }
+ if(typeof pages.tracking==='function'&&!pages.tracking.__drvWrapped){
+  const prevTracking=pages.tracking;
+  const wrapped=()=>`<div class="bocd-nobubble">${prevTracking()}${driverTerminalSection()}</div>`;
+  wrapped.__drvWrapped=true;
+  pages.tracking=wrapped;
+ }
  if(typeof bind==='function'&&!bind.__bocdWrapped){
   const old=bind;
   const enhanced=function(){
@@ -1093,6 +1276,7 @@ function install(){
    if(document.getElementById('fldScreen'))fldPaint();
    if(document.getElementById('agqList'))agqRefresh();
    if(document.getElementById('agtList'))agtPaint();
+   if(document.getElementById('drvScreen'))drvPaint();
   };
   enhanced.__bocdWrapped=true;
   bind=enhanced;
