@@ -49,6 +49,21 @@ function typeLabel(ty){return{exp:'Voyageurs',omn:'Voyageurs',fret:'Fret',maint:
 
 let selected='EXP-620';
 let tickHandle=null;
+let rosterFilter='all';
+function csvDownload(name,head,rows){
+ const csv='﻿'+[head,...rows].map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ a.download=name;a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),500)
+}
+function locatePulse(sel){
+ const el=document.querySelector(sel);
+ if(!el)return;
+ el.scrollIntoView({behavior:'smooth',block:'center',inline:'center'});
+ el.classList.remove('pulse');void el.getBoundingClientRect();el.classList.add('pulse');
+ setTimeout(()=>el.classList.remove('pulse'),2900)
+}
 
 function tick(){
  TRAINS.forEach(t=>{
@@ -150,20 +165,44 @@ function kpisHtml(){
  ].map(k=>`<div class="trk-kpi ${k[3]}"><small>${k[0]}</small><b>${k[1]}</b><span>${k[2]}</span></div>`).join('')
 }
 
+const ROSTER_FILTERS=[['all','Tous'],['pax','Voyageurs'],['fret','Fret'],['maint','Maintenance']];
+function rosterFilterBarHtml(){
+ return `<div class="trk-roster-filters">${ROSTER_FILTERS.map(f=>`<button class="${rosterFilter===f[0]?'active':''}" data-roster-filter="${f[0]}">${f[1]}</button>`).join('')}</div>`
+}
 function rosterHtml(){
- return TRAINS.map(t=>{
+ const list=TRAINS.filter(t=>rosterFilter==='all'?true:rosterFilter==='pax'?t.pax:rosterFilter==='fret'?t.type==='fret':t.type==='maint');
+ if(!list.length)return `<p class="trk-empty">${I('inbox')} Aucune circulation pour ce filtre.</p>`;
+ return list.map(t=>{
   const ns=nextStation(t);
-  const endClass=t.delay>15?'stop':t.delay>0?'late':'';
-  return `<button class="trk-roster-row${t.id===selected?' active':''}" data-select="${t.id}">
+  const endClass=t.status==='arret'?'stop':t.delay>15?'stop':t.delay>0?'late':'ok';
+  return `<div class="trk-roster-row${t.id===selected?' active':''}" data-select="${t.id}">
    <i class="${t.type}"></i>
    <span class="trk-roster-mid"><b>${t.id}</b><small>${t.label} · ${statusLabel(t.status)}</small></span>
-   <span class="trk-roster-end ${endClass}"><b>${ns?ns.name:'—'}</b><small>${t.delay>0?'+'+t.delay+' min':'à l’heure'}</small></span>
-  </button>`
+   <span class="trk-roster-end ${endClass}"><b>${ns?ns.name:'—'}</b><small>${t.status==='arret'?'à quai':t.delay>0?'+'+t.delay+' min':'à l’heure'}</small></span>
+   <button class="trk-roster-go" data-select="${t.id}" title="Voir le détail">${I('chevron-right')}</button>
+  </div>`
  }).join('')
 }
 
 function flowHtml(){
- return STATIONS.map(s=>`<div class="trk-flow-row"><span><b>${s.name}</b><small>PK ${s.km} · ${s.quais} voies</small></span><span class="w">${s.waiting}<small style="display:block;font-weight:600;color:#7f97a2">attente</small></span><span class="b">${s.boarded}<small style="display:block;font-weight:600;color:#7f97a2">embarqués</small></span></div>`).join('')
+ return STATIONS.map(s=>{
+  const total=s.waiting+s.boarded;
+  const pct=total?Math.round(s.boarded/total*100):0;
+  return `<div class="trk-flow-row">
+   <div class="trk-flow-top">
+    <div class="trk-flow-id"><i class="${s.hub?'hub':''}">${I(s.hub?'building-2':'map-pin')}</i><span><b>${s.name}</b><small>PK ${s.km} · ${s.quais} voies${s.hub?' · terminus':''}</small></span></div>
+    <div class="trk-flow-actions">
+     <button data-flow-locate="${s.id}" title="Localiser sur la carte">${I('locate-fixed')}</button>
+     <button data-flow-refresh="${s.id}" title="Actualiser le flux">${I('refresh-cw')}</button>
+    </div>
+   </div>
+   <div class="trk-flow-bottom">
+    <span class="trk-flow-num w"><b>${s.waiting}</b><small>attente</small></span>
+    <span class="trk-flow-num b"><b>${s.boarded}</b><small>embarqués</small></span>
+    <div class="trk-flow-bar" title="${pct}% embarqués sur le flux du jour"><i style="width:${pct}%"></i></div>
+   </div>
+  </div>`
+ }).join('')
 }
 
 function footHtml(){
@@ -194,7 +233,12 @@ function detailHtml(){
   <span><small>${t.pax?'Voyageurs':typeLabel(t.type)}</small><b>${fmtNum(t.occ)}${t.pax?' / '+fmtNum(t.cap):' t'}</b></span>
   <span><small>Occupation</small><b>${t.pax?pct+' %':'—'}</b></span>
  </div>
- ${t.pax?`<div class="trk-occ-bar"><i style="width:${pct}%"></i></div>`:''}`
+ ${t.pax?`<div class="trk-occ-bar"><i style="width:${pct}%"></i></div>`:''}
+ <div class="trk-detail-actions">
+  <button data-detail-locate>${I('locate-fixed')} Centrer sur la carte</button>
+  ${t.pax?`<button data-detail-contact>${I('radio')} Contacter le conducteur</button>`:''}
+  <button data-detail-export>${I('download')} Exporter la fiche</button>
+ </div>`
 }
 
 function render(){
@@ -220,9 +264,9 @@ function render(){
    <div class="trk-map-foot" id="trkFoot">${footHtml()}</div>
   </div>
   <div class="trk-panel">
-   <div class="trk-card"><h3>${I('users-round')} Flux gares · temps réel</h3><p class="sub">Voyageurs en attente et embarqués depuis l’ouverture</p><div class="trk-station-flow" id="trkFlow">${flowHtml()}</div></div>
-   <div class="trk-card"><h3>${I('train-front')} Circulations</h3><p class="sub">${TRAINS.length} trains suivis en direct</p><div class="trk-roster" id="trkRoster">${rosterHtml()}</div></div>
-   <div class="trk-card"><h3>${I('radar')} Détail circulation</h3><div id="trkDetail">${detailHtml()}</div></div>
+   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('users-round')} Flux gares · temps réel</h3><p class="sub">Voyageurs en attente et embarqués depuis l’ouverture</p></div><button class="trk-mini-btn" data-flow-export>${I('download')} Exporter</button></div><div class="trk-station-flow" id="trkFlow">${flowHtml()}</div></div>
+   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('train-front')} Circulations</h3><p class="sub">${TRAINS.length} trains suivis en direct</p></div><button class="trk-mini-btn" data-roster-export>${I('download')} Exporter</button></div><div id="trkRosterFilters">${rosterFilterBarHtml()}</div><div class="trk-roster" id="trkRoster">${rosterHtml()}</div></div>
+   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('radar')} Détail circulation</h3></div></div><div id="trkDetail">${detailHtml()}</div></div>
   </div>
  </div>
  </div>`
@@ -233,7 +277,43 @@ function selectTrain(id){
  document.querySelectorAll('.trk-train').forEach(x=>x.classList.toggle('selected',x.dataset.train===id));
  document.querySelectorAll('.trk-roster-row').forEach(x=>x.classList.toggle('active',x.dataset.select===id));
  const d=document.getElementById('trkDetail');if(d)d.innerHTML=detailHtml();
+ wireDetail();
  if(window.lucide)lucide.createIcons()
+}
+function wireDetail(){
+ const d=document.getElementById('trkDetail');
+ if(!d)return;
+ const locateBtn=d.querySelector('[data-detail-locate]');
+ if(locateBtn)locateBtn.onclick=()=>locatePulse(`.trk-train[data-train="${selected}"]`);
+ const contactBtn=d.querySelector('[data-detail-contact]');
+ if(contactBtn)contactBtn.onclick=()=>{if(typeof toast==='function')toast(`Conducteur de ${selected} contacté · liaison radio confirmée`)};
+ const exportBtn=d.querySelector('[data-detail-export]');
+ if(exportBtn)exportBtn.onclick=()=>{
+  const t=TRAINS.find(x=>x.id===selected);
+  if(!t)return;
+  const ns=nextStation(t);
+  csvDownload(`SETRAG-circulation-${t.id}.csv`,['Champ','Valeur'],[
+   ['Train',t.id],['Type',typeLabel(t.type)],['Statut',statusLabel(t.status)],
+   ['Origine',stById(t.from).name],['Destination',stById(t.to).name],
+   ['Position (PK)',Math.round(t.kmPos)],['Vitesse (km/h)',t.status==='arret'?0:Math.round(t.speedRef*(t.status==='ralenti'?.35:1))],
+   ['Prochaine étape',ns?ns.name:'—'],['Écart',t.delay>0?'+'+t.delay+' min':'à l’heure'],
+   [t.pax?'Voyageurs':'Charge',t.pax?`${fmtNum(t.occ)} / ${fmtNum(t.cap)}`:`${fmtNum(t.occ)} t`]
+  ]);
+  if(typeof toast==='function')toast('Fiche circulation exportée')
+ }
+}
+function wireFlow(){
+ document.querySelectorAll('[data-flow-locate]').forEach(b=>b.onclick=()=>locatePulse(`.trk-station[data-st="${b.dataset.flowLocate}"]`));
+ document.querySelectorAll('[data-flow-refresh]').forEach(b=>b.onclick=()=>{
+  const s=stById(b.dataset.flowRefresh);
+  if(!s)return;
+  const boarded=Math.round(4+Math.random()*14),arrived=Math.round(3+Math.random()*10);
+  s.waiting=Math.max(0,s.waiting-boarded+arrived);s.boarded+=boarded;
+  const flow=document.getElementById('trkFlow');if(flow){flow.innerHTML=flowHtml();wireFlow()}
+  const kpis=document.getElementById('trkKpis');if(kpis)kpis.innerHTML=kpisHtml();
+  if(window.lucide)lucide.createIcons();
+  if(typeof toast==='function')toast(`Flux voyageurs actualisé · ${s.name}`)
+ })
 }
 
 function paint(){
@@ -257,9 +337,9 @@ function paint(){
  });
  const kpis=document.getElementById('trkKpis');if(kpis)kpis.innerHTML=kpisHtml();
  const foot=document.getElementById('trkFoot');if(foot)foot.innerHTML=footHtml();
- const flow=document.getElementById('trkFlow');if(flow)flow.innerHTML=flowHtml();
+ const flow=document.getElementById('trkFlow');if(flow){flow.innerHTML=flowHtml();wireFlow()}
  const roster=document.getElementById('trkRoster');if(roster){roster.innerHTML=rosterHtml();wireRoster()}
- const detail=document.getElementById('trkDetail');if(detail&&selected)detail.innerHTML=detailHtml();
+ const detail=document.getElementById('trkDetail');if(detail&&selected){detail.innerHTML=detailHtml();wireDetail()}
  if(window.lucide)lucide.createIcons()
 }
 
@@ -281,6 +361,24 @@ function wire(){
  selectTrain(selected);
  root.querySelectorAll('[data-trk-refresh]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Réseau actualisé')});
  root.querySelectorAll('[data-trk-incident]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Déclaration d’incident enregistrée · équipe notifiée')});
+ root.querySelectorAll('[data-roster-filter]').forEach(b=>b.onclick=()=>{
+  rosterFilter=b.dataset.rosterFilter;
+  root.querySelectorAll('[data-roster-filter]').forEach(x=>x.classList.toggle('active',x.dataset.rosterFilter===rosterFilter));
+  const roster=document.getElementById('trkRoster');if(roster){roster.innerHTML=rosterHtml();wireRoster()}
+  if(window.lucide)lucide.createIcons()
+ });
+ const flowExportBtn=root.querySelector('[data-flow-export]');
+ if(flowExportBtn)flowExportBtn.onclick=()=>{
+  csvDownload('SETRAG-flux-gares.csv',['Gare','PK','Voies','En attente','Embarqués'],STATIONS.map(s=>[s.name,s.km,s.quais,s.waiting,s.boarded]));
+  if(typeof toast==='function')toast('Flux gares exporté en CSV')
+ };
+ const rosterExportBtn=root.querySelector('[data-roster-export]');
+ if(rosterExportBtn)rosterExportBtn.onclick=()=>{
+  csvDownload('SETRAG-circulations.csv',['Train','Type','Statut','Origine','Destination','Position (PK)','Écart'],
+   TRAINS.map(t=>[t.id,typeLabel(t.type),statusLabel(t.status),stById(t.from).name,stById(t.to).name,Math.round(t.kmPos),t.delay>0?'+'+t.delay+' min':'à l’heure']));
+  if(typeof toast==='function')toast('Circulations exportées en CSV')
+ };
+ wireFlow();
  paint();
  if(tickHandle)clearInterval(tickHandle);
  tickHandle=setInterval(tick,1500);
