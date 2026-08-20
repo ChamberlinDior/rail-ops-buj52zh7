@@ -17,10 +17,10 @@ const TEMPLATES=[['EXP-620','EXPRESS',7.5,72,{'2e':38,'1re':14,'VIP':4}],['OMN-6
 const PAYMENTS=[['am','Airtel Money','Mobile Money','#e30613'],['mm','Moov Money','Mobile Money','#005baa'],['cp','Click&Pay','Portefeuille en ligne','#e9b94f'],['vi','Visa','Carte bancaire','#1a1f71'],['mc','Mastercard','Carte bancaire','#eb5e28'],['cs','Espèces','Paiement en guichet','#087b5b']];
 const SERVICES=[
  {id:'ticket',icon:'ticket',title:'Billets voyageurs',desc:'Recherche, place, paiement et billet électronique QR en quelques clics.',tags:['Papier','Électronique','QR Code'],cta:'Réserver un billet'},
- {id:'bagage',icon:'luggage',title:'Bagages',desc:'Enregistrement lié au billet, étiquette unique, 0 à 30 kg.',tags:['Étiquette unique','0–30 kg'],cta:'Enregistrer un bagage',fields:[['Numéro de billet voyageur','text','SET-260822-5012'],['Poids (kg)','number','18'],['Gare de départ','select'],['Gare d’arrivée','select']],prefix:'BAG'},
- {id:'colis',icon:'package',title:'Colis express',desc:'Expédition autonome, vignette et suivi interfacé COLIRAIL.',tags:['COLIRAIL','Suivi expéditeur'],cta:'Créer une expédition',fields:[['Expéditeur','text','Nom complet'],['Destinataire','text','Nom complet'],['Téléphone destinataire','tel','+241 06 00 00 00'],['Poids (kg)','number','8']],prefix:'COL'},
- {id:'taa',icon:'car-front',title:'Transport Auto Accompagné',desc:'Votre véhicule voyage avec vous, rattaché à votre billet.',tags:['TAA','Wagon porte-autos'],cta:'Déclarer un véhicule',fields:[['Numéro de billet voyageur','text','SET-260822-5012'],['Véhicule','text','Toyota Hilux'],['Immatriculation','text','GA-1234-AB'],['Tonnage (t)','number','2.1']],prefix:'TAA'},
- {id:'funeraire',icon:'flower-2',title:'Transport funéraire',desc:'Service dédié, confidentiel et autonome, sans billet obligatoire.',tags:['Confidentiel','Prestation autonome'],cta:'Faire une demande',fields:[['Expéditeur / famille','text','Nom complet'],['Téléphone','tel','+241 06 00 00 00'],['Gare de départ','select'],['Gare d’arrivée','select']],prefix:'FUN'},
+ {id:'bagage',icon:'luggage',title:'Bagages',desc:'Enregistrement lié au billet, étiquette unique, 0 à 30 kg. Poids déclaré ici, vérifié et validé en gare.',tags:['Étiquette unique','0–30 kg','Pesée en gare'],cta:'Enregistrer un bagage',fields:[['Numéro de billet voyageur','text','SET-260822-5012'],['Poids déclaré (kg)','number','18'],['Gare de départ','select'],['Gare d’arrivée','select']],prefix:'BAG'},
+ {id:'colis',icon:'package',title:'Colis express',desc:'Pré-demande autonome, vignette et suivi COLIRAIL. Poids et contenu déclarés, contrôlés au dépôt avant expédition.',tags:['COLIRAIL','Suivi expéditeur','Contrôle au dépôt'],cta:'Créer une expédition',fields:[['Expéditeur','text','Nom complet'],['Destinataire','text','Nom complet'],['Téléphone destinataire','tel','+241 06 00 00 00'],['Poids déclaré (kg)','number','8'],['Dimensions','text','40×30×20 cm'],['Contenu déclaré','text','Nature du contenu']],prefix:'COL'},
+ {id:'taa',icon:'car-front',title:'Transport Auto Accompagné',desc:'Votre véhicule voyage avec vous, rattaché à votre billet. Dossier vérifié puis véhicule contrôlé au chargement.',tags:['TAA','Wagon porte-autos','Contrôle au chargement'],cta:'Déclarer un véhicule',fields:[['Numéro de billet voyageur','text','SET-260822-5012'],['Véhicule','text','Toyota Hilux'],['Immatriculation','text','GA-1234-AB'],['Type de véhicule','text','4×4 / Berline / Utilitaire'],['Tonnage déclaré (t)','number','2.1']],prefix:'TAA'},
+ {id:'funeraire',icon:'flower-2',title:'Transport funéraire',desc:'Service dédié et confidentiel : ouverture de dossier, pièces vérifiées par SETRAG, puis prise en charge.',tags:['Confidentiel','Dossier vérifié'],cta:'Faire une demande',fields:[['Expéditeur / famille','text','Nom complet'],['Téléphone','tel','+241 06 00 00 00'],['Gare de départ','select'],['Gare d’arrivée','select'],['Date souhaitée','date',''],['Type de cercueil / contenant','text','Cercueil standard'],['Personne autorisée à remettre/récupérer','text','Nom complet']],prefix:'FUN'},
  {id:'messagerie',icon:'send',title:'Messagerie voyageurs',desc:'Envoi de plis et messages associés au régime des trains voyageurs.',tags:['Régime voyageurs'],cta:'Envoyer un pli',fields:[['Expéditeur','text','Nom complet'],['Destinataire','text','Nom complet'],['Numéro de train','text','EXP-620'],['Description','text','Nature de l’envoi']],prefix:'MSG'}
 ];
 const stationOptions=sel=>STATIONS.map(s=>`<option value="${s[0]}" ${s[0]===sel?'selected':''}>${s[1]}</option>`).join('');
@@ -31,7 +31,17 @@ const AGENT_QUEUE=window.SETRAG_SERVICE_REQUESTS=window.SETRAG_SERVICE_REQUESTS|
 const kindIcon=k=>({billet:'ticket',bagage:'luggage',colis:'package',taa:'car-front',funeraire:'flower-2',messagerie:'send'}[k]||'file-text');
 function addToWallet(rec){WALLET.unshift(rec);updateWalletBadge()}
 function updateWalletBadge(){const b=document.getElementById('fosWalletBadge');if(!b)return;if(WALLET.length){b.style.display='inline-flex';b.textContent=WALLET.length}else{b.style.display='none'}}
+const FOS_STEPS=['Demande envoyée','Examen SETRAG','Contrôle / validation','Paiement','Prise en charge','Transport','Remise / clôture'];
+function fosStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4}[status]??0}
+function fosStatusLabel(status){return{nouvelle:'Demande reçue · en attente de validation par un agent SETRAG',prise_en_charge:'En cours de vérification par un agent SETRAG',complement:'Complément d’information requis — consultez vos messages',controle:'Contrôle physique requis : présentez-vous au point de dépôt en gare',validee:'Dossier validé',confirmee:'Demande confirmée et prise en charge',rejetee:'Demande rejetée — contactez le service client'}[status]||status}
+function fosTrackingHtml(status){
+ if(status==='rejetee')return `<div class="fos-track-row rejected">${I('x-circle')}<span>Demande rejetée</span></div>`;
+ const idx=fosStepIndex(status);
+ return `<div class="fos-track-row">${FOS_STEPS.map((s,i)=>`<i class="fos-track-dot ${i<idx?'done':i===idx?'current':''}" title="${s}"></i>`).join('')}</div>`
+}
 function docCardHtml(rec){
+ const live=rec.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===rec.id):null;
+ const liveFields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[])]:rec.fields;
  return `<div class="fos-ticket">
   <div class="fos-ticket-holo"></div>
   <div class="fos-ticket-headbar">
@@ -41,7 +51,8 @@ function docCardHtml(rec){
   <div class="fos-ticket-body">
   <div class="fos-ticket-main">
    <div class="fos-ticket-route">${rec.headlineHtml}</div>
-   <div class="fos-ticket-meta">${rec.fields.map(f=>`<span><small>${f[0]}</small><b>${f[1]}</b></span>`).join('')}</div>
+   ${live?`<div class="fos-track-block"><div class="fos-track-head"><span>${I('route')} Suivi de la demande</span><b>${fosStatusLabel(live.status)}</b></div>${fosTrackingHtml(live.status)}</div>`:''}
+   <div class="fos-ticket-meta">${liveFields.map(f=>`<span><small>${f[0]}</small><b>${f[1]}</b></span>`).join('')}</div>
    <div class="fos-ticket-security">
     <span>${I('shield-check')} Titre sécurisé</span>
     <span>${I('badge-check')} Vérifié SETRAG</span>
@@ -289,9 +300,10 @@ function fapSvcFormScreen(){
 }
 function fapSvcDoneScreen(){
  const r=fap.lastRec;
- return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('check-circle-2')}</span><b>Demande confirmée</b></div>
+ return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('send')}</span><b>Demande envoyée</b></div>
+  <p class="fap-svc-pending">${I('info')} En attente de validation par un agent SETRAG. Vous serez notifié par SMS dès que votre dossier ${esc(r.id)} sera examiné.</p>
   <div class="fap-ticket-card"><div class="fap-ticket-route"><b>${esc(r.title)}</b></div><div class="fap-ticket-qr">${qr(r.id)}</div><small class="fap-ticket-id">${r.id}</small></div>
-  <button data-fap-wallet-open="last">${I('wallet')} Voir dans mon portefeuille</button>
+  <button data-fap-wallet-open="last">${I('wallet')} Suivre ma demande</button>
   <button class="ghost" data-fap-back="home">${I('arrow-left')} Retour à l’accueil</button>
  </div>`
 }
@@ -304,8 +316,11 @@ function fapWalletScreen(){
 function fapWalletDetailScreen(){
  const r=WALLET[fap.walletIdx];
  if(!r)return fapWalletScreen();
+ const live=r.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id):null;
+ const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[])]:r.fields;
  return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="wallet">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
-  <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${r.fields.slice(0,6).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
+  ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p></div>`:''}
+  <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${fields.slice(0,8).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
  </div>`
 }
 function fapScreenHtml(){
@@ -360,13 +375,13 @@ function wireFap(){
   const s=SERVICES.find(x=>x.id===fap.svc);
   const vals=s.fields.map((f,i)=>{const el=document.querySelector(`[data-fap-f="${i}"]`);return[f[0],esc((el&&el.value.trim())||f[2]||'—')]});
   const id=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
-  const rec={id,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()} (mobile)`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Canal','Application mobile'],['Statut','Confirmé']]};
+  const rec={id,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()} (mobile)`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Canal','Application mobile']]};
   addToWallet(rec);
   const q=window.SETRAG_SERVICE_REQUESTS;
   if(q)q.unshift({ref:id,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',fields:vals,summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null,channel:'Application mobile'});
   fap.lastRec={id,title:s.title};
   fap.screen='svcdone';fapPaint();
-  if(typeof toast==='function')toast('Demande envoyée depuis l’application mobile')
+  if(typeof toast==='function')toast('Demande envoyée · en attente de validation par SETRAG')
  };
  document.querySelectorAll('[data-fap-wallet]').forEach(b=>b.onclick=()=>{fap.walletIdx=+b.dataset.fapWallet;fap.screen='walletdetail';fapPaint()});
  document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.screen='walletdetail';fapPaint()});
@@ -487,10 +502,10 @@ function openServiceModal(id){
  document.getElementById('fosModalSubmit').onclick=()=>{
   const vals=s.fields.map((f,i)=>{const el=root.querySelector(`[data-f="${i}"]`);return[f[0],esc((el&&el.value.trim())||f[2]||'—')]});
   const ref=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
-  const rec={id:ref,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()}`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Statut','Confirmé'],['Date',today()]]};
+  const rec={id:ref,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()}`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals]};
   addToWallet(rec);
   AGENT_QUEUE.unshift({ref,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',fields:vals,summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null,channel:'Portail web'});
-  root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success-doc"><div class="fos-modal-success-head"><i>${I('check')}</i><div><h3>Demande confirmée</h3><p>Ajouté à votre portefeuille · confirmation envoyée par SMS et e-mail.</p></div></div>${docCardHtml(rec)}<div class="fos-ticket-actions" style="margin-top:16px"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button class="gold" data-fos-modal-close>Fermer</button></div></div>`;
+  root.querySelector('.fos-modal').innerHTML=`<div class="fos-modal-success-doc"><div class="fos-modal-success-head"><i>${I('send')}</i><div><h3>Demande envoyée</h3><p>Dossier ${ref} en attente de validation par un agent SETRAG · vous serez notifié par SMS et e-mail.</p></div></div>${docCardHtml(rec)}<div class="fos-ticket-actions" style="margin-top:16px"><button data-fos-action="pdf">${I('download')} Télécharger le PDF</button><button class="gold" data-fos-modal-close>Fermer</button></div></div>`;
   if(window.lucide)lucide.createIcons();
   root.querySelectorAll('[data-fos-modal-close]').forEach(x=>x.onclick=()=>root.innerHTML='');
   root.querySelectorAll('[data-fos-action]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Document PDF généré')})

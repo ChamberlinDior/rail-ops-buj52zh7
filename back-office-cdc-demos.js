@@ -33,15 +33,20 @@ const CDC_GUIDE={
   ['Documents liés','Billet ↔ bagage associé ↔ reçu de paiement ; TAA ↔ billet conducteur','§7.1.2 / §7.1.4'],
   ['Fiscalité et paiement','HT, TVA, CSS, TTC, perçu, à payer, référence opérateur','§7.2 / §7.5'],
   ['Contrôle complet','Statut, agent, terminal, chronologie, journal et QR online/offline','§7.7'],
-  ['Réponse aux demandes reçues du Front Office','Carte « File de demandes clients » : réception, prise en charge, confirmation ou rejet par un agent','§7.1 · Parcours agent'],
-  ['Poste vendeur sur tablette','Simulation complète de l’application caissier : champs CDC par prestation, tarif calculé, agent et paiement affectés, document généré avec QR','§7.1 · Poste de vente']
+  ['Pré-demande ≠ prestation validée','Une demande créée à distance (bagage, colis, TAA, funéraire) n’est qu’une déclaration du client — rien n’est facturé ni « conforme » tant qu’un agent ne l’a pas vérifiée, éventuellement contrôlée physiquement, puis validée','§7.1 · Parcours agent'],
+  ['Chaîne de statut complète','Demande reçue → Prise en charge → (Complément requis) → Contrôle physique requis → Validée/Confirmée, avec un bouton « Refuser » à chaque étape de vérification','§7.1 · Parcours agent'],
+  ['Poids/tonnage déclaré vs contrôlé','Bagage, colis et TAA distinguent la valeur déclarée par le client (en ligne) de la valeur mesurée par l’agent en gare ; l’écart recalcule automatiquement le tarif et le complément à encaisser','§7.1 · Anti-fraude tarifaire'],
+  ['Dossier funéraire à pièces vérifiées','Traitement dédié : liste des documents obligatoires cochés un à un par l’agent — le bouton « Valider le dossier » reste bloqué tant qu’un document manque','§7.1.2'],
+  ['Suivi client façon livraison','Le voyageur voit l’avancement de sa demande (portail et application) sur une frise à 7 étapes, à jour en temps réel avec la file de l’agent','§7.1 · Expérience client'],
+  ['Poste vendeur sur tablette','Simulation complète de l’application caissier : file de demandes à traiter, écrans de vérification/contrôle dédiés, et vente directe au guichet pour un client présent sur place','§7.1 · Poste de vente']
  ]},
  frontoffice:{eyebrow:'FRONT OFFICE VOYAGEUR · CDC §3',intro:'Le canal client (web et mobile) doit permettre au voyageur d’accéder seul aux six prestations, en autonomie complète.',items:[
   ['Six prestations en libre-service','Portail unique : billets, bagages, colis express, TAA, funéraire, messagerie','§3.1–3.6'],
   ['Parcours recherche → place → paiement → billet','Funnel complet avec sélection de place et six moyens de paiement','§7.1 / §7.5'],
   ['Portefeuille voyageur','Bouton « Profil » : tous les documents achetés, e-billet avec QR','§3.7 / §7.1.1'],
   ['Application mobile voyageur','Section « Dans la poche du voyageur » : écrans mobiles pour les six services','§3 · Canal mobile'],
-  ['Documents ultra-sécurisés','E-billets et bordereaux avec QR signé, filigrane, bande holographique','§7.1.1']
+  ['Documents ultra-sécurisés','E-billets et bordereaux avec QR signé, filigrane, bande holographique','§7.1.1'],
+  ['Suivi de demande en temps réel','Bagage, colis, TAA, funéraire et messagerie affichent une frise « Demande envoyée → Examen SETRAG → Contrôle/validation → … » dans le portefeuille, synchronisée avec l’agent en Back Office','§7.1 · Expérience client']
  ]},
  trains:{eyebrow:'TRAINS & CIRCULATIONS · CDC',intro:'Le CDC demande de piloter EXPRESS, OMNIBUS et SPECIAL avec position, composition et signalisation en direct.',items:[
   ['EXPRESS, OMNIBUS, SPECIAL','Filtres par type et tableau des circulations'],
@@ -510,45 +515,49 @@ function fieldAgentSection(){
 const AGQ_ICON={bagage:'luggage',colis:'package',taa:'car-front',funeraire:'flower-2',messagerie:'send',ticket:'ticket'};
 const AGT_AGENTS=['Grâce Mavoungou','Paul Mounguengui','Aline Lekabi'];
 const AGT_PAYMENTS=['Espèces','Airtel Money','Moov Money','Click&Pay','Visa','Mastercard'];
+const FUN_DOCS=['Acte de décès','Autorisation de transport de corps','Pièce d’identité du représentant'];
+const AGQ_STEPS=['Demande envoyée','Examen SETRAG','Contrôle / validation','Paiement','Prise en charge','Transport','Remise / clôture'];
 function agqSeed(){
  const q=window.SETRAG_SERVICE_REQUESTS=window.SETRAG_SERVICE_REQUESTS||[];
  if(!q.length){
   q.push(
-   {ref:'COL-260817-4471',service:'Colis express',kind:'colis',client:'Judith Mabika',fields:[['Expéditeur','Judith Mabika'],['Destinataire','Serge Ondo'],['Téléphone destinataire','+241 06 12 90 44'],['Poids (kg)','14']],summary:'Expéditeur : Judith Mabika · Destinataire : Serge Ondo · Poids (kg) : 14',time:'08:12',status:'nouvelle',agent:null,channel:'Portail web'},
-   {ref:'BAG-260817-9021',service:'Bagages',kind:'bagage',client:'SET-260817-2201',fields:[['Numéro de billet voyageur','SET-260817-2201'],['Poids (kg)','22'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],summary:'Numéro de billet voyageur : SET-260817-2201 · Poids (kg) : 22',time:'08:26',status:'nouvelle',agent:null,channel:'Application mobile'},
-   {ref:'FUN-260817-0092',service:'Transport funéraire',kind:'funeraire',client:'Famille Ntoutoume',fields:[['Expéditeur / famille','Famille Ntoutoume'],['Téléphone','+241 06 12 34 56'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],summary:'Expéditeur / famille : Famille Ntoutoume · Téléphone : +241 06 12 34 56',time:'08:41',status:'en_cours',agent:'Grâce Mavoungou',channel:'Portail web'}
+   {ref:'COL-260817-4471',service:'Colis express',kind:'colis',client:'Judith Mabika',fields:[['Expéditeur','Judith Mabika'],['Destinataire','Serge Ondo'],['Téléphone destinataire','+241 06 12 90 44'],['Poids déclaré (kg)','14'],['Dimensions','40×30×20 cm'],['Contenu déclaré','Pièces détachées']],summary:'Expéditeur : Judith Mabika · Destinataire : Serge Ondo · Poids déclaré : 14 kg',time:'08:12',status:'nouvelle',agent:null,channel:'Portail web'},
+   {ref:'BAG-260817-9021',service:'Bagages',kind:'bagage',client:'SET-260817-2201',fields:[['Numéro de billet voyageur','SET-260817-2201'],['Poids déclaré (kg)','22'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],summary:'Billet SET-260817-2201 · Poids déclaré : 22 kg',time:'08:26',status:'controle',agent:'Grâce Mavoungou',channel:'Application mobile'},
+   {ref:'FUN-260817-0092',service:'Transport funéraire',kind:'funeraire',client:'Famille Ntoutoume',fields:[['Expéditeur / famille','Famille Ntoutoume'],['Téléphone','+241 06 12 34 56'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville'],['Date souhaitée','21/08/2026'],['Type de cercueil / contenant','Cercueil standard'],['Personne autorisée à remettre/récupérer','M. Ntoutoume Jean']],summary:'Famille Ntoutoume · Owendo → Franceville · 21/08/2026',time:'08:41',status:'prise_en_charge',agent:'Grâce Mavoungou',channel:'Portail web',docs:[true,true,false]}
   )
  }
  return q
 }
-function agqStatusLabel(s){return{nouvelle:'Nouvelle',en_cours:'En cours',traitee:'Traitée',rejetee:'Rejetée'}[s]||s}
+function agqStatusLabel(s){return{nouvelle:'Demande reçue',prise_en_charge:'Prise en charge',complement:'Complément requis',controle:'Contrôle physique requis',validee:'Validée',confirmee:'Confirmée',rejetee:'Rejetée'}[s]||s}
 function agqFieldVal(r,part){const f=(r.fields||[]).find(x=>x[0].toLowerCase().includes(part.toLowerCase()));return f?f[1]:null}
+function agqStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4}[status]??0}
 function agqPricing(r){
  if(r.kind==='bagage'){
-  const poids=+(agqFieldVal(r,'poids')||20);
+  const poids=r.poidsControle!=null?r.poidsControle:+(agqFieldVal(r,'poids')||20);
   const montant=poids<=30?490:700;
-  return{montant,detail:`${poids} kg · franchise 30 kg · ${poids<=30?'0–190 km':'≥200 km'}`,code:poids<=30?'BAG-Z1':'BAG-Z2'}
+  return{montant,detail:`${poids} kg · franchise 30 kg · ${poids<=30?'0–190 km':'≥200 km'}`,code:poids<=30?'BAG-Z1':'BAG-Z2',poids}
  }
  if(r.kind==='colis'){
-  const poids=+(agqFieldVal(r,'poids')||10);
+  const poids=r.poidsControle!=null?r.poidsControle:+(agqFieldVal(r,'poids')||10);
   const montant=Math.max(1500,Math.round(poids*650/100)*100);
-  return{montant,detail:`${poids} kg · zone standard COLIRAIL`,code:'COL-Z1'}
+  return{montant,detail:`${poids} kg · zone standard COLIRAIL`,code:'COL-Z1',poids}
  }
  if(r.kind==='taa'){
-  const t=+(agqFieldVal(r,'tonnage')||1.5);
+  const t=r.poidsControle!=null?r.poidsControle:+(agqFieldVal(r,'tonnage')||1.5);
   const montant=Math.max(20000,Math.round(t*35000/500)*500);
-  return{montant,detail:`${t} t · porte-auto`,code:'TAA-Z6'}
+  return{montant,detail:`${t} t · porte-auto`,code:'TAA-Z6',poids:t}
  }
  if(r.kind==='funeraire')return{montant:150000,detail:'Forfait national · dossier à accès restreint',code:'FUN-01'};
  if(r.kind==='messagerie')return{montant:1500,detail:'Pli standard · régime voyageurs',code:'MSG-01'};
  return{montant:0,detail:'',code:'—'}
 }
+const AGQ_OPEN=['nouvelle','prise_en_charge','controle','complement'];
 function agqRowHtml(r){
  return `<div class="agq-row" data-agq-ref="${esc(r.ref)}"><div class="agq-icon">${I(AGQ_ICON[r.kind]||'file-text')}</div><div class="agq-main"><b>${esc(r.service)} · ${esc(r.ref)}</b><span>${esc(r.summary)}</span></div><div class="agq-meta"><small>Reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</small><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div><div class="agq-actions row-actions">${
   r.status==='nouvelle'?`<button data-agq-act="treat">Prendre en charge</button>`:
-  r.status==='en_cours'?`<button data-agq-act="tablet">${I('tablet')} Traiter sur la tablette ↓</button>`:
+  AGQ_OPEN.includes(r.status)?`<button data-agq-act="tablet">${I('tablet')} Traiter sur la tablette ↓</button>`:
   r.status==='rejetee'?`<span class="agq-rejected">${I('x')} Rejetée</span>`:
-  `<span class="agq-done">${I('check')} Traitée par ${esc(r.agent||'agent')}</span>`
+  `<span class="agq-done">${I('check')} Confirmée · ${esc(r.agent||'agent')}</span>`
  }</div></div>`
 }
 function agqListHtml(){
@@ -560,16 +569,21 @@ function agqRefresh(){
  const el=document.getElementById('agqList');
  if(el){el.innerHTML=agqListHtml();if(window.lucide)lucide.createIcons();wireAgq()}
  const count=document.getElementById('agqCount');
- if(count){const n=agqSeed().filter(r=>r.status==='nouvelle'||r.status==='en_cours').length;count.textContent=`${n} demande${n>1?'s':''} à traiter`}
+ if(count){const n=agqSeed().filter(r=>AGQ_OPEN.includes(r.status)).length;count.textContent=`${n} demande${n>1?'s':''} à traiter`}
 }
 function wireAgq(){
  document.querySelectorAll('[data-agq-act]').forEach(b=>b.onclick=()=>{
   const row=b.closest('[data-agq-ref]'),ref=row.dataset.agqRef;
   const q=agqSeed(),r=q.find(x=>x.ref===ref);
   if(!r)return;
-  if(b.dataset.agqAct==='treat'){r.status='en_cours';r.agent='Grâce Mavoungou';toastMsg(`${ref} pris en charge par Grâce Mavoungou`);agqRefresh()}
+  if(b.dataset.agqAct==='treat'){r.status='prise_en_charge';r.agent='Grâce Mavoungou';toastMsg(`${ref} pris en charge par Grâce Mavoungou · vérification en cours`);agqRefresh()}
   else if(b.dataset.agqAct==='tablet'){agt.selected=ref;agtPaint();document.getElementById('agtTablet')?.scrollIntoView({behavior:'smooth',block:'center'})}
  });
+}
+function agtTrackingHtml(r){
+ if(r.status==='rejetee')return `<div class="agq-track agq-track-rejected"><i>${I('x-circle')}</i><span>Demande rejetée · dossier clos</span></div>`;
+ const idx=agqStepIndex(r.status);
+ return `<div class="agq-track">${AGQ_STEPS.map((s,i)=>`<div class="agq-track-step ${i<idx?'done':i===idx?'current':''}"><i>${i<idx?I('check'):i===idx?I('loader-circle'):''}</i><span>${s}</span></div>`).join('')}</div>`
 }
 function agentQueueSection(){
  return `<div style="margin-top:15px"><section class="cdc-card agq-queue">
@@ -623,14 +637,14 @@ function agtServiceDoc(r,pricing){
  const dep=agqFieldVal(r,'départ')||'Owendo',arr=agqFieldVal(r,'arrivée')||'Franceville';
  let identity='';
  if(r.kind==='bagage'){
-  const owner=agqFieldVal(r,'billet')||r.agent,poids=agqFieldVal(r,'poids')||'—';
-  identity=`<div class="premium-identity"><div><small>VOYAGEUR PROPRIÉTAIRE</small><h2>${esc(owner)}</h2><span>${esc(r.ref)} · billet lié</span></div><strong><small>POIDS CONTRÔLÉ</small>${esc(poids)} KG</strong></div>`
+  const owner=agqFieldVal(r,'billet')||r.agent,poids=r.poidsControle!=null?r.poidsControle:(agqFieldVal(r,'poids')||'—');
+  identity=`<div class="premium-identity"><div><small>VOYAGEUR PROPRIÉTAIRE</small><h2>${esc(owner)}</h2><span>${esc(r.ref)} · billet lié</span></div><strong><small>${r.poidsControle!=null?'POIDS CONTRÔLÉ':'POIDS DÉCLARÉ'}</small>${esc(poids)} KG</strong></div>`
  }else if(r.kind==='colis'){
-  const from=agqFieldVal(r,'expéditeur')||'—',to=agqFieldVal(r,'destinataire')||'—',poids=agqFieldVal(r,'poids')||'—';
-  identity=`<div class="premium-identity"><div><small>EXPÉDITEUR</small><h2>${esc(from)}</h2><span>${esc(agqFieldVal(r,'téléphone')||'Identité vérifiée')}</span></div><div class="recipient"><small>DESTINATAIRE</small><h2>${esc(to)}</h2></div><strong><small>POIDS</small>${esc(poids)} KG</strong></div>`
+  const from=agqFieldVal(r,'expéditeur')||'—',to=agqFieldVal(r,'destinataire')||'—',poids=r.poidsControle!=null?r.poidsControle:(agqFieldVal(r,'poids')||'—');
+  identity=`<div class="premium-identity"><div><small>EXPÉDITEUR</small><h2>${esc(from)}</h2><span>${esc(agqFieldVal(r,'téléphone')||'Identité vérifiée')}</span></div><div class="recipient"><small>DESTINATAIRE</small><h2>${esc(to)}</h2></div><strong><small>${r.poidsControle!=null?'POIDS CONTRÔLÉ':'POIDS DÉCLARÉ'}</small>${esc(poids)} KG</strong></div>`
  }else if(r.kind==='taa'){
-  const owner=agqFieldVal(r,'titulaire')||'—',veh=agqFieldVal(r,'véhicule')||'—',immat=agqFieldVal(r,'immatriculation')||'—',tonnage=agqFieldVal(r,'tonnage')||'—';
-  identity=`<div class="premium-identity"><div><small>VÉHICULE</small><h2>${esc(veh)}</h2><span>${esc(immat)}</span></div><div><small>CONDUCTEUR / BILLET</small><h2>${esc(owner)}</h2><span>${esc(r.ref)}</span></div><strong><small>MASSE</small>${esc(tonnage)} T</strong></div>`
+  const owner=agqFieldVal(r,'titulaire')||'—',veh=agqFieldVal(r,'véhicule')||'—',immat=agqFieldVal(r,'immatriculation')||'—',tonnage=r.poidsControle!=null?r.poidsControle:(agqFieldVal(r,'tonnage')||'—');
+  identity=`<div class="premium-identity"><div><small>VÉHICULE</small><h2>${esc(veh)}</h2><span>${esc(immat)}</span></div><div><small>CONDUCTEUR / BILLET</small><h2>${esc(owner)}</h2><span>${esc(r.ref)}</span></div><strong><small>${r.poidsControle!=null?'MASSE CONTRÔLÉE':'MASSE DÉCLARÉE'}</small>${esc(tonnage)} T</strong></div>`
  }else if(r.kind==='funeraire'){
   const fam=agqFieldVal(r,'expéditeur')||agqFieldVal(r,'famille')||'—';
   identity=`<div class="premium-identity confidential"><div><small>PERSONNE HABILITÉE</small><h2>${esc(fam)}</h2><span>Données sensibles protégées selon le rôle</span></div><strong><small>DOSSIER</small>TF-${esc(r.ref.slice(-2))}</strong></div>`
@@ -643,7 +657,7 @@ function agtServiceDoc(r,pricing){
   <div class="premium-service-route"><section><small>ORIGINE</small><strong>${esc(agtStCode(dep))}</strong><b>${esc(dep)}</b></section><div><span>TRANSGABONAIS</span><i>→</i><small>VENTE GUICHET</small></div><section><small>DESTINATION</small><strong>${esc(agtStCode(arr))}</strong><b>${esc(arr)}</b></section></div>
   ${identity}
   <div class="premium-keyline">${keyline}</div>
-  ${agtDocMeta([['N° opération',r.ref],['Code tarifaire',pricing.code],['Application tarif',pricing.detail],['Montant TTC',fmt(pricing.montant)+' FCFA'],['Paiement',r.payMethod||'—'],['Émetteur','POS-OW-01'],['Agent',r.agent||'—'],['Horodatage',r.processedAt||'']])}
+  ${agtDocMeta([['N° opération',r.ref],['Code tarifaire',pricing.code],['Application tarif',pricing.detail],['Montant TTC',fmt(pricing.montant)+' FCFA'],['Paiement',r.payMethod||'—'],['Émetteur','POS-OW-01'],[m.cls==='funeral-doc'?'Validé par':'Agent',r.agent||'—'],['Horodatage',r.processedAt||'']])}
   <div class="premium-control">${agtBarcode(r.ref)}${agtDocQr(r.ref)}<aside><small>IDENTIFIANT UNIQUE</small><b>${esc(r.ref)}</b><span>Document généré au guichet · rapprochement billet/paiement automatique.</span><em>✓ Paiement vérifié · ✓ document signé · ✓ piste d’audit</em></aside></div>
  </article>`
 }
@@ -657,23 +671,90 @@ function agtListHtml(){
 function agtSvcListHtml(){
  return AGT_SALE_SERVICES.map(s=>`<button class="agt-row svc-btn ${agt.svc===s[0]?'active':''}" data-agt-svc="${s[0]}"><span class="agt-row-icon svc-${s[0]}">${I(s[2])}</span><div><b>${esc(s[1])}</b><small>Vente directe au guichet</small></div></button>`).join('')
 }
-function agtRequestDetailHtml(){
- const q=agqSeed();
- const r=q.find(x=>x.ref===agt.selected)||q.find(x=>x.status==='nouvelle'||x.status==='en_cours')||q[0];
- if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
- agt.selected=r.ref;
- const pricing=agqPricing(r);
- if(r.status==='traitee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+function agtNouvelleScreen(r){
  return `<div class="agt-detail">
   <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)} · reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <p class="agt-review-note">${I('info')} Ceci est une pré-demande transmise par le client — aucune vérification n’a encore eu lieu. Prenez le dossier en charge pour l’examiner.</p>
   <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')||'<div><small>Détails</small><b>—</b></div>'}</div>
-  <div class="agt-calc"><div><small>Code tarifaire</small><b>${esc(pricing.code)}</b></div><div><small>Application</small><b>${esc(pricing.detail)}</b></div><div><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></div></div>
+  <div class="agt-actions"><button class="primary" data-agt-take="${esc(r.ref)}">${I('user-check')} Prendre en charge</button></div>
+ </div>`
+}
+function agtReviewScreen(r,pricing){
+ const finalStep=r.kind==='messagerie'||r.kind==='funeraire';
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)} · reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <p class="agt-review-note">${I('info')} Vérifiez les informations déclarées par le client avant de valider${finalStep?'':' ou de le convoquer pour un contrôle physique'}.</p>
+  <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')}</div>
+  <div class="agt-calc"><div><small>Tarif</small><b>${esc(pricing.code)}</b></div><div><small>Base</small><b>${esc(pricing.detail)}</b></div><div><small>Montant estimé</small><b>${fmt(pricing.montant)} FCFA</b></div></div>
+  <div class="agt-form-row">
+   <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
+   ${finalStep?`<label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>`:''}
+  </div>
+  <div class="agt-actions">
+   <button class="ghost" data-agt-complement="${esc(r.ref)}">${I('message-circle-question')} Demander un complément</button>
+   <button class="danger" data-agt-reject="${esc(r.ref)}">${I('x')} Refuser</button>
+   <button class="primary" data-agt-review-validate="${esc(r.ref)}">${I('badge-check')} ${finalStep?'Valider et confirmer':'Valider → contrôle physique'}</button>
+  </div>
+ </div>`
+}
+function agtFuneralReviewScreen(r){
+ const docs=r.docs||(r.docs=FUN_DOCS.map(()=>false));
+ const allOk=docs.every(Boolean);
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)} · reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')}</div>
+  <div class="agt-docs"><b>${I('file-check-2')} Documents obligatoires</b>${FUN_DOCS.map((d,i)=>`<label class="agt-doc-check ${docs[i]?'ok':'missing'}"><input type="checkbox" data-agt-doc="${i}" ${docs[i]?'checked':''}><span>${esc(d)}</span><i>${docs[i]?I('check'):I('triangle-alert')}</i></label>`).join('')}</div>
+  ${allOk?'':`<p class="agt-doc-warn">${I('triangle-alert')} Tous les documents doivent être vérifiés avant de valider le dossier.</p>`}
   <div class="agt-form-row">
    <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
    <label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>
   </div>
-  <div class="agt-actions"><button class="ghost" data-agt-reject="${esc(r.ref)}">${I('x')} Rejeter la demande</button><button class="primary" data-agt-confirm="${esc(r.ref)}">${I('badge-check')} Confirmer et générer le document</button></div>
+  <div class="agt-actions">
+   <button class="ghost" data-agt-complement="${esc(r.ref)}">${I('message-circle-question')} Demander un complément</button>
+   <button class="danger" data-agt-reject="${esc(r.ref)}">${I('x')} Refuser</button>
+   <button class="primary" data-agt-review-validate="${esc(r.ref)}" ${allOk?'':'disabled'}>${I('badge-check')} Valider le dossier</button>
+  </div>
  </div>`
+}
+function agtControlScreen(r,pricing){
+ const isTaa=r.kind==='taa';
+ const declared=isTaa?(agqFieldVal(r,'tonnage')||'—'):(agqFieldVal(r,'poids')||'—');
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <div class="agt-convocation"><i>${I('bell-ring')}</i><div><b>Client convoqué</b><span>« Votre demande ${esc(r.ref)} a été examinée. Présentez-vous au point de dépôt d’Owendo pour contrôle et validation définitive. »</span></div></div>
+  <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')}</div>
+  <div class="agt-form-row">
+   <label>${isTaa?'Tonnage déclaré (t)':'Poids déclaré (kg)'}<input value="${esc(declared)}" disabled></label>
+   <label>${isTaa?'Tonnage contrôlé (t)':'Poids contrôlé (kg)'}<input type="number" step="${isTaa?'0.1':'1'}" id="agtCtrlPoids" placeholder="${esc(declared)}"></label>
+  </div>
+  <div class="agt-calc" id="agtCtrlCalc"><div><small>Écart</small><b>—</b></div><div><small>Nouveau tarif</small><b>Renseignez le contrôle</b></div></div>
+  <div class="agt-form-row"><label>Moyen de paiement<select id="agtCtrlPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label></div>
+  <div class="agt-actions"><button class="primary" data-agt-control-validate="${esc(r.ref)}">${I('scale')} Valider la pesée et encaisser</button></div>
+ </div>`
+}
+function agtComplementScreen(r){
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <div class="agt-convocation warn"><i>${I('mail-warning')}</i><div><b>En attente du client</b><span>Message envoyé : « Votre demande ${esc(r.ref)} nécessite un complément d’information. Merci de compléter votre dossier depuis l’application. »</span></div></div>
+  <div class="agt-actions"><button class="primary" data-agt-complement-received="${esc(r.ref)}">${I('inbox')} Informations reçues · revenir à la vérification</button></div>
+ </div>`
+}
+function agtRequestDetailHtml(){
+ const q=agqSeed();
+ const r=q.find(x=>x.ref===agt.selected)||q.find(x=>AGQ_OPEN.includes(x.status))||q[0];
+ if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
+ agt.selected=r.ref;
+ const pricing=agqPricing(r);
+ if(r.status==='confirmee'||r.status==='validee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+ if(r.status==='complement')return agtComplementScreen(r);
+ if(r.status==='controle')return agtControlScreen(r,pricing);
+ if(r.status==='nouvelle')return agtNouvelleScreen(r);
+ return r.kind==='funeraire'?agtFuneralReviewScreen(r):agtReviewScreen(r,pricing);
 }
 function agtDoneHtml(r,pricing){
  if(r.status==='rejetee'){
@@ -732,8 +813,8 @@ function agtDetailHtml(){
 }
 function agtStatsHtml(){
  const q=agqSeed();
- const nouvelles=q.filter(x=>x.status==='nouvelle').length,traitees=q.filter(x=>x.status==='traitee').length;
- return[['Ventes guichet',agtGuichetCount],['Demandes à traiter',nouvelles],['Demandes traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+ const aTraiter=q.filter(x=>AGQ_OPEN.includes(x.status)).length,traitees=q.filter(x=>x.status==='confirmee'||x.status==='validee').length;
+ return[['Ventes guichet',agtGuichetCount],['Demandes à traiter',aTraiter],['Demandes traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
 }
 function agtPaint(){
  const list=document.getElementById('agtList');
@@ -751,17 +832,13 @@ function wireAgt(){
  document.querySelectorAll('[data-agt-select]').forEach(b=>b.onclick=()=>{agt.selected=b.dataset.agtSelect;agtPaint()});
  document.querySelectorAll('[data-agt-svc]').forEach(b=>b.onclick=()=>{agt.svc=b.dataset.agtSvc;agt.lastSale=null;agtPaint()});
  const panel=document.getElementById('agtDetail');
- const confirmBtn=panel?.querySelector('[data-agt-confirm]');
- if(confirmBtn)confirmBtn.onclick=()=>{
-  const ref=confirmBtn.dataset.agtConfirm,r=agqSeed().find(x=>x.ref===ref);
+ const takeBtn=panel?.querySelector('[data-agt-take]');
+ if(takeBtn)takeBtn.onclick=()=>{
+  const ref=takeBtn.dataset.agtTake,r=agqSeed().find(x=>x.ref===ref);
   if(!r)return;
-  r.status='traitee';
-  r.agent=document.getElementById('agtAgent').value;
-  r.payMethod=document.getElementById('agtPay').value;
-  r.processedAt=ctrNow();
-  toastMsg(`${ref} confirmé · document généré · client notifié par SMS`);
-  agtPaint();agqRefresh();
-  setragPrint('agtPrinter',agtReceiptLines(r,agqPricing(r)))
+  r.status='prise_en_charge';r.agent=AGT_AGENTS[0];
+  toastMsg(`${ref} pris en charge par ${AGT_AGENTS[0]} · vérification en cours`);
+  agtPaint();agqRefresh()
  };
  const rejectBtn=panel?.querySelector('[data-agt-reject]');
  if(rejectBtn)rejectBtn.onclick=()=>{
@@ -771,6 +848,74 @@ function wireAgt(){
   r.processedAt=ctrNow();
   toastMsg(`${ref} rejeté · motif à consigner dans le journal d’audit`);
   agtPaint();agqRefresh()
+ };
+ const complementBtn=panel?.querySelector('[data-agt-complement]');
+ if(complementBtn)complementBtn.onclick=()=>{
+  const ref=complementBtn.dataset.agtComplement,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.status='complement';
+  toastMsg(`Message envoyé à ${r.client} · complément d’information demandé`);
+  agtPaint();agqRefresh()
+ };
+ const complementReceivedBtn=panel?.querySelector('[data-agt-complement-received]');
+ if(complementReceivedBtn)complementReceivedBtn.onclick=()=>{
+  const ref=complementReceivedBtn.dataset.agtComplementReceived,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.status='prise_en_charge';
+  toastMsg(`${ref} · informations reçues, retour à la vérification`);
+  agtPaint();agqRefresh()
+ };
+ document.querySelectorAll('[data-agt-doc]').forEach(cb=>cb.onchange=()=>{
+  const ref=agt.selected,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.docs=r.docs||FUN_DOCS.map(()=>false);
+  r.docs[+cb.dataset.agtDoc]=cb.checked;
+  agtPaint()
+ });
+ const reviewValidateBtn=panel?.querySelector('[data-agt-review-validate]');
+ if(reviewValidateBtn)reviewValidateBtn.onclick=()=>{
+  const ref=reviewValidateBtn.dataset.agtReviewValidate,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  r.agent=document.getElementById('agtAgent')?.value||r.agent||AGT_AGENTS[0];
+  if(r.kind==='messagerie'||r.kind==='funeraire'){
+   r.payMethod=document.getElementById('agtPay')?.value||'Espèces';
+   r.status='confirmee';
+   r.processedAt=ctrNow();
+   const pricing=agqPricing(r);
+   toastMsg(`${ref} validé · document généré · client notifié par SMS`);
+   agtPaint();agqRefresh();
+   setragPrint('agtPrinter',agtReceiptLines(r,pricing))
+  }else{
+   r.status='controle';
+   toastMsg(`${ref} validé pour contrôle physique · client convoqué en gare`);
+   agtPaint();agqRefresh()
+  }
+ };
+ const ctrlPoids=panel?.querySelector('#agtCtrlPoids');
+ if(ctrlPoids)ctrlPoids.oninput=()=>{
+  const r=agqSeed().find(x=>x.ref===agt.selected);
+  if(!r)return;
+  const declared=+(r.kind==='taa'?(agqFieldVal(r,'tonnage')||0):(agqFieldVal(r,'poids')||0));
+  const calc=document.getElementById('agtCtrlCalc');
+  if(ctrlPoids.value===''){if(calc)calc.innerHTML=`<div><small>Écart</small><b>—</b></div><div><small>Nouveau tarif</small><b>Renseignez le contrôle</b></div>`;return}
+  const val=+ctrlPoids.value,ecart=Math.round((val-declared)*10)/10;
+  const p=agqPricing(Object.assign({},r,{poidsControle:val}));
+  if(calc)calc.innerHTML=`<div><small>Écart</small><b>${ecart>0?'+':''}${ecart} ${r.kind==='taa'?'t':'kg'}</b></div><div><small>Nouveau tarif</small><b>${fmt(p.montant)} FCFA</b></div>`
+ };
+ const controlValidateBtn=panel?.querySelector('[data-agt-control-validate]');
+ if(controlValidateBtn)controlValidateBtn.onclick=()=>{
+  const ref=controlValidateBtn.dataset.agtControlValidate,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  const inp=document.getElementById('agtCtrlPoids');
+  const declared=+(r.kind==='taa'?(agqFieldVal(r,'tonnage')||0):(agqFieldVal(r,'poids')||0));
+  r.poidsControle=inp&&inp.value!==''?+inp.value:declared;
+  const pricing=agqPricing(r);
+  r.payMethod=document.getElementById('agtCtrlPay')?.value||'Espèces';
+  r.status='confirmee';
+  r.processedAt=ctrNow();
+  toastMsg(`${ref} pesée validée · ${fmt(pricing.montant)} FCFA encaissés`);
+  agtPaint();agqRefresh();
+  setragPrint('agtPrinter',agtReceiptLines(r,pricing))
  };
  const tCls=document.getElementById('agtTCls');
  if(tCls)tCls.onchange=()=>{

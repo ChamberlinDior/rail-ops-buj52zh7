@@ -346,7 +346,25 @@
 .fap-svc b{font-size:10.5px;color:var(--navy);text-align:center}
 .fap-empty{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11.5px;justify-content:center;padding:30px 0}
 .fap-empty svg{width:16px}
-@media(max-width:900px){.fap-shell{min-height:auto;margin-top:10px}}
+.fap-svc-pending{display:flex;align-items:flex-start;gap:8px;margin:0;padding:10px 12px;border-radius:10px;background:#eaf2fb;color:#1e5c8a;font-size:11px;line-height:1.4;text-align:left}
+.fap-svc-pending svg{width:14px;flex:none;margin-top:1px}
+.fap-track-block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.fap-track-head{display:flex;align-items:center;gap:6px;font:800 10.5px Manrope;color:var(--navy)}
+.fap-track-head svg{width:13px;color:var(--green)}
+.fap-track-status{margin:0;font-size:10.5px;color:var(--muted);line-height:1.4}
+
+/* ---------- Suivi de dossier (portail desktop + app mobile) ---------- */
+.fos-track-block{border:1px solid #e6ebe9;border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;flex-direction:column;gap:8px;background:#fbfcfb}
+.fos-track-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.fos-track-head span{display:flex;align-items:center;gap:6px;font:800 10.5px Manrope;color:#5c7180}
+.fos-track-head span svg{width:13px}
+.fos-track-head b{font-size:11px;color:var(--navy,#0a2941)}
+.fos-track-row{display:flex;align-items:center;gap:5px}
+.fos-track-dot{flex:1;height:6px;border-radius:3px;background:#e3ebe8}
+.fos-track-dot.done{background:#15835f}
+.fos-track-dot.current{background:#2179c9}
+.fos-track-row.rejected{display:flex;align-items:center;gap:6px;color:#c0392b;font-size:11px;font-weight:800}
+.fos-track-row.rejected svg{width:14px}
 
 .fos-paygrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:1100px;margin:auto}
 .fos-paylogo{display:grid;place-items:center;gap:10px;padding:22px 10px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:.2s}

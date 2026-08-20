@@ -226,9 +226,54 @@
 .agq-meta small{color:var(--muted);font-size:10px}
 .agq-status{padding:3px 10px;border-radius:999px;font:800 9.5px Manrope;background:#eef2f1;color:var(--muted)}
 .agq-status.nouvelle{background:#fff4df;color:#c9860f}
-.agq-status.en_cours{background:#eaf2fb;color:#2179c9}
-.agq-status.traitee{background:#eef8f3;color:var(--green)}
+.agq-status.prise_en_charge{background:#eaf2fb;color:#2179c9}
+.agq-status.complement{background:#f3ecfb;color:#8c5fc9}
+.agq-status.controle{background:#ffe9de;color:#c9560f}
+.agq-status.validee,.agq-status.confirmee{background:#eef8f3;color:var(--green)}
 .agq-status.rejetee{background:#fdf1f1;color:var(--red)}
+
+/* ---------- Suivi de dossier (tracking client) ---------- */
+.agq-track{display:flex;overflow-x:auto;gap:0;padding:2px 0 6px;margin-bottom:2px}
+.agq-track-step{flex:1;min-width:84px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;position:relative}
+.agq-track-step:before{content:'';position:absolute;top:11px;left:-50%;width:100%;height:2px;background:#e3ebe8;z-index:0}
+.agq-track-step:first-child:before{display:none}
+.agq-track-step i{width:22px;height:22px;border-radius:50%;background:#eef1f0;color:#9fb0b8;display:grid;place-items:center;position:relative;z-index:1;flex:none}
+.agq-track-step i svg{width:11px}
+.agq-track-step span{font:800 8px Manrope,sans-serif;color:#9fb0b8;letter-spacing:.01em;line-height:1.25}
+.agq-track-step.done i{background:var(--green);color:#fff}
+.agq-track-step.done:before{background:var(--green)}
+.agq-track-step.done span{color:var(--navy)}
+.agq-track-step.current i{background:#eaf2fb;color:#2179c9;box-shadow:0 0 0 3px #2179c922}
+.agq-track-step.current span{color:#2179c9}
+.agq-track-step.current i svg{animation:agq-spin 1.6s linear infinite}
+@keyframes agq-spin{to{transform:rotate(360deg)}}
+.agq-track-rejected{display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:11px;background:#fdf1f1;color:var(--red);font:800 11.5px Manrope}
+.agq-track-rejected svg{width:15px}
+
+/* ---------- Écrans de vérification / contrôle / dossier funéraire ---------- */
+.agt-review-note{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;border-radius:10px;background:#eaf2fb;color:#1e5c8a;font:700 11px Manrope}
+.agt-review-note svg{width:14px;flex:none}
+.agt-convocation{display:flex;gap:11px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#eef8f3}
+.agt-convocation i{flex:none;width:30px;height:30px;border-radius:9px;background:#fff;color:var(--green);display:grid;place-items:center}
+.agt-convocation i svg{width:15px}
+.agt-convocation b{display:block;font-size:12px;color:var(--navy)}
+.agt-convocation span{display:block;font-size:11px;color:#4d6e60;margin-top:2px;line-height:1.4}
+.agt-convocation.warn{background:#f3ecfb}
+.agt-convocation.warn i{color:#8c5fc9}
+.agt-convocation.warn span{color:#5c4d75}
+.agt-docs{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.agt-docs>b{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--navy)}
+.agt-docs>b svg{width:14px;color:var(--green)}
+.agt-doc-check{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;background:#f6f8f7;cursor:pointer}
+.agt-doc-check input{width:15px;height:15px;accent-color:var(--green)}
+.agt-doc-check span{flex:1;font:700 11.5px Manrope;color:var(--navy)}
+.agt-doc-check i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none}
+.agt-doc-check i svg{width:11px}
+.agt-doc-check.ok i{background:#eef8f3;color:var(--green)}
+.agt-doc-check.missing i{background:#fff4df;color:#c9860f}
+.agt-doc-warn{display:flex;align-items:center;gap:7px;margin:0;font:700 10.5px Manrope;color:#c9860f}
+.agt-doc-warn svg{width:13px}
+.agt-actions button.danger{background:#fdf1f1;color:var(--red);border:1px solid #f3d0d0}
 .agq-actions{flex:none}
 .agq-actions button{border:1px solid var(--navy);background:var(--navy);color:#fff;border-radius:9px;padding:8px 13px;font:800 10.5px Manrope;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px}
 .agq-actions button svg{width:12px}
