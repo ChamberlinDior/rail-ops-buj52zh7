@@ -581,6 +581,61 @@ const AGT_SVC_FIELDS={
  funeraire:[['Expéditeur / famille','Nom complet'],['Téléphone','+241 06 00 00 00'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],
  messagerie:[['Expéditeur','Nom complet'],['Destinataire','Nom complet'],['Numéro de train','EXP-620'],['Description','Nature de l’envoi']]
 };
+
+/* ---------- Documents professionnels (même gabarit que Ventes & prestations) ---------- */
+const AGT_DOC_META={
+ bagage:{watermark:'SETRAG BAGAGES',type:'ÉTIQUETTE BAGAGE SÉCURISÉE',status:'ENREGISTRÉ',cls:'bag-doc'},
+ colis:{watermark:'COLIS EXPRESS',type:'BORDEREAU COLIS EXPRESS',status:'EN TRANSIT',cls:'parcel-doc'},
+ taa:{watermark:'AUTO ACCOMPAGNÉE',type:'AUTORISATION TRANSPORT AUTO ACCOMPAGNÉ',status:'CHARGEMENT AUTORISÉ',cls:'taa-doc'},
+ funeraire:{watermark:'ACCÈS RESTREINT',type:'BORDEREAU TRANSPORT FUNÉRAIRE',status:'DOSSIER CONFORME',cls:'funeral-doc'},
+ messagerie:{watermark:'MESSAGERIE VOYAGEURS',type:'BORDEREAU MESSAGERIE VOYAGEURS',status:'PRIS EN CHARGE',cls:'messagerie-doc'}
+};
+function agtStCode(label){const s=AGT_STATIONS.find(x=>x[1]===label);return s?s[0]:(label||'—').slice(0,3).toUpperCase()}
+function agtDocBrand(type,ref,status){return `<header class="doc-brand"><div class="doc-logo"><span>⚡</span><b>SETRAG</b><small>Le Transgabonais</small></div><div><small>${esc(type)}</small><strong>${esc(ref)}</strong></div><em>${esc(status)}</em></header>`}
+function agtDocQr(ref){return `<div class="doc-qr"><img src="${ctrQrUrl(ref)}" alt="QR de vérification"><small>QR signé</small></div>`}
+function agtBarcode(ref){return `<div class="premium-barcode">${Array.from({length:14}).map(()=>'<i></i>').join('')}<small>${esc(ref)}</small></div>`}
+function agtDocMeta(items){return `<div class="doc-meta">${items.map(x=>`<div><small>${esc(x[0])}</small><b>${esc(x[1])}</b></div>`).join('')}</div>`}
+function agtDocFinance(ttc){const ht=Math.round(ttc/1.06),vat=Math.round(ht*0.05),css=ttc-ht-vat;return `<div class="doc-finance"><span>Prix unitaire HT <b>${fmt(ht)}</b></span><span>TVA <b>${fmt(vat)}</b></span><span>CSS <b>${fmt(css)}</b></span><strong>TTC ${fmt(ttc)} FCFA</strong></div>`}
+function agtTicketDoc(r,pricing){
+ return `<article class="setrag-document ticket-doc"><div class="doc-watermark">TRANSGABONAIS</div>${agtDocBrand('BILLET VOYAGEUR ÉLECTRONIQUE',r.ref,'VALIDE')}
+  <div class="doc-route"><div><small>DÉPART</small><b>${esc(r.fromLabel)}</b><span>${esc(r.trainLabel||r.train)}</span></div><i>→<small>TRANSGABONAIS</small></i><div><small>ARRIVÉE</small><b>${esc(r.toLabel)}</b><span>${esc(r.train)}</span></div></div>
+  <div class="doc-passenger"><div><small>VOYAGEUR · VENTE GUICHET</small><h2>${esc(r.passenger)}</h2><span>Client comptant · encaissement immédiat au guichet</span></div><div class="doc-seat"><small>${esc(r.cls)}</small><b>${esc(r.car)} · Place ${esc(r.seat)}</b></div></div>
+  ${agtDocMeta([['Train / service',r.train+(r.trainLabel?' · '+r.trainLabel:'')],['Gares',agtStCode(r.fromLabel)+' → '+agtStCode(r.toLabel)],['Classe',r.cls],['Référence',r.ref],['Type / prestation','VENTE · Billet voyageur'],['Validité','Trajet et date indiqués'],['Point de vente','POS-OW-01 · '+esc(r.agent)],['Émis le',r.processedAt]])}
+  ${agtDocFinance(pricing.montant)}
+  <footer>${agtDocQr(r.ref)}<div><b>Contrôle online/offline · identifiant unique</b><span>Paiement ${esc(r.payMethod)} · vente guichet</span><span>Vente et encaissement : ${esc(r.processedAt)} · POS-OW-01</span><small>Document nominatif · duplicata contrôlé · piste d’audit</small></div></footer>
+ </article>`
+}
+function agtServiceDoc(r,pricing){
+ const m=AGT_DOC_META[r.kind]||AGT_DOC_META.messagerie;
+ const dep=agqFieldVal(r,'départ')||'Owendo',arr=agqFieldVal(r,'arrivée')||'Franceville';
+ let identity='';
+ if(r.kind==='bagage'){
+  const owner=agqFieldVal(r,'billet')||r.agent,poids=agqFieldVal(r,'poids')||'—';
+  identity=`<div class="premium-identity"><div><small>VOYAGEUR PROPRIÉTAIRE</small><h2>${esc(owner)}</h2><span>${esc(r.ref)} · billet lié</span></div><strong><small>POIDS CONTRÔLÉ</small>${esc(poids)} KG</strong></div>`
+ }else if(r.kind==='colis'){
+  const from=agqFieldVal(r,'expéditeur')||'—',to=agqFieldVal(r,'destinataire')||'—',poids=agqFieldVal(r,'poids')||'—';
+  identity=`<div class="premium-identity"><div><small>EXPÉDITEUR</small><h2>${esc(from)}</h2><span>${esc(agqFieldVal(r,'téléphone')||'Identité vérifiée')}</span></div><div class="recipient"><small>DESTINATAIRE</small><h2>${esc(to)}</h2></div><strong><small>POIDS</small>${esc(poids)} KG</strong></div>`
+ }else if(r.kind==='taa'){
+  const owner=agqFieldVal(r,'titulaire')||'—',veh=agqFieldVal(r,'véhicule')||'—',immat=agqFieldVal(r,'immatriculation')||'—',tonnage=agqFieldVal(r,'tonnage')||'—';
+  identity=`<div class="premium-identity"><div><small>VÉHICULE</small><h2>${esc(veh)}</h2><span>${esc(immat)}</span></div><div><small>CONDUCTEUR / BILLET</small><h2>${esc(owner)}</h2><span>${esc(r.ref)}</span></div><strong><small>MASSE</small>${esc(tonnage)} T</strong></div>`
+ }else if(r.kind==='funeraire'){
+  const fam=agqFieldVal(r,'expéditeur')||agqFieldVal(r,'famille')||'—';
+  identity=`<div class="premium-identity confidential"><div><small>PERSONNE HABILITÉE</small><h2>${esc(fam)}</h2><span>Données sensibles protégées selon le rôle</span></div><strong><small>DOSSIER</small>TF-${esc(r.ref.slice(-2))}</strong></div>`
+ }else{
+  const from=agqFieldVal(r,'expéditeur')||'—',to=agqFieldVal(r,'destinataire')||'—',train=agqFieldVal(r,'train')||'—';
+  identity=`<div class="premium-identity"><div><small>EXPÉDITEUR</small><h2>${esc(from)}</h2></div><div class="recipient"><small>DESTINATAIRE</small><h2>${esc(to)}</h2></div><strong><small>TRAIN</small>${esc(train)}</strong></div>`
+ }
+ const keyline=(r.fields||[]).slice(0,4).map(f=>`<span><small>${esc(f[0]).toUpperCase()}</small><b>${esc(f[1])}</b></span>`).join('');
+ return `<article class="setrag-document premium-service ${m.cls}"><div class="doc-watermark">${esc(m.watermark)}</div>${agtDocBrand(m.type,r.ref,m.status)}
+  <div class="premium-service-route"><section><small>ORIGINE</small><strong>${esc(agtStCode(dep))}</strong><b>${esc(dep)}</b></section><div><span>TRANSGABONAIS</span><i>→</i><small>VENTE GUICHET</small></div><section><small>DESTINATION</small><strong>${esc(agtStCode(arr))}</strong><b>${esc(arr)}</b></section></div>
+  ${identity}
+  <div class="premium-keyline">${keyline}</div>
+  ${agtDocMeta([['N° opération',r.ref],['Code tarifaire',pricing.code],['Application tarif',pricing.detail],['Montant TTC',fmt(pricing.montant)+' FCFA'],['Paiement',r.payMethod||'—'],['Émetteur','POS-OW-01'],['Agent',r.agent||'—'],['Horodatage',r.processedAt||'']])}
+  <div class="premium-control">${agtBarcode(r.ref)}${agtDocQr(r.ref)}<aside><small>IDENTIFIANT UNIQUE</small><b>${esc(r.ref)}</b><span>Document généré au guichet · rapprochement billet/paiement automatique.</span><em>✓ Paiement vérifié · ✓ document signé · ✓ piste d’audit</em></aside></div>
+ </article>`
+}
+function agtProDoc(r,pricing){return r.kind==='billet'?agtTicketDoc(r,pricing):agtServiceDoc(r,pricing)}
+
 function agtListHtml(){
  const q=agqSeed();
  if(!q.length)return `<p class="ctr-log-empty">Aucune demande.</p>`;
@@ -608,13 +663,14 @@ function agtRequestDetailHtml(){
  </div>`
 }
 function agtDoneHtml(r,pricing){
- const rejected=r.status==='rejetee';
- return `<div class="agt-doc ${rejected?'rejected':''}">
-  <div class="agt-doc-head"><span>${I(rejected?'x-circle':'badge-check')} SETRAG</span><b>${esc(r.service)} · ${rejected?'demande rejetée':'document généré'}</b></div>
-  ${rejected?'':`<div class="agt-doc-qr"><img src="${ctrQrUrl(r.ref)}" alt="QR de vérification"></div>`}
-  <div class="agt-doc-grid">${(r.fields||[]).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(f[1])}</b></span>`).join('')}${rejected?'':`<span><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></span><span><small>Paiement</small><b>${esc(r.payMethod||'—')}</b></span>`}</div>
-  <small class="agt-doc-id">${esc(r.ref)} · ${rejected?'Rejetée':'Traitée'} par ${esc(r.agent||'agent')} · ${esc(r.processedAt||r.time)}</small>
+ if(r.status==='rejetee'){
+  return `<div class="agt-doc rejected">
+  <div class="agt-doc-head"><span>${I('x-circle')} SETRAG</span><b>${esc(r.service)} · demande rejetée</b></div>
+  <div class="agt-doc-grid">${(r.fields||[]).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(f[1])}</b></span>`).join('')}</div>
+  <small class="agt-doc-id">${esc(r.ref)} · Rejetée par ${esc(r.agent||'agent')} · ${esc(r.processedAt||r.time)}</small>
  </div>`
+ }
+ return `<div class="agt-doc-pro">${agtProDoc(r,pricing)}<small class="agt-doc-id">Document généré à partir de la demande reçue le ${esc(r.time)} via ${esc(r.channel||'Portail web')}</small></div>`
 }
 function agtTicketFormHtml(){
  const clsList=Object.keys(CTR_FARES),defCls=agt.ticketCls&&clsList.includes(agt.ticketCls)?agt.ticketCls:clsList[clsList.length-1];
@@ -650,12 +706,8 @@ function agtCollectSaleFields(){
  return cfg.map((f,i)=>{const el=document.getElementById(`agtSaleF${i}`);return[f[0],(el&&el.value.trim())||f[1]||'—']})
 }
 function agtSaleDocHtml(r,pricing){
- return `<div class="agt-doc">
-  <div class="agt-doc-head"><span>${I('badge-check')} SETRAG</span><b>${esc(r.service)} · vente guichet encaissée</b></div>
-  <div class="agt-doc-qr"><img src="${ctrQrUrl(r.ref)}" alt="QR de vérification"></div>
-  <div class="agt-doc-grid">${(r.fields||[]).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(f[1])}</b></span>`).join('')}<span><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></span><span><small>Paiement</small><b>${esc(r.payMethod||'—')}</b></span></div>
-  <small class="agt-doc-id">${esc(r.ref)} · Encaissé par ${esc(r.agent)} · ${esc(r.processedAt)}</small>
-  <div class="agt-actions" style="margin-top:2px"><button class="ghost" data-agt-print>${I('printer')} Imprimer</button><button class="primary" data-agt-new-sale>${I('plus')} Nouvelle vente</button></div>
+ return `<div class="agt-doc-pro">${agtProDoc(r,pricing)}
+  <div class="agt-actions" style="margin-top:12px"><button class="ghost" data-agt-print>${I('printer')} Imprimer</button><button class="primary" data-agt-new-sale>${I('plus')} Nouvelle vente</button></div>
  </div>`
 }
 function agtDetailHtml(){
@@ -721,7 +773,13 @@ function wireAgt(){
   const pay=document.getElementById('agtTPay').value;
   const price=CTR_FARES[cls];
   const ref='SET-'+Math.floor(100000+Math.random()*900000);
-  const r={ref,service:'Billet voyageur',kind:'billet',fields:[['Voyageur',name],['Trajet',`${AGT_STATIONS.find(s=>s[0]===from)[1]} → ${AGT_STATIONS.find(s=>s[0]===to)[1]}`],['Train',train],['Classe',cls]],agent:AGT_AGENTS[0],payMethod:pay,processedAt:ctrNow()};
+  const fromSt=AGT_STATIONS.find(s=>s[0]===from),toSt=AGT_STATIONS.find(s=>s[0]===to);
+  const trainInfo=AGT_TRAINS.find(t=>t[0]===train);
+  const car='V'+(1+Math.floor(Math.random()*4)),seat=1+Math.floor(Math.random()*60);
+  const r={ref,service:'Billet voyageur',kind:'billet',
+   passenger:name,fromLabel:fromSt[1],toLabel:toSt[1],train,trainLabel:trainInfo?trainInfo[1]:'',cls,car,seat,
+   fields:[['Voyageur',name],['Trajet',`${fromSt[1]} → ${toSt[1]}`],['Train',train],['Classe',cls]],
+   agent:AGT_AGENTS[0],payMethod:pay,processedAt:ctrNow()};
   agt.lastSale=r;agt.lastSalePricing={montant:price};
   agtGuichetCount++;
   toastMsg(`Billet émis et encaissé au guichet · ${fmt(price)} FCFA · ${pay}`);
