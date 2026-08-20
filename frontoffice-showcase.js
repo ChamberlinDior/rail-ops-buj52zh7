@@ -209,32 +209,195 @@ function stepsSection(){
  </section>`
 }
 
+/* ---------- interactive mobile app phone ---------- */
+let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null};
+function fapTrainsFor(o,d){
+ const dist=Math.abs(stKm(d)-stKm(o));
+ return TEMPLATES.map(t=>{
+  const[code,type,baseH,speed]=t;
+  const durH=Math.max(.6,dist/speed);
+  const depH=baseH,arrH=(baseH+durH)%24;
+  const f=h=>`${String(Math.floor(h)).padStart(2,'0')}:${String(Math.round((h%1)*60)).padStart(2,'0')}`;
+  const prices={};CLASSES.forEach(c=>{prices[c[0]]=Math.max(1500,Math.round(dist*c[2]/500)*500)});
+  return{code,type,depart:f(depH),arrive:f(arrH),prices,dist}
+ })
+}
+function fapHomeScreen(){
+ return `<div class="fap-home">
+  <div class="fap-search-card">
+   <label>Départ<select id="fapFrom">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.o?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+   <label>Arrivée<select id="fapTo">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+   <button data-fap-search>${I('search')} Rechercher un billet</button>
+  </div>
+  ${WALLET.length?`<div class="fap-recent"><b>Vos billets récents</b>${WALLET.slice(0,2).map((r,i)=>`<button class="fap-recent-row" data-fap-wallet="${i}"><span>${I(kindIcon(r.kind))}</span><div><b>${esc(r.brand)}</b><small>${esc(r.code)}</small></div>${I('chevron-right')}</button>`).join('')}</div>`:''}
+ </div>`
+}
+function fapResultsScreen(){
+ const trains=fapTrainsFor(fap.o,fap.d);
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>${stName(fap.o)} → ${stName(fap.d)}</b></div>
+  ${trains.map(t=>`<button class="fap-train-card" data-fap-choose="${t.code}"><div><b>${t.code} · ${t.type}</b><small>${t.depart} → ${t.arrive}</small></div><span>${fmtMoney(t.prices['2e'])}</span></button>`).join('')}
+ </div>`
+}
+function fapSeatScreen(){
+ const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train);
+ const taken=[2,6,11,14,19];
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="results">${I('arrow-left')}</button><b>${t.code} · choisir une place</b></div>
+  <div class="fap-seatgrid">${Array.from({length:24},(_,i)=>`<button class="fap-seat ${taken.includes(i)?'taken':fap.seat===i?'picked':''}" ${taken.includes(i)?'disabled':''} data-fap-seat="${i}">${i+1}</button>`).join('')}</div>
+  <div class="fap-classrow">${CLASSES.map(c=>`<button class="fap-classchip ${fap.cls===c[0]?'active':''}" data-fap-cls="${c[0]}">${c[1]}</button>`).join('')}</div>
+  <button data-fap-next="pay" ${fap.seat==null?'disabled':''}>${I('arrow-right')} Continuer · ${fmtMoney(t.prices[fap.cls||'2e'])}</button>
+ </div>`
+}
+function fapPayForm(pay){
+ const p=PAYMENTS.find(x=>x[0]===pay);
+ if(pay==='cs')return `<div class="fap-payform"><p>${I('info')} Réglez en espèces au guichet ou auprès du contrôleur à bord — votre place reste réservée 15 minutes.</p></div>`;
+ if(pay==='vi'||pay==='mc')return `<div class="fap-payform"><label>N° de carte<input placeholder="4242 4242 4242 4242"></label><div class="fap-payform-row"><label>Expiration<input placeholder="12/28"></label><label>CVC<input placeholder="123"></label></div></div>`;
+ return `<div class="fap-payform"><label>Numéro ${esc(p[1])}<input placeholder="+241 06 00 00 00"></label><p>${I('info')} Un code de confirmation sera envoyé par SMS.</p></div>`
+}
+function fapPayScreen(){
+ const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train);
+ const amount=t.prices[fap.cls||'2e'];
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="seat">${I('arrow-left')}</button><b>Paiement · ${fmtMoney(amount)}</b></div>
+  <div class="fap-paygrid">${PAYMENTS.map(p=>`<button class="fap-pay ${fap.pay===p[0]?'active':''}" data-fap-pay="${p[0]}" style="--c:${p[3]}"><i>${esc(p[1][0])}</i><b>${esc(p[1])}</b><small>${esc(p[2])}</small></button>`).join('')}</div>
+  ${fap.pay?fapPayForm(fap.pay):''}
+  <button data-fap-confirm ${fap.pay?'':'disabled'}>${I('lock')} Payer ${fmtMoney(amount)}</button>
+ </div>`
+}
+function fapTicketScreen(){
+ const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train),r=fap.lastRec;
+ return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('check-circle-2')}</span><b>Paiement confirmé</b></div>
+  <div class="fap-ticket-card">
+   <div class="fap-ticket-route"><b>${stName(fap.o)}</b>${I('arrow-right')}<b>${stName(fap.d)}</b></div>
+   <div class="fap-ticket-qr">${qr(r.id)}</div>
+   <div class="fap-ticket-grid"><span><small>Train</small><b>${t.code}</b></span><span><small>Classe</small><b>${clsLabel(fap.cls||'2e')}</b></span><span><small>Place</small><b>${(fap.seat??0)+1}</b></span><span><small>Montant</small><b>${fmtMoney(r.amount)}</b></span></div>
+   <small class="fap-ticket-id">${r.id}</small>
+  </div>
+  <button data-fap-wallet-open="last">${I('wallet')} Voir dans mon portefeuille</button>
+  <button class="ghost" data-fap-back="home">${I('rotate-ccw')} Nouvel achat</button>
+ </div>`
+}
+function fapServicesScreen(){
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Tous les services</b></div>
+  <div class="fap-svcgrid">${SERVICES.filter(s=>s.id!=='ticket').map(s=>`<button class="fap-svc" data-fap-svc="${s.id}"><span>${I(s.icon)}</span><b>${s.title}</b></button>`).join('')}</div>
+ </div>`
+}
+function fapSvcFormScreen(){
+ const s=SERVICES.find(x=>x.id===fap.svc);
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="services">${I('arrow-left')}</button><b>${esc(s.title)}</b></div>
+  <div class="fap-payform">${s.fields.map((f,i)=>`<label>${esc(f[0])}<input data-fap-f="${i}" placeholder="${esc(f[2]||'')}"></label>`).join('')}</div>
+  <button data-fap-svc-submit>${I('check')} ${esc(s.cta)}</button>
+ </div>`
+}
+function fapSvcDoneScreen(){
+ const r=fap.lastRec;
+ return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('check-circle-2')}</span><b>Demande confirmée</b></div>
+  <div class="fap-ticket-card"><div class="fap-ticket-route"><b>${esc(r.title)}</b></div><div class="fap-ticket-qr">${qr(r.id)}</div><small class="fap-ticket-id">${r.id}</small></div>
+  <button data-fap-wallet-open="last">${I('wallet')} Voir dans mon portefeuille</button>
+  <button class="ghost" data-fap-back="home">${I('arrow-left')} Retour à l’accueil</button>
+ </div>`
+}
+function fapWalletScreen(){
+ if(!WALLET.length)return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Portefeuille</b></div><p class="fap-empty">${I('inbox')} Aucun document pour l’instant.</p></div>`;
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Portefeuille · ${WALLET.length}</b></div>
+  ${WALLET.map((r,i)=>`<button class="fap-recent-row" data-fap-wallet="${i}"><span>${I(kindIcon(r.kind))}</span><div><b>${esc(r.brand)}</b><small>${esc(r.code)} · ${r.date}</small></div>${I('chevron-right')}</button>`).join('')}
+ </div>`
+}
+function fapWalletDetailScreen(){
+ const r=WALLET[fap.walletIdx];
+ if(!r)return fapWalletScreen();
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="wallet">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
+  <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${r.fields.slice(0,6).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
+ </div>`
+}
+function fapScreenHtml(){
+ return{home:fapHomeScreen,results:fapResultsScreen,seat:fapSeatScreen,pay:fapPayScreen,ticket:fapTicketScreen,services:fapServicesScreen,svcform:fapSvcFormScreen,svcdone:fapSvcDoneScreen,wallet:fapWalletScreen,walletdetail:fapWalletDetailScreen}[fap.screen]()
+}
+function fapNavKey(){
+ if(['services','svcform','svcdone'].includes(fap.screen))return 'services';
+ if(['wallet','walletdetail'].includes(fap.screen))return 'wallet';
+ return 'home'
+}
+function fapPaint(){
+ const screen=document.getElementById('fapScreen');
+ if(screen)screen.innerHTML=`<div class="fap-screen-inner">${fapScreenHtml()}</div>`;
+ document.querySelectorAll('[data-fap-nav]').forEach(b=>b.classList.toggle('active',b.dataset.fapNav===fapNavKey()));
+ if(window.lucide)lucide.createIcons();
+ wireFap()
+}
+function wireFap(){
+ document.querySelectorAll('[data-fap-nav]').forEach(b=>b.onclick=()=>{const k=b.dataset.fapNav;fap.screen=k;fapPaint()});
+ document.querySelectorAll('[data-fap-back]').forEach(b=>b.onclick=()=>{fap.screen=b.dataset.fapBack;fapPaint()});
+ const screenEl=document.getElementById('fapScreen');
+ const searchBtn=screenEl?.querySelector('[data-fap-search]');
+ if(searchBtn)searchBtn.onclick=()=>{
+  fap.o=document.getElementById('fapFrom').value;fap.d=document.getElementById('fapTo').value;
+  if(fap.o===fap.d){if(typeof toast==='function')toast('Choisissez deux gares différentes');return}
+  fap.screen='results';fapPaint()
+ };
+ document.querySelectorAll('[data-fap-choose]').forEach(b=>b.onclick=()=>{fap.train=b.dataset.fapChoose;fap.seat=null;fap.screen='seat';fapPaint()});
+ document.querySelectorAll('[data-fap-seat]').forEach(b=>b.onclick=()=>{fap.seat=+b.dataset.fapSeat;fapPaint()});
+ document.querySelectorAll('[data-fap-cls]').forEach(b=>b.onclick=()=>{fap.cls=b.dataset.fapCls;fapPaint()});
+ const nextBtn=screenEl?.querySelector('[data-fap-next]');
+ if(nextBtn)nextBtn.onclick=()=>{if(fap.seat==null)return;fap.screen='pay';fapPaint()};
+ document.querySelectorAll('[data-fap-pay]').forEach(b=>b.onclick=()=>{fap.pay=b.dataset.fapPay;fapPaint()});
+ const confirmBtn=screenEl?.querySelector('[data-fap-confirm]');
+ if(confirmBtn)confirmBtn.onclick=()=>{
+  if(!fap.pay)return;
+  const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train);
+  const amount=t.prices[fap.cls||'2e'];
+  const id=`SET-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
+  const rec={id,kind:'billet',brand:'SETRAG · Billet électronique (mobile)',headlineHtml:`<b>${stName(fap.o)}</b>${I('arrow-right')}<b>${stName(fap.d)}</b>`,code:`${fap.o} → ${fap.d}`,date:today(),fields:[
+   ['Train',`${t.code} · ${t.type}`],['Classe',clsLabel(fap.cls||'2e')],['Départ',t.depart],['Place',String((fap.seat??0)+1)],
+   ['Montant TTC',fmtMoney(amount)],['Mode de paiement',(PAYMENTS.find(p=>p[0]===fap.pay)||['','Espèces'])[1]],['Canal','Application mobile'],['N° billet',id]
+  ]};
+  addToWallet(rec);
+  fap.lastRec={id,amount};
+  fap.screen='ticket';fapPaint();
+  if(typeof toast==='function')toast('Paiement confirmé depuis l’application mobile · billet généré')
+ };
+ document.querySelectorAll('[data-fap-svc]').forEach(b=>b.onclick=()=>{fap.svc=b.dataset.fapSvc;fap.screen='svcform';fapPaint()});
+ const svcSubmit=screenEl?.querySelector('[data-fap-svc-submit]');
+ if(svcSubmit)svcSubmit.onclick=()=>{
+  const s=SERVICES.find(x=>x.id===fap.svc);
+  const vals=s.fields.map((f,i)=>{const el=document.querySelector(`[data-fap-f="${i}"]`);return[f[0],esc((el&&el.value.trim())||f[2]||'—')]});
+  const id=`${s.prefix}-${today().split('/').reverse().join('').slice(2)}-${String(1000+Math.floor(Math.random()*9000))}`;
+  const rec={id,kind:s.id,brand:`SETRAG · ${s.title.toUpperCase()} (mobile)`,headlineHtml:`<b>${s.title}</b>`,code:s.prefix,date:today(),fields:[...vals,['Canal','Application mobile'],['Statut','Confirmé']]};
+  addToWallet(rec);
+  const q=window.SETRAG_SERVICE_REQUESTS;
+  if(q)q.unshift({ref:id,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null});
+  fap.lastRec={id,title:s.title};
+  fap.screen='svcdone';fapPaint();
+  if(typeof toast==='function')toast('Demande envoyée depuis l’application mobile')
+ };
+ document.querySelectorAll('[data-fap-wallet]').forEach(b=>b.onclick=()=>{fap.walletIdx=+b.dataset.fapWallet;fap.screen='walletdetail';fapPaint()});
+ document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.screen='walletdetail';fapPaint()});
+}
 function appSection(){
  return `<section class="fos-section" id="application">
  <div class="fos-app">
   <div class="fos-app-copy fos-reveal">
    <span class="fos-kicker" style="color:#0b8a56;border-color:#cfe6de;background:#eef8f3"><i style="background:#0b8a56"></i>APPLICATION MOBILE & WEB</span>
    <h3 style="margin-top:16px;color:#092238">La même expérience, dans la poche du voyageur</h3>
-   <p style="color:#5d717a">Une seule API alimente le portail web et l’application mobile : recherche, réservation, paiement et billet QR restent identiques, en ligne comme hors connexion.</p>
+   <p style="color:#5d717a">Une seule API alimente le portail web et l’application mobile : recherche, réservation, paiement et billet QR restent identiques, en ligne comme hors connexion. Essayez le téléphone ci-contre — il est entièrement interactif.</p>
    <ul class="fos-app-list" style="color:#3f545c">
-    ${['Recherche et achat en moins de 2 minutes','Billet et QR disponibles hors ligne après achat','Notifications de départ, retard et embarquement','Historique des voyages et re-achat en un clic'].map(x=>`<li style="color:#3f545c">${I('check-circle-2')} ${x}</li>`).join('')}
+    ${['Recherche et achat en moins de 2 minutes','Six moyens de paiement, du Mobile Money à la carte bancaire','Billet et QR disponibles hors ligne après achat','Portefeuille et historique partagés avec le portail web'].map(x=>`<li style="color:#3f545c">${I('check-circle-2')} ${x}</li>`).join('')}
    </ul>
    <div class="fos-store-badges" style="filter:invert(0)">
     ${[['smartphone','App Store','iOS'],['play','Google Play','Android']].map(x=>`<span style="border-color:#e3ebe8;background:#f3f7f6;color:#092238">${I(x[0])}<span><small>Disponible sur</small><b>${x[1]}</b></span></span>`).join('')}
    </div>
   </div>
-  <div class="fos-phones fos-reveal">
-   <div class="fos-phone b"><div class="fos-phone-screen">
-    <div class="fos-screen-bar"><span>9:41</span><span>●●● 5G</span></div>
-    <div class="fos-screen-ticket" style="margin-top:20px"><b>SETRAG · Billet</b><small>${stName('OWE')} → ${stName('FCV')}</small><div class="fos-screen-qr">${qr('demo-phone-b')}</div></div>
-   </div></div>
-   <div class="fos-phone a"><div class="fos-phone-screen">
-    <div class="fos-screen-bar"><span>9:41</span><span>●●● 5G</span></div>
-    <div class="fos-screen-nav">${I('map-pin')} Rechercher un billet</div>
-    <div class="fos-screen-card"><b>${stName('OWE')} → ${stName('FCV')}</b><small>Aujourd’hui · 1 voyageur</small><div class="fos-screen-row"><span>EXP-620 · 07:30</span><span>7 000 FCFA</span></div></div>
-    <div class="fos-screen-card"><b>${stName('BOU')} → ${stName('LAS')}</b><small>Demain · 2 voyageurs</small><div class="fos-screen-row"><span>OMN-624 · 09:15</span><span>3 500 FCFA</span></div></div>
-    <div class="fos-screen-btn">Rechercher</div>
-   </div></div>
+  <div class="fap-shell fos-reveal">
+   <div class="fap-phone"><div class="fap-notch"></div>
+    <div class="fap-phone-screen">
+     <div class="fap-statusbar"><span>${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span><span class="fap-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
+     <div class="fap-appbar"><span>S</span><b>SETRAG</b></div>
+     <div class="fap-screen" id="fapScreen"></div>
+     <div class="fap-bottomnav">
+      <button class="active" data-fap-nav="home">${I('house')}<small>Accueil</small></button>
+      <button data-fap-nav="services">${I('grid-2x2')}<small>Services</small></button>
+      <button data-fap-nav="wallet">${I('wallet')}<small>Portefeuille</small></button>
+     </div>
+    </div>
+   </div>
   </div>
  </div>
  </section>`
@@ -405,6 +568,7 @@ function wire(){
   flow.scrollIntoView({behavior:'smooth',block:'start'})
  };
  wireFlow();
+ if(document.getElementById('fapScreen'))fapPaint();
 }
 
 function wireFlow(){
