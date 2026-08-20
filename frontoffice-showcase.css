@@ -258,7 +258,10 @@
 .fap-statusicons svg{width:13px}
 .fap-appbar{display:flex;align-items:center;gap:8px;padding:8px 18px 12px;border-bottom:1px solid #e3ebe8}
 .fap-appbar span{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:var(--gold);color:#142b3b;font-weight:900;font-size:11px}
-.fap-appbar b{font-size:12.5px;color:var(--navy)}
+.fap-appbar b{font-size:12.5px;color:var(--navy);flex:1}
+.fap-bell{position:relative;border:0;background:#f3f7f6;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--navy);cursor:pointer;flex:none}
+.fap-bell svg{width:14px}
+.fap-bell-badge{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--red,#d64545);color:#fff;font:800 8.5px Manrope;display:grid;place-items:center;line-height:1}
 .fap-screen{flex:1;background:#fff;padding:16px 14px;display:flex;flex-direction:column;overflow-y:auto;max-height:420px}
 .fap-screen-inner{display:flex;flex-direction:column;flex:1;animation:fap-enter .3s cubic-bezier(.2,.8,.3,1)}
 @keyframes fap-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -349,9 +352,47 @@
 .fap-svc-pending{display:flex;align-items:flex-start;gap:8px;margin:0;padding:10px 12px;border-radius:10px;background:#eaf2fb;color:#1e5c8a;font-size:11px;line-height:1.4;text-align:left}
 .fap-svc-pending svg{width:14px;flex:none;margin-top:1px}
 .fap-track-block{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.fap-track-head{display:flex;align-items:center;gap:6px;font:800 10.5px Manrope;color:var(--navy)}
+.fap-track-head{display:flex;align-items:center;justify-content:space-between;gap:6px;font:800 10.5px Manrope;color:var(--navy)}
+.fap-track-head>span{display:flex;align-items:center;gap:6px}
 .fap-track-head svg{width:13px;color:var(--green)}
+.fap-track-live{display:flex;align-items:center;gap:4px;font:800 8.5px Manrope;color:var(--green);text-transform:uppercase;letter-spacing:.03em}
+.fap-track-live svg{width:9px;animation:fap-pulse 1.4s ease infinite}
+@keyframes fap-pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .fap-track-status{margin:0;font-size:10.5px;color:var(--muted);line-height:1.4}
+.fap-track-position{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:9px;background:#f6f8f7}
+.fap-track-position i{flex:none;color:var(--green);display:flex}
+.fap-track-position i svg{width:13px}
+.fap-track-position span{font:700 10.5px Manrope;color:var(--navy)}
+
+/* ---------- Mes demandes / Notifications (app mobile) ---------- */
+.fap-track-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
+.fap-track-row-icon{flex:none;width:32px;height:32px;border-radius:9px;background:#eef8f3;color:var(--green);display:grid;place-items:center}
+.fap-track-row-icon svg{width:14px}
+.fap-track-row-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.fap-track-row-mid b{font-size:11.5px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fap-track-row-mid small{color:var(--muted);font-size:9.5px}
+.fap-track-row-mid em{font-style:normal;color:#5c7180;font-size:9.5px;margin-top:1px}
+.fap-track-row-status{flex:none;padding:3px 9px;border-radius:999px;font:800 8.5px Manrope;background:#eef2f1;color:var(--muted)}
+.fap-track-row-status.nouvelle{background:#fff4df;color:#c9860f}
+.fap-track-row-status.prise_en_charge{background:#eaf2fb;color:#2179c9}
+.fap-track-row-status.complement{background:#f3ecfb;color:#8c5fc9}
+.fap-track-row-status.controle{background:#ffe9de;color:#c9560f}
+.fap-track-row-status.validee,.fap-track-row-status.confirmee{background:#eef8f3;color:var(--green)}
+.fap-track-row-status.rejetee{background:#fdf1f1;color:var(--red,#d64545)}
+.fap-notif-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
+.fap-notif-row>span{flex:none;width:30px;height:30px;border-radius:9px;background:#eaf2fb;color:#2179c9;display:grid;place-items:center}
+.fap-notif-row>span svg{width:14px}
+.fap-notif-row div{flex:1;min-width:0}
+.fap-notif-row b{display:block;font-size:11px;color:var(--navy);font-weight:700;line-height:1.35}
+.fap-notif-row small{color:var(--muted);font-size:9.5px}
+
+/* ---------- Notification push simulée sur le téléphone ---------- */
+.fap-push-banner{position:absolute;left:8px;right:8px;top:8px;z-index:20;display:flex;align-items:flex-start;gap:9px;background:#0e2436f2;color:#fff;border-radius:14px;padding:11px 12px;box-shadow:0 14px 30px #06243850;transform:translateY(-140%);opacity:0;transition:transform .4s cubic-bezier(.25,.9,.35,1),opacity .3s}
+.fap-push-banner.show{transform:translateY(0);opacity:1}
+.fap-push-icon{flex:none;width:24px;height:24px;border-radius:8px;background:#ffffff20;display:grid;place-items:center}
+.fap-push-icon svg{width:13px}
+.fap-push-banner b{display:block;font-size:10.5px}
+.fap-push-banner span{display:block;font-size:10.5px;color:#cfe0e8;line-height:1.35;margin-top:1px}
 
 /* ---------- Suivi de dossier (portail desktop + app mobile) ---------- */
 .fos-track-block{border:1px solid #e6ebe9;border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;flex-direction:column;gap:8px;background:#fbfcfb}

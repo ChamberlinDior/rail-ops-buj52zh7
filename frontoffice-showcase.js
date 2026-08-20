@@ -221,7 +221,64 @@ function stepsSection(){
 }
 
 /* ---------- interactive mobile app phone ---------- */
-let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null};
+let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
+function fosPositionLabel(r){
+ if(!r)return '—';
+ const gare=(r.fields||[]).find(f=>/départ/i.test(f[0]));
+ const agence=gare?gare[1]:'Owendo';
+ return{
+  nouvelle:'Chez vous · en attente d’examen',
+  prise_en_charge:`Agence ${agence} · vérification du dossier en cours`,
+  complement:'Chez vous · complément d’information requis',
+  controle:`Agence ${agence} · présentez-vous pour le contrôle`,
+  validee:`Agence ${agence} · dossier validé, prise en charge imminente`,
+  confirmee:`Agence ${agence} · pris en charge, en attente d’expédition`,
+  rejetee:'Dossier rejeté · contactez le service client'
+ }[r.status]||'—'
+}
+function fapNotifMessage(id,status){
+ return{
+  prise_en_charge:`Votre demande ${id} a été prise en charge par un agent SETRAG.`,
+  complement:`Complément d’information requis pour votre demande ${id}.`,
+  controle:`Présentez-vous en gare pour le contrôle physique de ${id}.`,
+  validee:`Votre dossier ${id} a été validé par SETRAG.`,
+  confirmee:`Votre demande ${id} est confirmée et prise en charge !`,
+  rejetee:`Votre demande ${id} a été rejetée.`
+ }[status]||`Mise à jour de votre demande ${id}.`
+}
+function fapShowPushBanner(msg){
+ const phone=document.querySelector('.fap-phone-screen');
+ if(!phone)return;
+ phone.querySelector('.fap-push-banner')?.remove();
+ const b=document.createElement('div');
+ b.className='fap-push-banner';
+ b.innerHTML=`<span class="fap-push-icon">${I('bell-ring')}</span><div><b>SETRAG</b><span>${esc(msg)}</span></div>`;
+ phone.appendChild(b);
+ if(window.lucide)lucide.createIcons();
+ requestAnimationFrame(()=>b.classList.add('show'));
+ setTimeout(()=>{b.classList.remove('show');setTimeout(()=>b.remove(),400)},3400)
+}
+function fapCheckNotifications(){
+ const q=window.SETRAG_SERVICE_REQUESTS||[];
+ let changed=false;
+ WALLET.filter(r=>r.kind!=='billet').forEach(r=>{
+  const live=q.find(x=>x.ref===r.id);
+  if(!live)return;
+  const prev=fap.lastKnownStatus[r.id];
+  if(prev===undefined){fap.lastKnownStatus[r.id]=live.status;return}
+  if(prev!==live.status){
+   fap.lastKnownStatus[r.id]=live.status;
+   const msg=fapNotifMessage(r.id,live.status);
+   fap.notifications.unshift({text:msg,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),ref:r.id});
+   fap.notifications=fap.notifications.slice(0,20);
+   fap.notifUnread=(fap.notifUnread||0)+1;
+   fapShowPushBanner(msg);
+   changed=true;
+  }
+ });
+ if(changed&&document.getElementById('fapScreen'))fapPaint()
+}
+if(!window.__fapNotifyTimer)window.__fapNotifyTimer=setInterval(fapCheckNotifications,2500);
 function fapTrainsFor(o,d){
  const dist=Math.abs(stKm(d)-stKm(o));
  return TEMPLATES.map(t=>{
@@ -318,23 +375,45 @@ function fapWalletDetailScreen(){
  if(!r)return fapWalletScreen();
  const live=r.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id):null;
  const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[])]:r.fields;
- return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="wallet">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
-  ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p></div>`:''}
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="${esc(fap.walletBack||'wallet')}">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
+  ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span><b class="fap-track-live">${I('radio')} en direct</b></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p><div class="fap-track-position"><i>${I('map-pin')}</i><span>${esc(fosPositionLabel(live))}</span></div></div>`:''}
   <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${fields.slice(0,8).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
  </div>`
 }
+function fapTrackingListScreen(){
+ const mine=WALLET.filter(r=>r.kind!=='billet');
+ if(!mine.length)return `<div class="fap-list"><div class="fap-list-head"><b>Mes demandes</b></div><p class="fap-empty">${I('inbox')} Aucune demande en cours — faites-en une depuis « Services ».</p></div>`;
+ return `<div class="fap-list"><div class="fap-list-head"><b>Mes demandes · ${mine.length}</b></div>
+  ${mine.map(r=>{
+   const live=(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id);
+   const status=live?live.status:'nouvelle';
+   return `<button class="fap-track-row" data-fap-track-open="${esc(r.id)}"><span class="fap-track-row-icon">${I(kindIcon(r.kind))}</span><div class="fap-track-row-mid"><b>${esc(r.brand)}</b><small>${esc(r.id)}</small><em>${esc(fosPositionLabel(live))}</em></div><span class="fap-track-row-status ${status}">${esc(agqStatusLabelFos(status))}</span></button>`
+  }).join('')}
+ </div>`
+}
+function agqStatusLabelFos(s){return{nouvelle:'Reçue',prise_en_charge:'Vérification',complement:'Complément',controle:'Contrôle',validee:'Validée',confirmee:'Confirmée',rejetee:'Rejetée'}[s]||s}
+function fapNotifsScreen(){
+ const head=`<div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Notifications</b></div>`;
+ if(!fap.notifications.length)return `<div class="fap-list">${head}<p class="fap-empty">${I('bell-off')} Aucune notification pour l’instant.</p></div>`;
+ return `<div class="fap-list">${head}
+  ${fap.notifications.map(n=>`<button class="fap-notif-row" data-fap-notif-open="${esc(n.ref)}"><span>${I('bell-ring')}</span><div><b>${esc(n.text)}</b><small>${n.time}</small></div>${I('chevron-right')}</button>`).join('')}
+ </div>`
+}
 function fapScreenHtml(){
- return{home:fapHomeScreen,results:fapResultsScreen,seat:fapSeatScreen,pay:fapPayScreen,ticket:fapTicketScreen,services:fapServicesScreen,svcform:fapSvcFormScreen,svcdone:fapSvcDoneScreen,wallet:fapWalletScreen,walletdetail:fapWalletDetailScreen}[fap.screen]()
+ return{home:fapHomeScreen,results:fapResultsScreen,seat:fapSeatScreen,pay:fapPayScreen,ticket:fapTicketScreen,services:fapServicesScreen,svcform:fapSvcFormScreen,svcdone:fapSvcDoneScreen,wallet:fapWalletScreen,walletdetail:fapWalletDetailScreen,tracking:fapTrackingListScreen,notifs:fapNotifsScreen}[fap.screen]()
 }
 function fapNavKey(){
  if(['services','svcform','svcdone'].includes(fap.screen))return 'services';
- if(['wallet','walletdetail'].includes(fap.screen))return 'wallet';
+ if(fap.screen==='tracking'||(fap.screen==='walletdetail'&&fap.walletBack==='tracking'))return 'tracking';
+ if(fap.screen==='wallet'||(fap.screen==='walletdetail'&&fap.walletBack!=='tracking'))return 'wallet';
  return 'home'
 }
 function fapPaint(){
  const screen=document.getElementById('fapScreen');
  if(screen)screen.innerHTML=`<div class="fap-screen-inner">${fapScreenHtml()}</div>`;
  document.querySelectorAll('[data-fap-nav]').forEach(b=>b.classList.toggle('active',b.dataset.fapNav===fapNavKey()));
+ const bell=document.querySelector('[data-fap-bell]');
+ if(bell)bell.innerHTML=`${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}`;
  if(window.lucide)lucide.createIcons();
  wireFap()
 }
@@ -379,12 +458,16 @@ function wireFap(){
   addToWallet(rec);
   const q=window.SETRAG_SERVICE_REQUESTS;
   if(q)q.unshift({ref:id,service:s.title,kind:s.id,client:vals[0]?.[1]||'—',fields:vals,summary:vals.map(v=>`${v[0]} : ${v[1]}`).join(' · '),time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),status:'nouvelle',agent:null,channel:'Application mobile'});
+  fap.lastKnownStatus[id]='nouvelle';
   fap.lastRec={id,title:s.title};
   fap.screen='svcdone';fapPaint();
   if(typeof toast==='function')toast('Demande envoyée · en attente de validation par SETRAG')
  };
- document.querySelectorAll('[data-fap-wallet]').forEach(b=>b.onclick=()=>{fap.walletIdx=+b.dataset.fapWallet;fap.screen='walletdetail';fapPaint()});
- document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.screen='walletdetail';fapPaint()});
+ document.querySelectorAll('[data-fap-wallet]').forEach(b=>b.onclick=()=>{fap.walletIdx=+b.dataset.fapWallet;fap.walletBack='wallet';fap.screen='walletdetail';fapPaint()});
+ document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.walletBack='tracking';fap.screen='walletdetail';fapPaint()});
+ document.querySelectorAll('[data-fap-track-open]').forEach(b=>b.onclick=()=>{const idx=WALLET.findIndex(x=>x.id===b.dataset.fapTrackOpen);if(idx>=0){fap.walletIdx=idx;fap.walletBack='tracking';fap.screen='walletdetail';fapPaint()}});
+ document.querySelectorAll('[data-fap-notif-open]').forEach(b=>b.onclick=()=>{const idx=WALLET.findIndex(x=>x.id===b.dataset.fapNotifOpen);if(idx>=0){fap.walletIdx=idx;fap.walletBack='notifs';fap.screen='walletdetail';fapPaint()}});
+ document.querySelectorAll('[data-fap-bell]').forEach(b=>b.onclick=()=>{fap.notifUnread=0;fap.screen='notifs';fapPaint()});
 }
 function appSection(){
  return `<section class="fos-section" id="application">
@@ -404,11 +487,12 @@ function appSection(){
    <div class="fap-phone"><div class="fap-notch"></div>
     <div class="fap-phone-screen">
      <div class="fap-statusbar"><span>${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span><span class="fap-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
-     <div class="fap-appbar"><span>S</span><b>SETRAG</b></div>
+     <div class="fap-appbar"><span>S</span><b>SETRAG</b><button class="fap-bell" data-fap-bell>${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}</button></div>
      <div class="fap-screen" id="fapScreen"></div>
      <div class="fap-bottomnav">
       <button class="active" data-fap-nav="home">${I('house')}<small>Accueil</small></button>
       <button data-fap-nav="services">${I('grid-2x2')}<small>Services</small></button>
+      <button data-fap-nav="tracking">${I('route')}<small>Suivi</small></button>
       <button data-fap-nav="wallet">${I('wallet')}<small>Portefeuille</small></button>
      </div>
     </div>
