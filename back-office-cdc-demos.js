@@ -141,6 +141,14 @@ const CDC_GUIDE={
   ['Trajectoire de déploiement','Frise sur 6 mois, de M1 à M6'],
   ['Alternative de partenariat','Section paiement mensuel négociable, socle de base'],
   ['Valeur économique mesurée','Tableau leviers / indicateurs avant-après']
+ ]},
+ boards:{eyebrow:'AFFICHAGE VOYAGEURS EN GARE · CDC §9',intro:'Panneaux physiques installés en gare : départs, arrivées, retards et signalétique, à l’image des grandes gares et aéroports internationaux.',items:[
+  ['Tableau des départs en temps réel','Heure, train, destination, voie et statut recalculés chaque minute','§9.1'],
+  ['Tableau des arrivées','Provenance, heure estimée et retard éventuel','§9.1'],
+  ['Statuts dynamiques','À l’heure, retardé (+minutes), embarquement, départ imminent, parti, supprimé','§9.2'],
+  ['Panneau « prochain départ »','Mise en avant du train le plus proche avec compte à rebours et voie','§9.2'],
+  ['Sélecteur multi-gares','Le même modèle d’écran s’applique aux huit gares du réseau','§9.3'],
+  ['Signalétique et cheminement','Plan de gare : entrée, billetterie, salle d’attente, contrôle d’accès, quais','§9.3 · Wayfinding']
  ]}
 };
 function pageIdFromCrumb(){
