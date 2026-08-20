@@ -202,6 +202,8 @@ const CTR_OUTCOMES={
 };
 let ctr={screen:'scan',online:true,queue:0,lastKind:null,lastPassenger:null,lastTicket:null,lastPv:null,boardCar:null,stats:{controls:0,valid:0,irregular:0,pv:0},log:[]};
 function ctrNow(){return new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}
+function addDaysISO(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function fmtDateFR(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`}
 function ctrQrUrl(data){return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${encodeURIComponent('SETRAG|'+data+'|CTRL-'+CTR_TERMINAL.id)}`}
 function ctrLogPush(text,icon){
  ctr.log.unshift({text,icon:icon||'circle-dot',time:ctrNow()});
@@ -657,7 +659,7 @@ function agtServiceDoc(r,pricing){
   <div class="premium-service-route"><section><small>ORIGINE</small><strong>${esc(agtStCode(dep))}</strong><b>${esc(dep)}</b></section><div><span>TRANSGABONAIS</span><i>→</i><small>VENTE GUICHET</small></div><section><small>DESTINATION</small><strong>${esc(agtStCode(arr))}</strong><b>${esc(arr)}</b></section></div>
   ${identity}
   <div class="premium-keyline">${keyline}</div>
-  ${agtDocMeta([['N° opération',r.ref],['Code tarifaire',pricing.code],['Application tarif',pricing.detail],['Montant TTC',fmt(pricing.montant)+' FCFA'],['Paiement',r.payMethod||'—'],['Émetteur','POS-OW-01'],[m.cls==='funeral-doc'?'Validé par':'Agent',r.agent||'—'],['Horodatage',r.processedAt||'']])}
+  ${agtDocMeta([['N° opération',r.ref],['Code tarifaire',pricing.code],['Application tarif',pricing.detail],['Montant TTC',fmt(pricing.montant)+' FCFA'],['Paiement',r.payMethod||'—'],['Émetteur','POS-OW-01'],[m.cls==='funeral-doc'?'Validé par':'Agent',r.agent||'—'],['Horodatage',r.processedAt||''],...(r.convocationDate&&m.cls==='funeral-doc'?[['Rendez-vous confirmé',fmtDateFR(r.convocationDate)]]:[])])}
   <div class="premium-control">${agtBarcode(r.ref)}${agtDocQr(r.ref)}<aside><small>IDENTIFIANT UNIQUE</small><b>${esc(r.ref)}</b><span>Document généré au guichet · rapprochement billet/paiement automatique.</span><em>✓ Paiement vérifié · ✓ document signé · ✓ piste d’audit</em></aside></div>
  </article>`
 }
@@ -692,6 +694,7 @@ function agtReviewScreen(r,pricing){
    <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
    ${finalStep?`<label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>`:''}
   </div>
+  ${finalStep?'':`<div class="agt-form-row"><label>Date limite de convocation<input type="date" id="agtConvocationDate" value="${r.convocationDate||addDaysISO(3)}"></label></div>`}
   <div class="agt-actions">
    <button class="ghost" data-agt-complement="${esc(r.ref)}">${I('message-circle-question')} Demander un complément</button>
    <button class="danger" data-agt-reject="${esc(r.ref)}">${I('x')} Refuser</button>
@@ -712,6 +715,7 @@ function agtFuneralReviewScreen(r){
    <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
    <label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>
   </div>
+  <div class="agt-form-row"><label>Date de convocation confirmée<input type="date" id="agtConvocationDate" value="${r.convocationDate||addDaysISO(5)}"></label></div>
   <div class="agt-actions">
    <button class="ghost" data-agt-complement="${esc(r.ref)}">${I('message-circle-question')} Demander un complément</button>
    <button class="danger" data-agt-reject="${esc(r.ref)}">${I('x')} Refuser</button>
@@ -725,7 +729,7 @@ function agtControlScreen(r,pricing){
  return `<div class="agt-detail">
   <div class="agt-detail-head"><div><b>${esc(r.service)}</b><span>${esc(r.ref)}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
   ${agtTrackingHtml(r)}
-  <div class="agt-convocation"><i>${I('bell-ring')}</i><div><b>Client convoqué</b><span>« Votre demande ${esc(r.ref)} a été examinée. Présentez-vous au point de dépôt d’Owendo pour contrôle et validation définitive. »</span></div></div>
+  <div class="agt-convocation"><i>${I('bell-ring')}</i><div><b>Client convoqué</b><span>« Votre demande ${esc(r.ref)} a été examinée. Présentez-vous au point de dépôt d’Owendo avant le ${esc(fmtDateFR(r.convocationDate))} pour contrôle et validation définitive. »</span></div></div>
   <div class="agt-fields">${(r.fields||[]).map(f=>`<div><small>${esc(f[0])}</small><b>${esc(f[1])}</b></div>`).join('')}</div>
   <div class="agt-form-row">
    <label>${isTaa?'Tonnage déclaré (t)':'Poids déclaré (kg)'}<input value="${esc(declared)}" disabled></label>
@@ -877,17 +881,19 @@ function wireAgt(){
   const ref=reviewValidateBtn.dataset.agtReviewValidate,r=agqSeed().find(x=>x.ref===ref);
   if(!r)return;
   r.agent=document.getElementById('agtAgent')?.value||r.agent||AGT_AGENTS[0];
+  const dateInp=document.getElementById('agtConvocationDate');
+  if(dateInp)r.convocationDate=dateInp.value;
   if(r.kind==='messagerie'||r.kind==='funeraire'){
    r.payMethod=document.getElementById('agtPay')?.value||'Espèces';
    r.status='confirmee';
    r.processedAt=ctrNow();
    const pricing=agqPricing(r);
-   toastMsg(`${ref} validé · document généré · client notifié par SMS`);
+   toastMsg(r.kind==='funeraire'?`${ref} validé · rendez-vous confirmé le ${fmtDateFR(r.convocationDate)} · client notifié par SMS`:`${ref} validé · document généré · client notifié par SMS`);
    agtPaint();agqRefresh();
    setragPrint('agtPrinter',agtReceiptLines(r,pricing))
   }else{
    r.status='controle';
-   toastMsg(`${ref} validé pour contrôle physique · client convoqué en gare`);
+   toastMsg(`${ref} validé pour contrôle physique · convocation avant le ${fmtDateFR(r.convocationDate)}`);
    agtPaint();agqRefresh()
   }
  };

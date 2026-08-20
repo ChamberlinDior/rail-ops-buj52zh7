@@ -41,7 +41,7 @@ function fosTrackingHtml(status){
 }
 function docCardHtml(rec){
  const live=rec.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===rec.id):null;
- const liveFields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[])]:rec.fields;
+ const liveFields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[])]:rec.fields;
  return `<div class="fos-ticket">
   <div class="fos-ticket-holo"></div>
   <div class="fos-ticket-headbar">
@@ -226,25 +226,27 @@ function fosPositionLabel(r){
  if(!r)return '—';
  const gare=(r.fields||[]).find(f=>/départ/i.test(f[0]));
  const agence=gare?gare[1]:'Owendo';
+ const dateTxt=r.convocationDate?fmtDate(r.convocationDate):null;
  return{
   nouvelle:'Chez vous · en attente d’examen',
   prise_en_charge:`Agence ${agence} · vérification du dossier en cours`,
   complement:'Chez vous · complément d’information requis',
-  controle:`Agence ${agence} · présentez-vous pour le contrôle`,
+  controle:`Agence ${agence} · présentez-vous${dateTxt?` avant le ${dateTxt}`:''} pour le contrôle`,
   validee:`Agence ${agence} · dossier validé, prise en charge imminente`,
-  confirmee:`Agence ${agence} · pris en charge, en attente d’expédition`,
+  confirmee:`Agence ${agence} · pris en charge${dateTxt?` · rendez-vous du ${dateTxt}`:''}`,
   rejetee:'Dossier rejeté · contactez le service client'
  }[r.status]||'—'
 }
-function fapNotifMessage(id,status){
+function fapNotifMessage(live){
+ const id=live.ref,dateTxt=live.convocationDate?fmtDate(live.convocationDate):null;
  return{
   prise_en_charge:`Votre demande ${id} a été prise en charge par un agent SETRAG.`,
   complement:`Complément d’information requis pour votre demande ${id}.`,
-  controle:`Présentez-vous en gare pour le contrôle physique de ${id}.`,
+  controle:`Présentez-vous en gare${dateTxt?` avant le ${dateTxt}`:''} pour le contrôle physique de ${id}.`,
   validee:`Votre dossier ${id} a été validé par SETRAG.`,
-  confirmee:`Votre demande ${id} est confirmée et prise en charge !`,
+  confirmee:`Votre demande ${id} est confirmée et prise en charge${dateTxt?` · rendez-vous du ${dateTxt}`:''} !`,
   rejetee:`Votre demande ${id} a été rejetée.`
- }[status]||`Mise à jour de votre demande ${id}.`
+ }[live.status]||`Mise à jour de votre demande ${id}.`
 }
 function fapShowPushBanner(msg){
  const phone=document.querySelector('.fap-phone-screen');
@@ -268,7 +270,7 @@ function fapCheckNotifications(){
   if(prev===undefined){fap.lastKnownStatus[r.id]=live.status;return}
   if(prev!==live.status){
    fap.lastKnownStatus[r.id]=live.status;
-   const msg=fapNotifMessage(r.id,live.status);
+   const msg=fapNotifMessage(live);
    fap.notifications.unshift({text:msg,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),ref:r.id});
    fap.notifications=fap.notifications.slice(0,20);
    fap.notifUnread=(fap.notifUnread||0)+1;
@@ -374,7 +376,7 @@ function fapWalletDetailScreen(){
  const r=WALLET[fap.walletIdx];
  if(!r)return fapWalletScreen();
  const live=r.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id):null;
- const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[])]:r.fields;
+ const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[])]:r.fields;
  return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="${esc(fap.walletBack||'wallet')}">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
   ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span><b class="fap-track-live">${I('radio')} en direct</b></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p><div class="fap-track-position"><i>${I('map-pin')}</i><span>${esc(fosPositionLabel(live))}</span></div></div>`:''}
   <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${fields.slice(0,8).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
