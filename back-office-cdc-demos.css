@@ -150,6 +150,54 @@
 .ctr-log-empty{color:var(--muted);font-size:11.5px}
 @media(max-width:760px){.ctr-shell{grid-template-columns:1fr}.ctr-phone{margin:0 auto}}
 
+/* ---------- Imprimante thermique partagée (tablette caissier + TPE contrôleur) ---------- */
+.setrag-paper-track{width:150px;height:0;overflow:hidden;transition:height 1.3s cubic-bezier(.3,.9,.4,1);margin:0 auto}
+.setrag-paper{width:132px;margin:0 auto;background:#fdfdfb;border-radius:0 0 3px 3px;padding:12px 11px 16px;box-shadow:0 12px 26px #06243830,0 1px 0 #ffffff inset;background-image:repeating-linear-gradient(#fdfdfb 0 27px,#eef1f0 27px 28px)}
+.setrag-receipt{margin:0;font:9.5px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;color:#22323c;white-space:pre-wrap;letter-spacing:.01em}
+
+.setrag-printer{width:150px;flex:none;display:flex;flex-direction:column;align-items:center}
+.setrag-printer-body{width:150px;background:linear-gradient(165deg,#eef1f2,#ccd4d8);border-radius:16px;padding:11px 12px 13px;box-shadow:0 18px 34px #06243830,inset 0 1px 0 #ffffffc0,inset 0 -6px 10px #00000012;position:relative}
+.setrag-printer-body:before{content:'';position:absolute;left:12px;right:12px;top:6px;height:3px;border-radius:2px;background:#00000014}
+.setrag-printer-roll{display:flex;justify-content:center;gap:4px;margin:6px 0 10px}
+.setrag-printer-roll i{width:3px;height:17px;border-radius:2px;background:#9fadb2;transition:transform .15s}
+.setrag-printer.printing .setrag-printer-roll i{animation:pr-roll .45s linear infinite}
+.setrag-printer.printing .setrag-printer-roll i:nth-child(2){animation-delay:.07s}
+.setrag-printer.printing .setrag-printer-roll i:nth-child(3){animation-delay:.14s}
+.setrag-printer.printing .setrag-printer-roll i:nth-child(4){animation-delay:.21s}
+@keyframes pr-roll{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.5)}}
+.setrag-printer-slot{height:9px;border-radius:5px;background:linear-gradient(180deg,#0c1c27,#233c4c);box-shadow:inset 0 2px 4px #000a}
+.setrag-printer-face{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px}
+.setrag-printer-led{width:6px;height:6px;border-radius:50%;background:#9fadb2;flex:none}
+.setrag-printer.printing .setrag-printer-led{background:#5be08a;box-shadow:0 0 7px #5be08a;animation:pr-led 1s ease infinite}
+@keyframes pr-led{0%,100%{opacity:1}50%{opacity:.3}}
+.setrag-printer-face small{font:800 8px Manrope,sans-serif;letter-spacing:.06em;color:#5c6b72;text-transform:uppercase}
+.setrag-printer-shadow{width:100px;height:10px;border-radius:50%;background:radial-gradient(ellipse,#06243838,transparent 70%);margin-top:6px}
+
+/* ---------- TPE mobile contrôleur (terminal + imprimante intégrée) ---------- */
+.ctr-tpe-wrap{width:284px}
+.ctr-tpe-track{width:284px;height:0;overflow:hidden;transition:height 1.3s cubic-bezier(.3,.9,.4,1)}
+.ctr-tpe-track .setrag-paper{width:130px}
+.ctr-tpe{width:284px;border-radius:26px 26px 40px 40px;background:linear-gradient(160deg,#0d2338,#081726);padding:12px;box-shadow:0 30px 60px #06243838,inset 0 0 0 1px #1c3450;position:relative}
+.ctr-tpe-printer{position:relative;margin:-2px -2px 10px;padding:12px 14px 11px;background:linear-gradient(165deg,#1a3650,#0f253a);border-radius:22px 22px 14px 14px;box-shadow:inset 0 1px 0 #ffffff1a,inset 0 -4px 8px #00000030}
+.ctr-tpe-printer .setrag-printer-roll{margin:2px 0 9px}
+.ctr-tpe-printer .setrag-printer-roll i{background:#3c5872}
+.ctr-tpe-printer-unit.printing .setrag-printer-roll i{animation:pr-roll .45s linear infinite}
+.ctr-tpe-printer-unit.printing .setrag-printer-roll i:nth-child(2){animation-delay:.07s}
+.ctr-tpe-printer-unit.printing .setrag-printer-roll i:nth-child(3){animation-delay:.14s}
+.ctr-tpe-printer-unit.printing .setrag-printer-roll i:nth-child(4){animation-delay:.21s}
+.ctr-tpe-printer .setrag-printer-slot{background:linear-gradient(180deg,#020a12,#0c1c27)}
+.ctr-tpe-printer .setrag-printer-face{margin-top:8px}
+.ctr-tpe-printer .setrag-printer-led{background:#42586a}
+.ctr-tpe-printer-unit.printing .setrag-printer-led{background:#5be08a;box-shadow:0 0 7px #5be08a;animation:pr-led 1s ease infinite}
+.ctr-tpe-printer .setrag-printer-face small{color:#7d93a4}
+.ctr-tpe-printer-unit{display:contents}
+.ctr-tpe .ctr-phone-screen{border-radius:16px;min-height:492px}
+.ctr-tpe-grip{height:16px;margin:10px 4px -2px;border-radius:10px;background:linear-gradient(180deg,#0f2537,#081726);box-shadow:inset 0 1px 0 #ffffff12,inset 0 -2px 3px #00000040}
+.ctr-tpe-grip i{display:block;width:34px;height:3px;border-radius:2px;background:#24405c;margin:6px auto 0}
+@media(max-width:760px){.ctr-tpe-wrap,.ctr-tpe-track,.ctr-tpe{margin:0 auto}}
+.ctr-shell.ctr-shell-tpe{grid-template-columns:284px 1fr}
+@media(max-width:760px){.ctr-shell.ctr-shell-tpe{grid-template-columns:1fr}}
+
 /* ---------- Part 2b : agent de terrain ---------- */
 .fld-app{margin-top:15px;border-top:1px dashed var(--line);padding-top:18px}
 .fld-incident{border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:8px}
@@ -195,8 +243,14 @@
 .agt-app header h3{display:flex;align-items:center;gap:8px}
 .agt-app header svg{width:16px;color:var(--green)}
 .agt-tablet{display:flex;justify-content:center}
-.agt-tablet-bezel{width:100%;max-width:980px;border-radius:28px;background:linear-gradient(160deg,#0d2338,#081726);padding:16px;box-shadow:0 30px 60px #06243838}
-.agt-tablet-screen{background:#f6f8f7;border-radius:18px;overflow:hidden;min-height:540px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff10}
+.agt-station{display:flex;gap:26px;align-items:flex-end;justify-content:center;flex-wrap:wrap;padding:6px 0 0}
+.agt-tablet-stage{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;max-width:1060px}
+.agt-tablet-bezel{width:100%;max-width:1060px;height:648px;border-radius:30px;background:linear-gradient(155deg,#1a2c3d,#0a1826 55%,#0d2338);padding:16px;box-shadow:0 40px 80px #06243845,inset 0 1px 0 #ffffff14;position:relative;display:flex;flex-direction:column}
+.agt-tablet-bezel:before{content:'';position:absolute;top:50%;right:8px;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:#0a1826;box-shadow:0 0 0 2px #24405c,inset 0 0 2px #000}
+.agt-tablet-bezel:after{content:'SETRAG · TERMINAL VENDEUR PRO';position:absolute;left:50%;bottom:5px;transform:translateX(-50%);font:800 7.5px Manrope,sans-serif;letter-spacing:.14em;color:#3c5872}
+.agt-tablet-screen{background:#f6f8f7;border-radius:18px;overflow:hidden;flex:1;min-height:0;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff10;position:relative}
+.agt-tablet-screen:before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:linear-gradient(115deg,#ffffff22 0%,transparent 16%,transparent 84%,#ffffff10 100%)}
+.agt-tablet-shadow{width:min(760px,80%);height:26px;border-radius:50%;background:radial-gradient(ellipse,#06243845,transparent 72%);margin-top:14px}
 .agt-tablet-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 20px;background:linear-gradient(180deg,#fff,#fbfcfc);border-bottom:1px solid #e3ebe8}
 .agt-tablet-bar b{font-size:13px;color:var(--navy);flex:none}
 .agt-tablet-bar span{font-size:10.5px;color:var(--muted);flex:none;white-space:nowrap}
@@ -204,8 +258,8 @@
 .agt-modeswitch button{display:flex;align-items:center;gap:6px;border:0;background:none;border-radius:999px;padding:8px 14px;font:800 10.5px Manrope;color:var(--muted);cursor:pointer;white-space:nowrap}
 .agt-modeswitch button svg{width:12px}
 .agt-modeswitch button.active{background:var(--navy);color:#fff;box-shadow:0 4px 10px #06243830}
-.agt-tablet-body{display:grid;grid-template-columns:270px 1fr;flex:1;min-height:0}
-.agt-list{display:flex;flex-direction:column;gap:8px;padding:14px;border-right:1px solid #e3ebe8;overflow-y:auto;max-height:480px}
+.agt-tablet-body{display:grid;grid-template-columns:280px 1fr;flex:1;min-height:0}
+.agt-list{display:flex;flex-direction:column;gap:8px;padding:14px;border-right:1px solid #e3ebe8;overflow-y:auto;min-height:0}
 .agt-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 10px;cursor:pointer;text-align:left;font:inherit}
 .agt-row.active{border-color:var(--green);box-shadow:0 0 0 2px #087b5b22}
 .agt-row-icon{flex:none;width:32px;height:32px;border-radius:9px;background:#eef8f3;color:var(--green);display:grid;place-items:center}
@@ -221,7 +275,12 @@
 .agt-row small{color:var(--muted);font-size:9px}
 .agt-row .agq-status{font-size:8.5px;padding:2px 7px}
 .agt-row.svc-btn{padding:11px 10px}
-.agt-panel{padding:20px;overflow-y:auto;max-height:480px}
+.agt-panel{padding:22px 26px;overflow-y:auto;min-height:0}
+.agt-doc-pro .setrag-document{max-width:660px;box-shadow:0 22px 50px #06243822}
+.agt-doc-pro .doc-meta{grid-template-columns:repeat(2,1fr)}
+.agt-doc-pro .premium-keyline{grid-template-columns:repeat(2,1fr)}
+.agt-doc-pro .doc-brand strong{font-size:14px}
+@media(max-width:900px){.agt-tablet-bezel{height:auto;min-height:600px}.agt-tablet-body{grid-template-columns:1fr}.agt-list{border-right:0;border-bottom:1px solid #e3ebe8;max-height:220px}}
 .agt-detail{display:flex;flex-direction:column;gap:14px;animation:ctr-enter .28s ease}
 .agt-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .agt-detail-head b{display:block;font-size:14px;color:var(--navy)}

@@ -339,7 +339,8 @@ function wireCtr(){
   ctr.screen='ticket';
   if(ctr.online){ctrLogPush(`Billet émis à bord · ${fmt(price)} FCFA · ${pay}`,'receipt');toastMsg('Billet émis à bord · document généré et journalisé')}
   else{ctr.queue++;ctrLogPush('Vente à bord (hors ligne, en file)','cloud-off');toastMsg('Vente enregistrée hors ligne · sera synchronisée')}
-  ctrPaint()
+  ctrPaint();
+  setragPrint('ctrPrinter',ctrTicketReceiptLines(ctr.lastTicket))
  };
  const pvBtn=document.getElementById('ctrScreen')?.querySelector('[data-ctr-pv]');
  if(pvBtn)pvBtn.onclick=()=>{
@@ -349,7 +350,8 @@ function wireCtr(){
   ctr.stats.pv++;ctr.screen='pvdoc';
   if(ctr.online){ctrLogPush(`PV émis · ${motif} · ${fmt(amount)} FCFA`,'file-warning');toastMsg('PV émis · amende consignée et journalisée')}
   else{ctr.queue++;ctrLogPush('PV (hors ligne, en file)','cloud-off');toastMsg('PV enregistré hors ligne · sera synchronisé')}
-  ctrPaint()
+  ctrPaint();
+  setragPrint('ctrPrinter',ctrPvReceiptLines(ctr.lastPv))
  };
  const connSwitch=document.getElementById('ctrConnSwitch');
  if(connSwitch)connSwitch.onclick=()=>{
@@ -361,20 +363,31 @@ function wireCtr(){
 }
 function controllerAppSection(){
  return `<div class="cdc-section" style="margin-top:15px"><section class="cdc-card ctr-app">
-  <header><div><h3>${I('smartphone')} Application contrôleur · terminal portable (TP)</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion — scan, embarquement, vente à bord, PV, synchronisation.</p></div><div class="ctr-stats" id="ctrStats">${ctrStatsHtml()}</div></header>
+  <header><div><h3>${I('printer')} Application contrôleur · TPE mobile avec imprimante intégrée</h3><p>Ce que voit le contrôleur à bord, en ligne ou hors connexion — scan, embarquement, vente à bord, PV imprimé, synchronisation.</p></div><div class="ctr-stats" id="ctrStats">${ctrStatsHtml()}</div></header>
   <div class="cdc-card-body">
-   <div class="ctr-shell">
-    <div class="ctr-phone"><div class="ctr-phone-notch"></div>
-     <div class="ctr-phone-screen">
-      <div class="ctr-statusbar"><span class="ctr-time">${ctrNow()}</span><span class="ctr-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
-      <div class="ctr-appbar"><b>SETRAG Contrôle</b><span>${CTR_TERMINAL.id} · ${CTR_TERMINAL.agent}</span></div>
-      <div class="ctr-screen" id="ctrScreen"></div>
-      <div class="ctr-bottomnav">
-       <button class="active" data-ctr-nav="scan">${I('scan-line')}<small>Scanner</small></button>
-       <button data-ctr-nav="board">${I('users')}<small>Embarq.</small></button>
-       <button data-ctr-nav="sale">${I('receipt')}<small>Vente</small></button>
-       <button data-ctr-nav="pv">${I('file-warning')}<small>PV</small></button>
+   <div class="ctr-shell ctr-shell-tpe">
+    <div class="ctr-tpe-wrap">
+     <div class="ctr-tpe-printer-unit" id="ctrPrinter">
+      <div class="ctr-tpe-track setrag-paper-track"><div class="setrag-paper"><pre class="setrag-receipt"></pre></div></div>
+      <div class="ctr-tpe-printer">
+       <div class="setrag-printer-roll"><i></i><i></i><i></i><i></i></div>
+       <div class="setrag-printer-slot"></div>
+       <div class="setrag-printer-face"><span class="setrag-printer-led"></span><small>Imprimante intégrée</small></div>
       </div>
+     </div>
+     <div class="ctr-tpe">
+      <div class="ctr-phone-screen">
+       <div class="ctr-statusbar"><span class="ctr-time">${ctrNow()}</span><span class="ctr-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
+       <div class="ctr-appbar"><b>SETRAG Contrôle</b><span>${CTR_TERMINAL.id} · ${CTR_TERMINAL.agent}</span></div>
+       <div class="ctr-screen" id="ctrScreen"></div>
+       <div class="ctr-bottomnav">
+        <button class="active" data-ctr-nav="scan">${I('scan-line')}<small>Scanner</small></button>
+        <button data-ctr-nav="board">${I('users')}<small>Embarq.</small></button>
+        <button data-ctr-nav="sale">${I('receipt')}<small>Vente</small></button>
+        <button data-ctr-nav="pv">${I('file-warning')}<small>PV</small></button>
+       </div>
+      </div>
+      <div class="ctr-tpe-grip"><i></i></div>
      </div>
     </div>
     <div class="ctr-side">
@@ -747,7 +760,8 @@ function wireAgt(){
   r.payMethod=document.getElementById('agtPay').value;
   r.processedAt=ctrNow();
   toastMsg(`${ref} confirmé · document généré · client notifié par SMS`);
-  agtPaint();agqRefresh()
+  agtPaint();agqRefresh();
+  setragPrint('agtPrinter',agtReceiptLines(r,agqPricing(r)))
  };
  const rejectBtn=panel?.querySelector('[data-agt-reject]');
  if(rejectBtn)rejectBtn.onclick=()=>{
@@ -783,7 +797,8 @@ function wireAgt(){
   agt.lastSale=r;agt.lastSalePricing={montant:price};
   agtGuichetCount++;
   toastMsg(`Billet émis et encaissé au guichet · ${fmt(price)} FCFA · ${pay}`);
-  agtPaint()
+  agtPaint();
+  setragPrint('agtPrinter',agtReceiptLines(r,{montant:price}))
  };
  if(panel&&agt.mode==='sale'&&agt.svc!=='billet'&&!agt.lastSale){
   panel.oninput=()=>{
@@ -805,32 +820,91 @@ function wireAgt(){
   agt.lastSale=r;agt.lastSalePricing=pricing;
   agtGuichetCount++;
   toastMsg(`${svc[1]} encaissé au guichet · ${fmt(pricing.montant)} FCFA · ${pay}`);
-  agtPaint()
+  agtPaint();
+  setragPrint('agtPrinter',agtReceiptLines(r,pricing))
  };
- document.querySelectorAll('[data-agt-print]').forEach(b=>b.onclick=()=>{toastMsg('Impression envoyée à l’imprimante du poste POS-OW-01')});
+ document.querySelectorAll('[data-agt-print]').forEach(b=>b.onclick=()=>{
+  if(agt.lastSale)setragPrint('agtPrinter',agtReceiptLines(agt.lastSale,agt.lastSalePricing));
+  toastMsg('Impression envoyée à l’imprimante du poste POS-OW-01')
+ });
  document.querySelectorAll('[data-agt-new-sale]').forEach(b=>b.onclick=()=>{agt.lastSale=null;agtPaint()});
+}
+
+/* ---------- Imprimante thermique partagée : composant + animation ---------- */
+function setragPrinterHtml(id){
+ return `<div class="setrag-printer" id="${id}">
+  <div class="setrag-printer-body">
+   <div class="setrag-printer-roll"><i></i><i></i><i></i><i></i></div>
+   <div class="setrag-printer-slot"></div>
+   <div class="setrag-printer-face"><span class="setrag-printer-led"></span><small>Imprimante POS-OW-01</small></div>
+  </div>
+  <div class="setrag-paper-track"><div class="setrag-paper"><pre class="setrag-receipt"></pre></div></div>
+  <div class="setrag-printer-shadow"></div>
+ </div>`
+}
+function setragPrint(id,lines){
+ const root=document.getElementById(id);
+ if(!root)return;
+ const track=root.querySelector('.setrag-paper-track'),receipt=root.querySelector('.setrag-receipt');
+ if(!track||!receipt)return;
+ receipt.textContent=lines.join('\n');
+ track.style.transition='none';
+ track.style.height='0px';
+ void track.offsetHeight;
+ const target=track.scrollHeight+'px';
+ requestAnimationFrame(()=>{track.style.transition='height 1.3s cubic-bezier(.3,.9,.4,1)';track.style.height=target});
+ root.classList.remove('printing');
+ void root.offsetWidth;
+ root.classList.add('printing');
+ setTimeout(()=>root.classList.remove('printing'),1300)
+}
+function receiptLine(width,a,b){a=String(a);b=String(b);const sp=Math.max(1,width-a.length-b.length);return a+' '.repeat(sp)+b}
+function receiptCenter(width,s){s=String(s);const pad=Math.max(0,Math.floor((width-s.length)/2));return ' '.repeat(pad)+s}
+function agtReceiptLines(r,pricing){
+ const w=26,rule='·'.repeat(w);
+ const lines=[receiptCenter(w,'SETRAG'),receiptCenter(w,'LE TRANSGABONAIS'),rule,String(r.service).toUpperCase(),r.ref,rule];
+ (r.fields||[]).slice(0,3).forEach(f=>lines.push(receiptLine(w,f[0],f[1])));
+ lines.push(rule);
+ lines.push(receiptLine(w,'TOTAL TTC',fmt(pricing.montant)+' F'));
+ lines.push(receiptLine(w,'Paiement',r.payMethod||'—'));
+ lines.push(rule);
+ lines.push(receiptCenter(w,r.processedAt||ctrNow()));
+ lines.push(receiptCenter(w,'Merci de votre confiance'));
+ return lines
+}
+function ctrTicketReceiptLines(t){
+ const w=24,rule='·'.repeat(w);
+ return[receiptCenter(w,'SETRAG'),receiptCenter(w,'BILLET A BORD'),rule,t.ref,rule,receiptLine(w,CTR_TERMINAL.from,t.stop),receiptLine(w,'Train',CTR_TERMINAL.mission),receiptLine(w,'Classe',t.cls),receiptLine(w,'Paiement',t.pay),rule,receiptLine(w,'TOTAL',fmt(t.price)+' F'),rule,receiptCenter(w,t.time)]
+}
+function ctrPvReceiptLines(v){
+ const w=24,rule='·'.repeat(w);
+ return[receiptCenter(w,'SETRAG'),receiptCenter(w,'PROCES-VERBAL'),rule,v.ref,rule,receiptCenter(w,v.motif),rule,receiptLine(w,'AMENDE',fmt(v.amount)+' F'),rule,receiptCenter(w,CTR_TERMINAL.agent),receiptCenter(w,v.time)]
 }
 function agentTabletSection(){
  return `<div style="margin-top:15px" id="agtTablet"><section class="cdc-card agt-app">
   <header><div><h3>${I('tablet')} Poste vendeur · tablette caissier</h3><p>L’application vendeur du Front Office, telle que l’agent la voit en gare ou en agence : vente directe au guichet et traitement des demandes reçues en ligne.</p></div><div class="ctr-stats" id="agtStats">${agtStatsHtml()}</div></header>
   <div class="cdc-card-body">
-   <div class="agt-tablet">
-    <div class="agt-tablet-bezel">
-     <div class="agt-tablet-screen">
-      <div class="agt-tablet-bar">
-       <b>SETRAG Vendeur</b>
-       <div class="agt-modeswitch">
-        <button class="active" data-agt-mode="sale">${I('shopping-cart')} Nouvelle vente</button>
-        <button data-agt-mode="requests">${I('inbox')} Demandes reçues</button>
+   <div class="agt-station">
+    <div class="agt-tablet-stage">
+     <div class="agt-tablet-bezel">
+      <div class="agt-tablet-screen">
+       <div class="agt-tablet-bar">
+        <b>SETRAG Vendeur</b>
+        <div class="agt-modeswitch">
+         <button class="active" data-agt-mode="sale">${I('shopping-cart')} Nouvelle vente</button>
+         <button data-agt-mode="requests">${I('inbox')} Demandes reçues</button>
+        </div>
+        <span>POS-OW-01 · Grâce Mavoungou</span>
        </div>
-       <span>POS-OW-01 · Grâce Mavoungou</span>
-      </div>
-      <div class="agt-tablet-body">
-       <div class="agt-list" id="agtList">${agtSvcListHtml()}</div>
-       <div class="agt-panel" id="agtDetail"></div>
+       <div class="agt-tablet-body">
+        <div class="agt-list" id="agtList">${agtSvcListHtml()}</div>
+        <div class="agt-panel" id="agtDetail"></div>
+       </div>
       </div>
      </div>
+     <div class="agt-tablet-shadow"></div>
     </div>
+    ${setragPrinterHtml('agtPrinter')}
    </div>
   </div>
  </section></div>`
