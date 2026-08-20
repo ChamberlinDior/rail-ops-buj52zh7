@@ -1,0 +1,45 @@
+.siem-card{margin-top:15px}
+.siem-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
+.siem-head h3{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 6px;font-size:16px;color:#0b304f}
+.siem-head h3 i{color:#c9860f}
+.siem-head p{margin:0;color:#607486;font-size:12px;max-width:640px;line-height:1.55}
+.siem-tag{padding:4px 10px;border-radius:99px;background:#08784a;color:#fff;font-size:9px;font-weight:800;letter-spacing:.05em}
+#siemSimulate{display:flex;align-items:center;gap:8px;white-space:nowrap}
+#siemSimulate:disabled{opacity:.75;cursor:progress}
+#siemSimulate i[data-lucide="loader-2"]{animation:siem-spin .8s linear infinite}
+@keyframes siem-spin{to{transform:rotate(360deg)}}
+
+.siem-flow{display:flex;align-items:stretch;gap:0;margin:4px 0 26px;overflow-x:auto;padding-bottom:2px}
+.siem-step{flex:1;min-width:190px;padding:15px 16px;border:1px solid #e3ebe8;border-radius:13px;background:#f8fafa;transition:.25s ease;display:flex;flex-direction:column;gap:6px}
+.siem-step i{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:#eef3f1;color:#0b304f}
+.siem-step i svg{width:17px;height:17px}
+.siem-step b{font-size:12.5px;color:#0b304f}
+.siem-step span{font-size:11px;color:#66787f;line-height:1.5}
+.siem-step.active{border-color:#e9b94f;background:#fff8e8;box-shadow:0 0 0 3px rgba(233,185,79,.28)}
+.siem-step.active i{background:#f5dda3;color:#8a5b0a}
+.siem-step.done{border-color:#0b8a56;background:#eef8f2}
+.siem-step.done i{background:#d7f0e2;color:#0b7a4c}
+.siem-arrow{flex:none;display:flex;align-items:center;padding:0 8px;color:#a9bcb5}
+.siem-arrow i svg{width:16px;height:16px}
+
+.siem-sub{margin:22px 0 10px}
+.siem-sub h4{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:13px;color:#0b304f}
+.siem-sub p{margin:0;font-size:11.5px;color:#7a8a92}
+
+.siem-table-wrap{overflow-x:auto;border:1px solid #edf1f4;border-radius:13px;margin-bottom:6px}
+table.siem-table{min-width:760px}
+table.siem-table th{white-space:nowrap}
+table.siem-table td{font-size:11px;color:#39515a;vertical-align:top}
+table.siem-table td b{color:#0b304f}
+.siem-resolve-btn{padding:6px 10px;font-size:10px;font-weight:700}
+
+.siem-specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:20px}
+.siem-spec{padding:12px 14px;border-radius:11px;background:#f6f8f7;border:1px solid #e3ebe8}
+.siem-spec small{display:block;color:#7a8a92;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
+.siem-spec b{color:#0b304f;font-size:12px;font-weight:700;line-height:1.4}
+
+@media(max-width:900px){
+ .siem-flow{flex-direction:column}
+ .siem-arrow{transform:rotate(90deg);padding:4px 0;align-self:center}
+ table.siem-table{min-width:640px}
+}
