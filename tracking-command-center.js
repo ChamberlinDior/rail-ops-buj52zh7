@@ -166,42 +166,50 @@ function kpisHtml(){
 }
 
 const ROSTER_FILTERS=[['all','Tous'],['pax','Voyageurs'],['fret','Fret'],['maint','Maintenance']];
+let tableSearch='';
 function rosterFilterBarHtml(){
  return `<div class="trk-roster-filters">${ROSTER_FILTERS.map(f=>`<button class="${rosterFilter===f[0]?'active':''}" data-roster-filter="${f[0]}">${f[1]}</button>`).join('')}</div>`
 }
-function rosterHtml(){
- const list=TRAINS.filter(t=>rosterFilter==='all'?true:rosterFilter==='pax'?t.pax:rosterFilter==='fret'?t.type==='fret':t.type==='maint');
- if(!list.length)return `<p class="trk-empty">${I('inbox')} Aucune circulation pour ce filtre.</p>`;
- return list.map(t=>{
-  const ns=nextStation(t);
-  const endClass=t.status==='arret'?'stop':t.delay>15?'stop':t.delay>0?'late':'ok';
-  return `<div class="trk-roster-row${t.id===selected?' active':''}" data-select="${t.id}">
-   <i class="${t.type}"></i>
-   <span class="trk-roster-mid"><b>${t.id}</b><small>${t.label} · ${statusLabel(t.status)}</small></span>
-   <span class="trk-roster-end ${endClass}"><b>${ns?ns.name:'—'}</b><small>${t.status==='arret'?'à quai':t.delay>0?'+'+t.delay+' min':'à l’heure'}</small></span>
-   <button class="trk-roster-go" data-select="${t.id}" title="Voir le détail">${I('chevron-right')}</button>
-  </div>`
+function flowStripHtml(){
+ return STATIONS.map(s=>{
+  const total=s.waiting+s.boarded,pct=total?Math.round(s.boarded/total*100):0;
+  return `<button class="trk-flow-chip" data-flow-locate="${s.id}" title="Localiser ${esc(s.name)} sur la carte">
+   <i class="${s.hub?'hub':''}">${I(s.hub?'building-2':'map-pin')}</i>
+   <span class="trk-flow-chip-id"><b>${s.name}</b><small>PK ${s.km}</small></span>
+   <span class="trk-flow-chip-num w"><b>${s.waiting}</b><small>attente</small></span>
+   <span class="trk-flow-chip-num b"><b>${s.boarded}</b><small>embarq.</small></span>
+   <span class="trk-flow-chip-bar" title="${pct}% embarqués"><i style="width:${pct}%"></i></span>
+  </button>`
  }).join('')
 }
-
-function flowHtml(){
- return STATIONS.map(s=>{
-  const total=s.waiting+s.boarded;
-  const pct=total?Math.round(s.boarded/total*100):0;
-  return `<div class="trk-flow-row">
-   <div class="trk-flow-top">
-    <div class="trk-flow-id"><i class="${s.hub?'hub':''}">${I(s.hub?'building-2':'map-pin')}</i><span><b>${s.name}</b><small>PK ${s.km} · ${s.quais} voies${s.hub?' · terminus':''}</small></span></div>
-    <div class="trk-flow-actions">
-     <button data-flow-locate="${s.id}" title="Localiser sur la carte">${I('locate-fixed')}</button>
-     <button data-flow-refresh="${s.id}" title="Actualiser le flux">${I('refresh-cw')}</button>
-    </div>
-   </div>
-   <div class="trk-flow-bottom">
-    <span class="trk-flow-num w"><b>${s.waiting}</b><small>attente</small></span>
-    <span class="trk-flow-num b"><b>${s.boarded}</b><small>embarqués</small></span>
-    <div class="trk-flow-bar" title="${pct}% embarqués sur le flux du jour"><i style="width:${pct}%"></i></div>
-   </div>
-  </div>`
+function tableFilteredTrains(){
+ const q=tableSearch.trim().toLowerCase();
+ return TRAINS.filter(t=>{
+  if(rosterFilter!=='all'){
+   const ok=rosterFilter==='pax'?t.pax:rosterFilter==='fret'?t.type==='fret':t.type==='maint';
+   if(!ok)return false
+  }
+  if(q&&!(t.id.toLowerCase().includes(q)||t.label.toLowerCase().includes(q)||stById(t.from).name.toLowerCase().includes(q)||stById(t.to).name.toLowerCase().includes(q)))return false;
+  return true
+ })
+}
+function rosterTableHtml(){
+ const list=tableFilteredTrains();
+ if(!list.length)return `<tr><td colspan="7" class="trk-empty">${I('inbox')} Aucune circulation ne correspond à ces critères.</td></tr>`;
+ return list.map(t=>{
+  const ns=nextStation(t);
+  const pct=t.pax?Math.round(t.occ/t.cap*100):0;
+  const journeyPct=Math.max(0,Math.min(100,Math.round((t.kmPos-t.min)/((t.max-t.min)||1)*100)));
+  return `<tr class="${t.id===selected?'active':''}" data-select-row="${t.id}">
+   <td><div class="trk-t-id"><i class="${t.type}"></i><div><b>${t.id}</b><small>${t.label}</small></div></div></td>
+   <td><span class="trk-badge ${t.status}">${statusLabel(t.status)}</span></td>
+   <td><div class="trk-route"><b>${stById(t.from).name}</b>${I('arrow-right')}<b>${stById(t.to).name}</b></div></td>
+   <td><div class="trk-progress-cell"><small>PK ${Math.round(t.kmPos)}</small><div class="trk-mini-bar"><i style="width:${journeyPct}%"></i></div></div></td>
+   <td><b>${ns?ns.name:'—'}</b></td>
+   <td><span class="${t.delay>0?'trk-late':'trk-ontime'}">${t.status==='arret'?'à quai':t.delay>0?'+'+t.delay+' min':'à l’heure'}</span></td>
+   <td>${t.pax?`<div class="trk-progress-cell"><small>${fmtNum(t.occ)} / ${fmtNum(t.cap)}</small><div class="trk-mini-bar occ"><i style="width:${pct}%"></i></div></div>`:`<b>${fmtNum(t.occ)} t</b>`}</td>
+   <td><div class="trk-row-actions"><button data-locate-row="${t.id}" title="Localiser sur la carte">${I('locate-fixed')}</button><button class="primary" data-detail-row="${t.id}">${I('chevron-right')} Détails</button></div></td>
+  </tr>`
  }).join('')
 }
 
@@ -218,13 +226,11 @@ function footHtml(){
  return items.map(x=>`<span class="trk-foot-pill ${x[2]}">${x[0]} ${x[1]}</span>`).join('')
 }
 
-function detailHtml(){
- const t=TRAINS.find(x=>x.id===selected);
- if(!t)return `<div class="trk-detail-empty">Sélectionnez un train sur la carte ou dans la liste.</div>`;
+function drawerContentHtml(t){
  const ns=nextStation(t);
- const pct=Math.round(t.occ/t.cap*100);
- return `<div class="trk-detail-head"><b>${t.id}</b><span class="${t.status}">${statusLabel(t.status)}</span></div>
- <p class="sub" style="margin:0">${t.label} · ${stById(t.from).name} → ${stById(t.to).name}</p>
+ const pct=t.pax?Math.round(t.occ/t.cap*100):0;
+ return `<header><div><small>FICHE CIRCULATION</small><h2>${t.id}</h2><span class="trk-badge ${t.status}">${statusLabel(t.status)}</span></div><button data-drawer-close>×</button></header>
+ <p class="sub">${t.label} · ${stById(t.from).name} → ${stById(t.to).name}</p>
  <div class="trk-detail-grid">
   <span><small>Position</small><b>PK ${Math.round(t.kmPos)}</b></span>
   <span><small>Vitesse</small><b>${t.status==='arret'?'0':Math.round(t.speedRef*(t.status==='ralenti'?.35:1))} km/h</b></span>
@@ -251,23 +257,32 @@ function render(){
   </div>
  </div>
  <div class="trk-kpis" id="trkKpis">${kpisHtml()}</div>
- <div class="trk-body">
-  <div class="trk-map-card">
-   <div class="trk-map-head">
-    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · signalisation automatique des cantons</p></div>
-    <div class="trk-legend">
-     <span><i class="exp"></i> Voyageurs</span><span><i class="omn"></i> Omnibus</span><span><i class="fret"></i> Fret</span><span><i class="maint"></i> Maintenance</span>
-     <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>
-    </div>
+ <div class="trk-map-card">
+  <div class="trk-map-head">
+   <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · signalisation automatique des cantons</p></div>
+   <div class="trk-legend">
+    <span><i class="exp"></i> Voyageurs</span><span><i class="omn"></i> Omnibus</span><span><i class="fret"></i> Fret</span><span><i class="maint"></i> Maintenance</span>
+    <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>
    </div>
-   <div class="trk-map-wrap" id="trkMapWrap">${svgMap()}</div>
-   <div class="trk-map-foot" id="trkFoot">${footHtml()}</div>
   </div>
-  <div class="trk-panel">
-   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('users-round')} Flux gares · temps réel</h3><p class="sub">Voyageurs en attente et embarqués depuis l’ouverture</p></div><button class="trk-mini-btn" data-flow-export>${I('download')} Exporter</button></div><div class="trk-station-flow" id="trkFlow">${flowHtml()}</div></div>
-   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('train-front')} Circulations</h3><p class="sub">${TRAINS.length} trains suivis en direct</p></div><button class="trk-mini-btn" data-roster-export>${I('download')} Exporter</button></div><div id="trkRosterFilters">${rosterFilterBarHtml()}</div><div class="trk-roster" id="trkRoster">${rosterHtml()}</div></div>
-   <div class="trk-card"><div class="trk-card-head"><div><h3>${I('radar')} Détail circulation</h3></div></div><div id="trkDetail">${detailHtml()}</div></div>
+  <div class="trk-map-wrap" id="trkMapWrap">${svgMap()}</div>
+  <div class="trk-map-foot" id="trkFoot">${footHtml()}</div>
+ </div>
+ <div class="trk-table-card">
+  <div class="trk-card-head"><div><h3>${I('users-round')} Flux gares · temps réel</h3><p class="sub">Voyageurs en attente et embarqués par gare depuis l’ouverture</p></div><button class="trk-mini-btn" data-flow-export>${I('download')} Exporter le flux</button></div>
+  <div class="trk-flow-strip" id="trkFlowStrip">${flowStripHtml()}</div>
+  <div class="trk-table-head">
+   <div><h3>${I('train-front')} Circulations</h3><p class="sub">${TRAINS.length} trains suivis en direct sur l’ensemble du réseau</p></div>
+   <div class="trk-table-toolbar">
+    <div id="trkRosterFilters">${rosterFilterBarHtml()}</div>
+    <label class="trk-search">${I('search')}<input id="trkSearch" placeholder="Rechercher un train, une gare…"></label>
+    <button class="trk-mini-btn" data-roster-export>${I('download')} Exporter</button>
+   </div>
   </div>
+  <div class="trk-table-scroll"><table class="trk-table">
+   <thead><tr><th>Train</th><th>Statut</th><th>Trajet</th><th>Position</th><th>Prochaine étape</th><th>Écart</th><th>Charge</th><th>Actions</th></tr></thead>
+   <tbody id="trkTableBody">${rosterTableHtml()}</tbody>
+  </table></div>
  </div>
  </div>`
 }
@@ -275,19 +290,47 @@ function render(){
 function selectTrain(id){
  selected=id;
  document.querySelectorAll('.trk-train').forEach(x=>x.classList.toggle('selected',x.dataset.train===id));
- document.querySelectorAll('.trk-roster-row').forEach(x=>x.classList.toggle('active',x.dataset.select===id));
- const d=document.getElementById('trkDetail');if(d)d.innerHTML=detailHtml();
- wireDetail();
+ document.querySelectorAll('[data-select-row]').forEach(x=>x.classList.toggle('active',x.dataset.selectRow===id))
+}
+function openDrawer(id){
+ selectTrain(id);
+ const t=TRAINS.find(x=>x.id===id);
+ const host=document.querySelector('#modalRoot');
+ if(!t||!host)return;
+ host.innerHTML=`<div class="trk-drawer-overlay"><div class="trk-drawer">${drawerContentHtml(t)}</div></div>`;
+ wireDrawer();
  if(window.lucide)lucide.createIcons()
 }
-function wireDetail(){
- const d=document.getElementById('trkDetail');
- if(!d)return;
- const locateBtn=d.querySelector('[data-detail-locate]');
+function closeDrawer(){
+ const host=document.querySelector('#modalRoot');
+ if(host&&host.querySelector('.trk-drawer'))host.innerHTML=''
+}
+function refreshDrawerIfOpen(){
+ const host=document.querySelector('#modalRoot');
+ if(!host)return;
+ const drawer=host.querySelector('.trk-drawer');
+ if(!drawer)return;
+ const t=TRAINS.find(x=>x.id===selected);
+ if(!t)return;
+ drawer.innerHTML=drawerContentHtml(t);
+ wireDrawer();
+ if(window.lucide)lucide.createIcons()
+}
+function wireDrawer(){
+ const host=document.querySelector('#modalRoot');
+ if(!host||!host.querySelector('.trk-drawer'))return;
+ const overlay=host.querySelector('.trk-drawer-overlay');
+ if(overlay){
+  overlay.addEventListener('click',e=>e.stopPropagation());
+  overlay.onclick=e=>{if(e.target===overlay)closeDrawer()}
+ }
+ const closeBtn=host.querySelector('[data-drawer-close]');
+ if(closeBtn)closeBtn.onclick=closeDrawer;
+ const locateBtn=host.querySelector('[data-detail-locate]');
  if(locateBtn)locateBtn.onclick=()=>locatePulse(`.trk-train[data-train="${selected}"]`);
- const contactBtn=d.querySelector('[data-detail-contact]');
+ const contactBtn=host.querySelector('[data-detail-contact]');
  if(contactBtn)contactBtn.onclick=()=>{if(typeof toast==='function')toast(`Conducteur de ${selected} contacté · liaison radio confirmée`)};
- const exportBtn=d.querySelector('[data-detail-export]');
+ const exportBtn=host.querySelector('[data-detail-export]');
  if(exportBtn)exportBtn.onclick=()=>{
   const t=TRAINS.find(x=>x.id===selected);
   if(!t)return;
@@ -302,17 +345,16 @@ function wireDetail(){
   if(typeof toast==='function')toast('Fiche circulation exportée')
  }
 }
-function wireFlow(){
- document.querySelectorAll('[data-flow-locate]').forEach(b=>b.onclick=()=>locatePulse(`.trk-station[data-st="${b.dataset.flowLocate}"]`));
- document.querySelectorAll('[data-flow-refresh]').forEach(b=>b.onclick=()=>{
-  const s=stById(b.dataset.flowRefresh);
-  if(!s)return;
-  const boarded=Math.round(4+Math.random()*14),arrived=Math.round(3+Math.random()*10);
-  s.waiting=Math.max(0,s.waiting-boarded+arrived);s.boarded+=boarded;
-  const flow=document.getElementById('trkFlow');if(flow){flow.innerHTML=flowHtml();wireFlow()}
-  const kpis=document.getElementById('trkKpis');if(kpis)kpis.innerHTML=kpisHtml();
-  if(window.lucide)lucide.createIcons();
-  if(typeof toast==='function')toast(`Flux voyageurs actualisé · ${s.name}`)
+function wireFlowStrip(){
+ document.querySelectorAll('[data-flow-locate]').forEach(b=>b.onclick=()=>locatePulse(`.trk-station[data-st="${b.dataset.flowLocate}"]`))
+}
+function wireTableRows(){
+ document.querySelectorAll('[data-select-row]').forEach(row=>{
+  row.onclick=()=>openDrawer(row.dataset.selectRow);
+  const locateBtn=row.querySelector('[data-locate-row]');
+  if(locateBtn)locateBtn.onclick=e=>{e.stopPropagation();locatePulse(`.trk-train[data-train="${locateBtn.dataset.locateRow}"]`)};
+  const detailBtn=row.querySelector('[data-detail-row]');
+  if(detailBtn)detailBtn.onclick=e=>{e.stopPropagation();openDrawer(detailBtn.dataset.detailRow)}
  })
 }
 
@@ -337,14 +379,10 @@ function paint(){
  });
  const kpis=document.getElementById('trkKpis');if(kpis)kpis.innerHTML=kpisHtml();
  const foot=document.getElementById('trkFoot');if(foot)foot.innerHTML=footHtml();
- const flow=document.getElementById('trkFlow');if(flow){flow.innerHTML=flowHtml();wireFlow()}
- const roster=document.getElementById('trkRoster');if(roster){roster.innerHTML=rosterHtml();wireRoster()}
- const detail=document.getElementById('trkDetail');if(detail&&selected){detail.innerHTML=detailHtml();wireDetail()}
+ const strip=document.getElementById('trkFlowStrip');if(strip){strip.innerHTML=flowStripHtml();wireFlowStrip()}
+ const body=document.getElementById('trkTableBody');if(body){body.innerHTML=rosterTableHtml();wireTableRows()}
+ refreshDrawerIfOpen();
  if(window.lucide)lucide.createIcons()
-}
-
-function wireRoster(){
- document.querySelectorAll('.trk-roster-row').forEach(b=>b.onclick=()=>selectTrain(b.dataset.select))
 }
 
 function wire(){
@@ -356,17 +394,24 @@ function wire(){
  ref.trains={};ref.signals=[];
  root.querySelectorAll('.trk-train').forEach(g=>{ref.trains[g.dataset.train]={el:g}});
  root.querySelectorAll('.trk-signal').forEach((g,i)=>{ref.signals[i]=g});
- root.querySelectorAll('.trk-train').forEach(g=>g.onclick=()=>selectTrain(g.dataset.train));
- wireRoster();
+ root.querySelectorAll('.trk-train').forEach(g=>g.onclick=()=>openDrawer(g.dataset.train));
+ wireTableRows();
+ wireFlowStrip();
  selectTrain(selected);
  root.querySelectorAll('[data-trk-refresh]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Réseau actualisé')});
  root.querySelectorAll('[data-trk-incident]').forEach(b=>b.onclick=()=>{if(typeof toast==='function')toast('Déclaration d’incident enregistrée · équipe notifiée')});
  root.querySelectorAll('[data-roster-filter]').forEach(b=>b.onclick=()=>{
   rosterFilter=b.dataset.rosterFilter;
   root.querySelectorAll('[data-roster-filter]').forEach(x=>x.classList.toggle('active',x.dataset.rosterFilter===rosterFilter));
-  const roster=document.getElementById('trkRoster');if(roster){roster.innerHTML=rosterHtml();wireRoster()}
+  const body=document.getElementById('trkTableBody');if(body){body.innerHTML=rosterTableHtml();wireTableRows()}
   if(window.lucide)lucide.createIcons()
  });
+ const searchInput=root.querySelector('#trkSearch');
+ if(searchInput)searchInput.oninput=()=>{
+  tableSearch=searchInput.value;
+  const body=document.getElementById('trkTableBody');if(body){body.innerHTML=rosterTableHtml();wireTableRows()}
+  if(window.lucide)lucide.createIcons()
+ };
  const flowExportBtn=root.querySelector('[data-flow-export]');
  if(flowExportBtn)flowExportBtn.onclick=()=>{
   csvDownload('SETRAG-flux-gares.csv',['Gare','PK','Voies','En attente','Embarqués'],STATIONS.map(s=>[s.name,s.km,s.quais,s.waiting,s.boarded]));
@@ -378,7 +423,6 @@ function wire(){
    TRAINS.map(t=>[t.id,typeLabel(t.type),statusLabel(t.status),stById(t.from).name,stById(t.to).name,Math.round(t.kmPos),t.delay>0?'+'+t.delay+' min':'à l’heure']));
   if(typeof toast==='function')toast('Circulations exportées en CSV')
  };
- wireFlow();
  paint();
  if(tickHandle)clearInterval(tickHandle);
  tickHandle=setInterval(tick,1500);
