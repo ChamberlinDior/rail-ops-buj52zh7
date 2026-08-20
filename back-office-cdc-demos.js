@@ -566,13 +566,30 @@ function agentQueueSection(){
 }
 
 /* ---------- Part 3b : tablette caissier · application vendeur Front Office ---------- */
-let agt={selected:null};
+let agt={mode:'sale',selected:null,svc:'billet',ticketCls:null,lastSale:null,lastSalePricing:null};
+let agtGuichetCount=0;
+const AGT_STATIONS=[['OWE','Owendo'],['NTM','N’Toum'],['NDJ','Ndjolé'],['LOP','Lopé'],['BOU','Booué'],['LAS','Lastourville'],['MOA','Moanda'],['FCV','Franceville']];
+const AGT_TRAINS=[['EXP-620','EXPRESS · 07:30'],['OMN-624','OMNIBUS · 11:20'],['SPE-551','SPÉCIAL · 14:00']];
+const AGT_SALE_SERVICES=[
+ ['billet','Billet voyageur','ticket'],['bagage','Bagage','luggage'],['colis','Colis express','package'],
+ ['taa','Transport Auto Accompagné','car-front'],['funeraire','Transport funéraire','flower-2'],['messagerie','Messagerie voyageurs','send']
+];
+const AGT_SVC_FIELDS={
+ bagage:[['Numéro de billet voyageur','SET-260819-4021'],['Poids (kg)','24'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],
+ colis:[['Expéditeur','Nom complet'],['Destinataire','Nom complet'],['Téléphone destinataire','+241 06 00 00 00'],['Poids (kg)','8']],
+ taa:[['Titulaire du billet','Nom complet'],['Véhicule','Toyota Hilux'],['Immatriculation','GA-1234-AB'],['Tonnage (t)','2.1']],
+ funeraire:[['Expéditeur / famille','Nom complet'],['Téléphone','+241 06 00 00 00'],['Gare de départ','Owendo'],['Gare d’arrivée','Franceville']],
+ messagerie:[['Expéditeur','Nom complet'],['Destinataire','Nom complet'],['Numéro de train','EXP-620'],['Description','Nature de l’envoi']]
+};
 function agtListHtml(){
  const q=agqSeed();
  if(!q.length)return `<p class="ctr-log-empty">Aucune demande.</p>`;
  return q.map(r=>`<button class="agt-row ${r.ref===agt.selected?'active':''}" data-agt-select="${esc(r.ref)}"><span class="agt-row-icon">${I(AGQ_ICON[r.kind]||'file-text')}</span><div><b>${esc(r.service)}</b><small>${esc(r.ref)} · ${esc(r.time)}</small></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></button>`).join('')
 }
-function agtDetailHtml(){
+function agtSvcListHtml(){
+ return AGT_SALE_SERVICES.map(s=>`<button class="agt-row svc-btn ${agt.svc===s[0]?'active':''}" data-agt-svc="${s[0]}"><span class="agt-row-icon svc-${s[0]}">${I(s[2])}</span><div><b>${esc(s[1])}</b><small>Vente directe au guichet</small></div></button>`).join('')
+}
+function agtRequestDetailHtml(){
  const q=agqSeed();
  const r=q.find(x=>x.ref===agt.selected)||q.find(x=>x.status==='nouvelle'||x.status==='en_cours')||q[0];
  if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
@@ -599,24 +616,77 @@ function agtDoneHtml(r,pricing){
   <small class="agt-doc-id">${esc(r.ref)} · ${rejected?'Rejetée':'Traitée'} par ${esc(r.agent||'agent')} · ${esc(r.processedAt||r.time)}</small>
  </div>`
 }
+function agtTicketFormHtml(){
+ const clsList=Object.keys(CTR_FARES),defCls=agt.ticketCls&&clsList.includes(agt.ticketCls)?agt.ticketCls:clsList[clsList.length-1];
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${I('ticket')} Billet voyageur</b><span>Vente directe · encaissement immédiat au guichet</span></div></div>
+  <div class="agt-form-row">
+   <label>Départ<select id="agtTFrom">${AGT_STATIONS.map(s=>`<option value="${s[0]}">${s[1]}</option>`).join('')}</select></label>
+   <label>Arrivée<select id="agtTTo">${AGT_STATIONS.map((s,i)=>`<option value="${s[0]}"${i===AGT_STATIONS.length-1?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+  </div>
+  <div class="agt-form-row">
+   <label>Train<select id="agtTTrain">${AGT_TRAINS.map(t=>`<option value="${t[0]}">${t[0]} · ${t[1]}</option>`).join('')}</select></label>
+   <label>Classe<select id="agtTCls">${clsList.map(c=>`<option${c===defCls?' selected':''}>${c}</option>`).join('')}</select></label>
+  </div>
+  <label>Voyageur<input id="agtTName" placeholder="Nom et prénom"></label>
+  <div class="agt-calc"><div><small>Classe</small><b id="agtTFareLabel">${defCls}</b></div><div><small>Montant TTC</small><b id="agtTFare">${fmt(CTR_FARES[defCls])} FCFA</b></div></div>
+  <div class="agt-form-row"><label>Paiement<select id="agtTPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label></div>
+  <div class="agt-actions"><button class="primary" data-agt-ticket-confirm>${I('printer')} Encaisser et imprimer le billet</button></div>
+ </div>`
+}
+function agtGenericSaleFormHtml(){
+ const svc=AGT_SALE_SERVICES.find(s=>s[0]===agt.svc);
+ const cfg=AGT_SVC_FIELDS[agt.svc]||[];
+ return `<div class="agt-detail">
+  <div class="agt-detail-head"><div><b>${I(svc[2])} ${esc(svc[1])}</b><span>Vente directe · encaissement immédiat au guichet</span></div></div>
+  <div class="agt-fields-form">${cfg.map((f,i)=>`<label>${esc(f[0])}<input id="agtSaleF${i}" placeholder="${esc(f[1]||'')}"></label>`).join('')}</div>
+  <div class="agt-calc" id="agtSaleCalc"><div><small>Tarif</small><b>—</b></div><div><small>Montant estimé</small><b>Renseignez les champs</b></div></div>
+  <div class="agt-form-row"><label>Paiement<select id="agtSalePay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label></div>
+  <div class="agt-actions"><button class="primary" data-agt-sale-confirm>${I('printer')} Encaisser et imprimer</button></div>
+ </div>`
+}
+function agtCollectSaleFields(){
+ const cfg=AGT_SVC_FIELDS[agt.svc]||[];
+ return cfg.map((f,i)=>{const el=document.getElementById(`agtSaleF${i}`);return[f[0],(el&&el.value.trim())||f[1]||'—']})
+}
+function agtSaleDocHtml(r,pricing){
+ return `<div class="agt-doc">
+  <div class="agt-doc-head"><span>${I('badge-check')} SETRAG</span><b>${esc(r.service)} · vente guichet encaissée</b></div>
+  <div class="agt-doc-qr"><img src="${ctrQrUrl(r.ref)}" alt="QR de vérification"></div>
+  <div class="agt-doc-grid">${(r.fields||[]).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(f[1])}</b></span>`).join('')}<span><small>Montant TTC</small><b>${fmt(pricing.montant)} FCFA</b></span><span><small>Paiement</small><b>${esc(r.payMethod||'—')}</b></span></div>
+  <small class="agt-doc-id">${esc(r.ref)} · Encaissé par ${esc(r.agent)} · ${esc(r.processedAt)}</small>
+  <div class="agt-actions" style="margin-top:2px"><button class="ghost" data-agt-print>${I('printer')} Imprimer</button><button class="primary" data-agt-new-sale>${I('plus')} Nouvelle vente</button></div>
+ </div>`
+}
+function agtDetailHtml(){
+ if(agt.mode==='sale'){
+  if(agt.lastSale)return agtSaleDocHtml(agt.lastSale,agt.lastSalePricing);
+  return agt.svc==='billet'?agtTicketFormHtml():agtGenericSaleFormHtml()
+ }
+ return agtRequestDetailHtml()
+}
 function agtStatsHtml(){
  const q=agqSeed();
  const nouvelles=q.filter(x=>x.status==='nouvelle').length,traitees=q.filter(x=>x.status==='traitee').length;
- return[['À traiter',nouvelles],['Traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
+ return[['Ventes guichet',agtGuichetCount],['Demandes à traiter',nouvelles],['Demandes traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
 }
 function agtPaint(){
  const list=document.getElementById('agtList');
- if(list)list.innerHTML=agtListHtml();
+ if(list)list.innerHTML=agt.mode==='sale'?agtSvcListHtml():agtListHtml();
  const detail=document.getElementById('agtDetail');
  if(detail)detail.innerHTML=`<div class="ctr-screen-inner">${agtDetailHtml()}</div>`;
+ document.querySelectorAll('[data-agt-mode]').forEach(b=>b.classList.toggle('active',b.dataset.agtMode===agt.mode));
  const stats=document.getElementById('agtStats');
  if(stats)stats.innerHTML=agtStatsHtml();
  if(window.lucide)lucide.createIcons();
  wireAgt()
 }
 function wireAgt(){
+ document.querySelectorAll('[data-agt-mode]').forEach(b=>b.onclick=()=>{agt.mode=b.dataset.agtMode;agt.lastSale=null;agtPaint()});
  document.querySelectorAll('[data-agt-select]').forEach(b=>b.onclick=()=>{agt.selected=b.dataset.agtSelect;agtPaint()});
- const confirmBtn=document.getElementById('agtDetail')?.querySelector('[data-agt-confirm]');
+ document.querySelectorAll('[data-agt-svc]').forEach(b=>b.onclick=()=>{agt.svc=b.dataset.agtSvc;agt.lastSale=null;agtPaint()});
+ const panel=document.getElementById('agtDetail');
+ const confirmBtn=panel?.querySelector('[data-agt-confirm]');
  if(confirmBtn)confirmBtn.onclick=()=>{
   const ref=confirmBtn.dataset.agtConfirm,r=agqSeed().find(x=>x.ref===ref);
   if(!r)return;
@@ -627,7 +697,7 @@ function wireAgt(){
   toastMsg(`${ref} confirmé · document généré · client notifié par SMS`);
   agtPaint();agqRefresh()
  };
- const rejectBtn=document.getElementById('agtDetail')?.querySelector('[data-agt-reject]');
+ const rejectBtn=panel?.querySelector('[data-agt-reject]');
  if(rejectBtn)rejectBtn.onclick=()=>{
   const ref=rejectBtn.dataset.agtReject,r=agqSeed().find(x=>x.ref===ref);
   if(!r)return;
@@ -636,17 +706,69 @@ function wireAgt(){
   toastMsg(`${ref} rejeté · motif à consigner dans le journal d’audit`);
   agtPaint();agqRefresh()
  };
+ const tCls=document.getElementById('agtTCls');
+ if(tCls)tCls.onchange=()=>{
+  agt.ticketCls=tCls.value;
+  const lbl=document.getElementById('agtTFareLabel'),fare=document.getElementById('agtTFare');
+  if(lbl)lbl.textContent=tCls.value;
+  if(fare)fare.textContent=fmt(CTR_FARES[tCls.value])+' FCFA'
+ };
+ const ticketConfirm=panel?.querySelector('[data-agt-ticket-confirm]');
+ if(ticketConfirm)ticketConfirm.onclick=()=>{
+  const from=document.getElementById('agtTFrom').value,to=document.getElementById('agtTTo').value;
+  const train=document.getElementById('agtTTrain').value,cls=document.getElementById('agtTCls').value;
+  const name=(document.getElementById('agtTName').value||'Client comptant').trim();
+  const pay=document.getElementById('agtTPay').value;
+  const price=CTR_FARES[cls];
+  const ref='SET-'+Math.floor(100000+Math.random()*900000);
+  const r={ref,service:'Billet voyageur',kind:'billet',fields:[['Voyageur',name],['Trajet',`${AGT_STATIONS.find(s=>s[0]===from)[1]} → ${AGT_STATIONS.find(s=>s[0]===to)[1]}`],['Train',train],['Classe',cls]],agent:AGT_AGENTS[0],payMethod:pay,processedAt:ctrNow()};
+  agt.lastSale=r;agt.lastSalePricing={montant:price};
+  agtGuichetCount++;
+  toastMsg(`Billet émis et encaissé au guichet · ${fmt(price)} FCFA · ${pay}`);
+  agtPaint()
+ };
+ if(panel&&agt.mode==='sale'&&agt.svc!=='billet'&&!agt.lastSale){
+  panel.oninput=()=>{
+   const fields=agtCollectSaleFields();
+   const p=agqPricing({kind:agt.svc,fields});
+   const calc=document.getElementById('agtSaleCalc');
+   if(calc)calc.innerHTML=`<div><small>Code tarifaire</small><b>${esc(p.code)}</b></div><div><small>Montant estimé TTC</small><b>${fmt(p.montant)} FCFA</b></div>`
+  }
+ }
+ const saleConfirm=panel?.querySelector('[data-agt-sale-confirm]');
+ if(saleConfirm)saleConfirm.onclick=()=>{
+  const fields=agtCollectSaleFields();
+  const svc=AGT_SALE_SERVICES.find(s=>s[0]===agt.svc);
+  const pricing=agqPricing({kind:agt.svc,fields});
+  const prefix={bagage:'BAG',colis:'COL',taa:'TAA',funeraire:'FUN',messagerie:'MSG'}[agt.svc]||'OP';
+  const ref=`${prefix}-${Math.floor(100000+Math.random()*900000)}`;
+  const pay=document.getElementById('agtSalePay').value;
+  const r={ref,service:svc[1],kind:agt.svc,fields,agent:AGT_AGENTS[0],payMethod:pay,processedAt:ctrNow()};
+  agt.lastSale=r;agt.lastSalePricing=pricing;
+  agtGuichetCount++;
+  toastMsg(`${svc[1]} encaissé au guichet · ${fmt(pricing.montant)} FCFA · ${pay}`);
+  agtPaint()
+ };
+ document.querySelectorAll('[data-agt-print]').forEach(b=>b.onclick=()=>{toastMsg('Impression envoyée à l’imprimante du poste POS-OW-01')});
+ document.querySelectorAll('[data-agt-new-sale]').forEach(b=>b.onclick=()=>{agt.lastSale=null;agtPaint()});
 }
 function agentTabletSection(){
  return `<div style="margin-top:15px" id="agtTablet"><section class="cdc-card agt-app">
-  <header><div><h3>${I('tablet')} Poste vendeur · tablette caissier</h3><p>Ce que voit l’agent en gare ou en agence, dans l’application vendeur du Front Office, pour traiter une demande reçue.</p></div><div class="ctr-stats" id="agtStats">${agtStatsHtml()}</div></header>
+  <header><div><h3>${I('tablet')} Poste vendeur · tablette caissier</h3><p>L’application vendeur du Front Office, telle que l’agent la voit en gare ou en agence : vente directe au guichet et traitement des demandes reçues en ligne.</p></div><div class="ctr-stats" id="agtStats">${agtStatsHtml()}</div></header>
   <div class="cdc-card-body">
    <div class="agt-tablet">
     <div class="agt-tablet-bezel">
      <div class="agt-tablet-screen">
-      <div class="agt-tablet-bar"><b>SETRAG Vendeur</b><span>POS-OW-01 · Grâce Mavoungou</span></div>
+      <div class="agt-tablet-bar">
+       <b>SETRAG Vendeur</b>
+       <div class="agt-modeswitch">
+        <button class="active" data-agt-mode="sale">${I('shopping-cart')} Nouvelle vente</button>
+        <button data-agt-mode="requests">${I('inbox')} Demandes reçues</button>
+       </div>
+       <span>POS-OW-01 · Grâce Mavoungou</span>
+      </div>
       <div class="agt-tablet-body">
-       <div class="agt-list" id="agtList">${agtListHtml()}</div>
+       <div class="agt-list" id="agtList">${agtSvcListHtml()}</div>
        <div class="agt-panel" id="agtDetail"></div>
       </div>
      </div>
