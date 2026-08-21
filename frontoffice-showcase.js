@@ -508,7 +508,7 @@ function appSection(){
 function payMarketingSection(){
  return `<section class="fos-section" id="paiement" style="background:#f3f7f6">
  <div class="fos-head fos-reveal"><small>MOYENS DE PAIEMENT</small><h2>Payez comme vous le souhaitez</h2><p>Mobile Money, carte bancaire ou espèces en guichet — tous les canaux prévus au cahier des charges.</p></div>
- <div class="fos-paygrid">${PAYMENTS.map(p=>`<div class="fos-paylogo fos-reveal"><i style="background:${p[3]}">${p[0].toUpperCase()}</i><b>${p[1]}</b></div>`).join('')}</div>
+ <div class="fos-paygrid">${PAYMENTS.map(p=>{const icon={am:'wallet',mm:'wallet',cp:'globe',vi:'credit-card',mc:'credit-card',cs:'banknote'}[p[0]]||'credit-card';return `<div class="fos-paylogo fos-reveal"><i style="background:${p[3]}">${I(icon)}</i><b>${p[1]}</b><small>${p[2]}</small></div>`}).join('')}</div>
  </section>`
 }
 
@@ -540,7 +540,7 @@ function finalSection(){
 
 function render(){
  return `<div class="fos-page"><div class="fos-progress"><i></i></div>
- <nav class="fos-nav"><div class="fos-nav-brand"><span>S</span> SETRAG · Front Office voyageur</div>
+ <nav class="fos-nav"><div class="fos-nav-brand"><span class="fap-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG"></span> SETRAG · Front Office voyageur</div>
  <div class="fos-nav-links"><button data-fos-scroll="fosSearch">Réserver</button><button data-fos-scroll="services">Services</button><button data-fos-scroll="application">Application</button><button data-fos-scroll="paiement">Paiement</button></div>
  <div class="fos-nav-cta"><button data-fos-scroll="services">${I('grid')} Tous les services</button><button id="fosWalletBtn">${I('wallet')} Profil<span class="fos-wallet-badge" id="fosWalletBadge">0</span></button><button class="gold" data-fos-scroll="fosSearch">${I('ticket')} Réserver</button></div>
  </nav>
