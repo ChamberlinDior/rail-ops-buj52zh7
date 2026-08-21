@@ -81,7 +81,7 @@ function rowsHtml(){
 }
 
 function scopeBanner(){
- return `<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 9/18</b><span>Recherche et extraction par train, date, opération ; manifeste et fiche voyageur 360°.</span></div><em>EXIGENCE VISIBLE</em></div>`
+ return `<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 9/19</b><span>Recherche et extraction par train, date, opération ; manifeste et fiche voyageur 360°.</span></div><em>EXIGENCE VISIBLE</em></div>`
 }
 
 function newTravelerModalHtml(){

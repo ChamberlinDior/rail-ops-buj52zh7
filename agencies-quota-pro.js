@@ -141,7 +141,7 @@ function rowsHtml(){
 }
 
 function scopeBanner(){
- return `<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 10/18</b><span>22 gares, agences accréditées/Premium, 89 postes, guichets, affectations et quotas.</span></div><em>EXIGENCE VISIBLE</em></div>`
+ return `<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 10/19</b><span>22 gares, agences accréditées/Premium, 89 postes, guichets, affectations et quotas.</span></div><em>EXIGENCE VISIBLE</em></div>`
 }
 
 function segmentOptions(trainId,selected){

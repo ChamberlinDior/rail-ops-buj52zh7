@@ -257,7 +257,7 @@ if(!window.__stbTimers){
 function stbRenderPage(){return `<div id="stbRoot">${stbPageHtml()}</div>`}
 function install(){
  if(!window.pages||typeof pages!=='object')return setTimeout(install,25);
- pages.boards=()=>`<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 18/18</b><span>Affichage voyageurs en gare : horaires, retards, voies de départ et signalétique conformes aux standards des grandes gares.</span></div><em>EXIGENCE VISIBLE</em></div>${stbRenderPage()}`;
+ pages.boards=()=>`<div class="cdc16-scope"><div><b>COUVERTURE CDC SETRAG · PAGE 19/19</b><span>Affichage voyageurs en gare : horaires, retards, voies de départ et signalétique conformes aux standards des grandes gares.</span></div><em>EXIGENCE VISIBLE</em></div>${stbRenderPage()}`;
  if(typeof bind==='function'&&!bind.__stbWrapped){const old=bind;bind=function(){old();if(document.getElementById('stbRoot'))stbWire()};bind.__stbWrapped=true;window.bind=bind}
  const requested=new URLSearchParams(location.search).get('page');
  if(requested==='boards'){const content=document.getElementById('content');if(content&&!document.getElementById('stbRoot')){content.innerHTML=pages.boards();if(window.lucide)lucide.createIcons();if(typeof bind==='function')bind()}}
