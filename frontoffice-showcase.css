@@ -252,7 +252,10 @@
 .fap-shell{display:flex;justify-content:center;min-height:560px}
 .fap-phone{position:relative;width:286px;border-radius:40px;background:linear-gradient(160deg,#0d2338,#081726);padding:12px;box-shadow:0 40px 80px #00000055;border:1px solid #223142}
 .fap-notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:20px;border-radius:0 0 14px 14px;background:#081726;z-index:3}
-.fap-phone-screen{position:relative;background:#f6f8f7;border-radius:30px;overflow:hidden;min-height:536px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff10}
+.fap-phone-screen{position:relative;background:linear-gradient(165deg,#eaf6f0a8,#dcedf3a0 45%,#eef8f3ad),url('public/images/setrag-rail-network-premium-v2.png') center 38%/cover no-repeat;border-radius:30px;overflow:hidden;min-height:536px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff10}
+.fap-statusbar,.fap-appbar{background:#ffffffb0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.fap-bottomnav{background:#ffffffc2!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid #ffffff80}
+.fap-home-indicator{background:transparent!important}
 .fap-statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 2px;font:800 10.5px Manrope,sans-serif;color:var(--navy)}
 .fap-statusicons{display:flex;align-items:center;gap:5px}
 .fap-statusicons svg{width:13px}
@@ -262,7 +265,7 @@
 .fap-bell{position:relative;border:0;background:#f3f7f6;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--navy);cursor:pointer;flex:none}
 .fap-bell svg{width:14px}
 .fap-bell-badge{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--red,#d64545);color:#fff;font:800 8.5px Manrope;display:grid;place-items:center;line-height:1}
-.fap-screen{flex:1;background:linear-gradient(165deg,#eaf6f0,#dcedf3 45%,#eef8f3);padding:16px 14px;display:flex;flex-direction:column;overflow-y:auto;max-height:420px}
+.fap-screen{position:relative;flex:1;background:transparent;padding:16px 14px;display:flex;flex-direction:column;overflow-y:auto;max-height:420px}
 .fap-screen-inner{display:flex;flex-direction:column;flex:1;animation:fap-enter .3s cubic-bezier(.2,.8,.3,1)}
 @keyframes fap-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fap-bottomnav{display:flex;border-top:1px solid #e3ebe8;background:#fff}
@@ -278,7 +281,7 @@
 .fap-search-card button svg{width:14px}
 .fap-recent{display:flex;flex-direction:column;gap:8px}
 .fap-recent b{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.fap-recent-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit}
+.fap-recent-row{display:flex;align-items:center;gap:10px;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit}
 .fap-recent-row>span{flex:none;width:30px;height:30px;border-radius:9px;background:#eef8f3;color:var(--green);display:grid;place-items:center}
 .fap-recent-row>span svg{width:14px}
 .fap-recent-row div{flex:1;min-width:0}
@@ -288,26 +291,26 @@
 
 .fap-list{display:flex;flex-direction:column;gap:9px;flex:1}
 .fap-list-head{display:flex;align-items:center;gap:10px;margin-bottom:2px}
-.fap-back{flex:none;border:1px solid var(--line);background:#fff;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;cursor:pointer;color:var(--navy)}
+.fap-back{flex:none;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);width:28px;height:28px;border-radius:9px;display:grid;place-items:center;cursor:pointer;color:var(--navy)}
 .fap-back svg{width:14px}
 .fap-list-head b{font-size:12px;color:var(--navy)}
-.fap-train-card{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 13px;cursor:pointer;text-align:left;font:inherit}
+.fap-train-card{display:flex;justify-content:space-between;align-items:center;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:12px;padding:11px 13px;cursor:pointer;text-align:left;font:inherit}
 .fap-train-card b{display:block;font-size:12px;color:var(--navy)}
 .fap-train-card small{color:var(--muted);font-size:10px}
 .fap-train-card span{font:800 12px Manrope;color:var(--green)}
 .fap-seatgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.fap-seat{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:8px;font:800 10px Manrope;color:var(--navy);cursor:pointer}
+.fap-seat{aspect-ratio:1;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:8px;font:800 10px Manrope;color:var(--navy);cursor:pointer}
 .fap-seat.taken{background:#eef1f0;color:#c3cdca;cursor:not-allowed}
 .fap-seat.picked{background:var(--green);border-color:var(--green);color:#fff}
 .fap-classrow{display:flex;gap:6px}
-.fap-classchip{flex:1;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 4px;font:800 10px Manrope;color:var(--muted);cursor:pointer}
+.fap-classchip{flex:1;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:9px;padding:8px 4px;font:800 10px Manrope;color:var(--muted);cursor:pointer}
 .fap-classchip.active{background:var(--navy);border-color:var(--navy);color:#fff}
 .fap-list>button[data-fap-next]{margin-top:auto;border:0;background:linear-gradient(135deg,var(--green),#0aa06d);color:#fff;border-radius:12px;padding:12px;font:800 12px Manrope;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 10px 20px #087b5b35}
 .fap-list>button[data-fap-next]:disabled{opacity:.45;box-shadow:none;cursor:not-allowed}
 .fap-list>button[data-fap-next] svg{width:14px}
 
 .fap-paygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.fap-pay{display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;cursor:pointer}
+.fap-pay{display:flex;flex-direction:column;align-items:center;gap:6px;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:12px;padding:10px 6px;cursor:pointer}
 .fap-pay i{width:26px;height:26px;border-radius:8px;background:var(--c,#087b5b);color:#fff;display:grid;place-items:center;font-style:normal;font:900 11px Manrope}
 .fap-pay b{font-size:9.5px;color:var(--navy);text-align:center}
 .fap-pay small{display:none}
@@ -343,7 +346,8 @@
 .fap-ticket button svg{width:14px}
 
 .fap-svcgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fap-svc{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:16px 8px;cursor:pointer}
+.fap-svc{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:14px;padding:16px 8px;cursor:pointer;box-shadow:0 8px 20px #0b3a2f10;transition:.2s}
+.fap-svc:hover{transform:translateY(-2px);box-shadow:0 12px 26px #0b3a2f1a}
 .fap-svc span{width:34px;height:34px;border-radius:10px;background:#eef8f3;color:var(--green);display:grid;place-items:center}
 .fap-svc span svg{width:16px}
 .fap-svc b{font-size:10.5px;color:var(--navy);text-align:center}
@@ -365,7 +369,7 @@
 .fap-track-position span{font:700 10.5px Manrope;color:var(--navy)}
 
 /* ---------- Mes demandes / Notifications (app mobile) ---------- */
-.fap-track-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
+.fap-track-row{display:flex;align-items:center;gap:10px;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
 .fap-track-row-icon{flex:none;width:32px;height:32px;border-radius:9px;background:#eef8f3;color:var(--green);display:grid;place-items:center}
 .fap-track-row-icon svg{width:14px}
 .fap-track-row-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
@@ -379,7 +383,7 @@
 .fap-track-row-status.controle{background:#ffe9de;color:#c9560f}
 .fap-track-row-status.validee,.fap-track-row-status.confirmee{background:#eef8f3;color:var(--green)}
 .fap-track-row-status.rejetee{background:#fdf1f1;color:var(--red,#d64545)}
-.fap-notif-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
+.fap-notif-row{display:flex;align-items:center;gap:10px;border:1px solid #ffffff90;background:#ffffffb3;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit;width:100%}
 .fap-notif-row>span{flex:none;width:30px;height:30px;border-radius:9px;background:#eaf2fb;color:#2179c9;display:grid;place-items:center}
 .fap-notif-row>span svg{width:14px}
 .fap-notif-row div{flex:1;min-width:0}
