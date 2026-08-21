@@ -139,3 +139,5 @@
  .stb-platforms{grid-template-columns:1fr 1fr}
  .stb-help-grid{grid-template-columns:1fr}
 }
+.stb-row.stb-editable{cursor:pointer}
+.stb-row.stb-editable:hover{background:#ffffff14}

@@ -26,6 +26,14 @@ function stbDesserte(originCode,destName,rand){
 }
 
 let stb={station:'OWE',now:new Date(),boards:{}};
+let stbNextId=1000;
+function csvDownload(name,head,rows){
+ const csv='﻿'+[head,...rows].map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ a.download=name;a.click();
+ setTimeout(()=>URL.revokeObjectURL(a.href),500)
+}
 
 function stbBuildBoard(originCode){
  const rand=mulberry32(hashStr(originCode+'-board-2026'));
@@ -112,7 +120,7 @@ function stbHeroHtml(originCode){
 }
 function stbRowHtml(kind,r){
  const st=kind==='dep'?stbDepStatus(r):stbArrStatus(r);
- return `<div class="stb-row ${st.cls==='urgent'||st.cls==='bad'?'hot':''} ${r.__flash?'flash':''}" data-stb-row="${r.id}">
+ return `<div class="stb-row ${st.cls==='urgent'||st.cls==='bad'?'hot':''} ${r.__flash?'flash':''} ${kind==='dep'?'stb-editable':''}" data-stb-row="${r.id}" ${kind==='dep'?`data-stb-edit="${r.id}" title="Cliquer pour modifier ce départ"`:''}>
   <span class="c-time">${stbFmtHM(stbEffective(r))}${r.delay?`<small>${stbFmtHM(r.scheduled)}</small>`:''}</span>
   <span class="c-train">${esc(r.type)}<small>${esc(r.ref)}</small>${kind==='dep'&&r.services&&r.services.length?`<i class="c-svc">${r.services.map(s=>I(s)).join('')}</i>`:''}</span>
   <span class="c-dest">${kind==='dep'?esc(r.dest):esc(r.from)}${kind==='dep'?`<small>${r.desserte&&r.desserte.length?'Dessert '+r.desserte.map(esc).join(', '):'Trajet direct'}</small>`:''}</span>
@@ -196,7 +204,7 @@ function stbSummaryHtml(originCode){
 }
 function stbPageHtml(){
  const o=stb.station;
- return `${pageHead('Écrans de gare','Panneaux d’affichage voyageurs — départs, arrivées, retards en temps réel et signalétique des quais, tels qu’installés en gare.')}
+ return `${pageHead('Écrans de gare','Panneaux d’affichage voyageurs — départs, arrivées, retards en temps réel et signalétique des quais, tels qu’installés en gare.',`<button class="btn ghost" data-stb-export>${I('download')} Exporter la grille</button><button class="btn primary" data-stb-new>${I('plus')} Nouveau départ</button>`)}
  ${stbStationPicker()}
  ${stbHeroHtml(o)}
  ${stbSummaryHtml(o)}
@@ -232,7 +240,10 @@ function stbRefreshRows(){
  if(hero)hero.outerHTML=stbHeroHtml(o);
  const ticker=document.querySelector('.stb-ticker');
  if(ticker)ticker.outerHTML=stbTickerHtml(o);
- if(window.lucide)lucide.createIcons()
+ const summary=document.querySelector('#stbRoot .grid.kpis');
+ if(summary)summary.outerHTML=stbSummaryHtml(o);
+ if(window.lucide)lucide.createIcons();
+ stbWireRows()
 }
 function stbPerturb(){
  if(!document.getElementById('stbRoot'))return;
@@ -245,8 +256,111 @@ function stbPerturb(){
  stbRefreshRows();
  setTimeout(()=>{r.__flash=false},1600)
 }
+function stbModalHtml(mode,row){
+ const o=stb.station;
+ const line=stbLine(o);
+ const isEdit=mode==='edit';
+ const destOpts=line.map(s=>`<option value="${s[0]}" ${row&&row.destCode===s[0]?'selected':''}>${esc(s[1])}</option>`).join('');
+ const typeOpts=['EXPRESS','OMNIBUS','SPÉCIAL'].map(t=>`<option ${row&&row.type===t?'selected':''}>${t}</option>`).join('');
+ const voieOpts=[1,2,3,4].map(v=>`<option value="${v}" ${row&&row.voie===v?'selected':''}>${v}</option>`).join('');
+ const heureVal=row?stbFmtHM(row.scheduled):(()=>{const d=new Date(Date.now()+30*60000);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')})();
+ return `<div class="modal-backdrop" data-stb-modal-overlay><div class="modal">
+  <div class="modal-head"><div><span class="subtle">PANNEAU DÉPARTS · ${esc(stbStName(o)).toUpperCase()}</span><h2>${isEdit?`Modifier le départ ${esc(row.ref)}`:'Créer un départ'}</h2></div><button class="icon-btn" data-stb-modal-close>×</button></div>
+  <div class="modal-body">
+   <form id="stbForm">
+    <div class="form-grid">
+     <div class="field"><label>Type de circulation</label><select id="stbType">${typeOpts}</select></div>
+     <div class="field"><label>Référence</label><input class="input" id="stbRef" placeholder="Générée automatiquement" value="${row?esc(row.ref):''}"></div>
+     <div class="field"><label>Destination</label><select id="stbDest">${destOpts}</select></div>
+     <div class="field"><label>Voie</label><select id="stbVoie">${voieOpts}</select></div>
+     <div class="field"><label>Heure de départ</label><input class="input" type="time" id="stbHeure" value="${heureVal}"></div>
+     <div class="field"><label>Retard (minutes)</label><input class="input" type="number" id="stbDelay" min="0" max="90" value="${row?row.delay:0}"></div>
+     <div class="field span2"><label style="display:flex;align-items:center;gap:8px;font-weight:700"><input type="checkbox" id="stbCancelled" style="width:auto" ${row&&row.cancelled?'checked':''}> Marquer ce train comme supprimé</label></div>
+    </div>
+    <p class="aq-hint">${I('info')} Le panneau LED, le rappel sonore et le bandeau d’information se mettent à jour immédiatement en gare.</p>
+   </form>
+  </div>
+  <div class="modal-foot">${isEdit?`<button class="btn ghost" data-stb-modal-delete>${I('trash-2')} Retirer du panneau</button>`:'<span></span>'}<div style="display:flex;gap:8px"><button class="btn ghost" data-stb-modal-close>Annuler</button><button class="btn primary" data-stb-modal-submit>${isEdit?'Enregistrer les modifications':'Créer le départ'}</button></div></div>
+ </div></div>`
+}
+function stbCloseModal(){
+ const root=document.querySelector('#modalRoot');
+ if(root&&root.querySelector('#stbForm'))root.innerHTML=''
+}
+function stbOpenModal(mode,id){
+ const root=document.querySelector('#modalRoot');
+ if(!root)return;
+ const row=mode==='edit'?stbBoard(stb.station).dep.find(r=>r.id===id):null;
+ if(mode==='edit'&&!row)return;
+ root.innerHTML=stbModalHtml(mode,row);
+ stbWireModal(mode,row);
+ if(window.lucide)lucide.createIcons()
+}
+function stbWireModal(mode,row){
+ const root=document.querySelector('#modalRoot');
+ if(!root)return;
+ root.querySelectorAll('[data-stb-modal-close]').forEach(b=>b.onclick=stbCloseModal);
+ const overlay=root.querySelector('[data-stb-modal-overlay]');
+ if(overlay){
+  overlay.addEventListener('click',e=>e.stopPropagation());
+  overlay.onclick=e=>{if(e.target===overlay)stbCloseModal()}
+ }
+ root.querySelector('[data-stb-modal-submit]').onclick=()=>{
+  const o=stb.station;
+  const type=root.querySelector('#stbType').value;
+  let ref=root.querySelector('#stbRef').value.trim();
+  const destCode=root.querySelector('#stbDest').value;
+  const destName=stbStName(destCode);
+  const voie=Number(root.querySelector('#stbVoie').value);
+  const heureStr=root.querySelector('#stbHeure').value;
+  const delay=Math.max(0,Number(root.querySelector('#stbDelay').value)||0);
+  const cancelled=root.querySelector('#stbCancelled').checked;
+  if(!heureStr){if(typeof toast==='function')toast('Merci de renseigner une heure de départ');return}
+  if(!ref){const prefix={'EXPRESS':'620','OMNIBUS':'624','SPÉCIAL':'551'}[type];ref=`${prefix}-${Math.floor(100+Math.random()*900)}`}
+  const [hh,mm]=heureStr.split(':').map(Number);
+  const scheduled=new Date();scheduled.setHours(hh,mm,0,0);
+  const rand=mulberry32(hashStr(ref+'-'+Date.now()));
+  const desserte=stbDesserte(o,destName,rand);
+  const coaches=(STB_COACHES[type]||6)+Math.floor(Math.random()*3)-1;
+  const services=STB_SERVICES[type]||[];
+  if(mode==='create'){
+   const id=`${o}-new${stbNextId++}`;
+   stbBoard(o).dep.unshift({id,ref,type,dest:destName,destCode,voie,scheduled,delay,cancelled,coaches,services,desserte});
+   if(typeof toast==='function')toast(`Nouveau départ créé · ${type} ${ref} → ${destName} · voie ${voie}`);
+  }else{
+   Object.assign(row,{ref,type,dest:destName,destCode,voie,scheduled,delay,cancelled,coaches,services,desserte});
+   if(typeof toast==='function')toast(`Départ ${ref} mis à jour · panneau actualisé`);
+  }
+  stbCloseModal();
+  stbRefreshRows();
+ };
+ const delBtn=root.querySelector('[data-stb-modal-delete]');
+ if(delBtn)delBtn.onclick=()=>{
+  const arr=stbBoard(stb.station).dep;
+  const idx=arr.findIndex(r=>r.id===row.id);
+  if(idx>=0)arr.splice(idx,1);
+  stbCloseModal();
+  stbRefreshRows();
+  if(typeof toast==='function')toast('Annonce retirée du panneau')
+ }
+}
+function stbWireRows(){
+ document.querySelectorAll('[data-stb-edit]').forEach(el=>el.onclick=()=>stbOpenModal('edit',el.dataset.stbEdit))
+}
 function stbWire(){
+ const root=document.getElementById('stbRoot');
+ if(root&&!root.__stbStop){root.addEventListener('click',e=>e.stopPropagation());root.__stbStop=true}
  document.querySelectorAll('[data-stb-station]').forEach(b=>b.onclick=()=>{stb.station=b.dataset.stbStation;stbPaint()});
+ const newBtn=document.querySelector('[data-stb-new]');
+ if(newBtn)newBtn.onclick=()=>stbOpenModal('create');
+ const exportBtn=document.querySelector('[data-stb-export]');
+ if(exportBtn)exportBtn.onclick=()=>{
+  const o=stb.station;
+  csvDownload(`SETRAG-panneau-departs-${o}.csv`,['Heure','Train','Référence','Destination','Voie','Retard (min)','Statut'],
+   stbBoard(o).dep.map(r=>[stbFmtHM(stbEffective(r)),r.type,r.ref,r.dest,r.voie,r.delay,stbDepStatus(r).label]));
+  if(typeof toast==='function')toast('Grille des départs exportée en CSV')
+ };
+ stbWireRows()
 }
 if(!window.__stbTimers){
  window.__stbTimers=true;
