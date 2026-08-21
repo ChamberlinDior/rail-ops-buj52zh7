@@ -423,3 +423,10 @@
 .messagerie-doc .premium-service-route{background:linear-gradient(115deg,#2c1a52,#5b3aa8)}
 .messagerie-doc .premium-identity>strong{background:#6a42c4}
 @media(max-width:820px){.agt-tablet-body{grid-template-columns:1fr}.agt-list{border-right:0;border-bottom:1px solid #e3ebe8;max-height:220px}}
+.agt-brand{display:flex;align-items:center;gap:9px}
+.agt-brand .fap-logo{width:30px;height:30px;border-radius:8px;flex:none;box-shadow:0 2px 6px #0002}
+.agt-tablet-screen{background:linear-gradient(165deg,#eaf6f0a8,#dcedf3a0 45%,#eef8f3ad),url('public/images/setrag-rail-network-premium-v2.png') center 38%/cover no-repeat!important}
+.agt-tablet-bar{background:#ffffffb0!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.agt-list{background:transparent;border-right:1px solid #ffffff80}
+.agt-row{border:1px solid #ffffff90!important;background:#ffffffb3!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.agt-modeswitch{background:#ffffff55;backdrop-filter:blur(8px)}

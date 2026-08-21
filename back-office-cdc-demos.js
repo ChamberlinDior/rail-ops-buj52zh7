@@ -1048,7 +1048,7 @@ function agentTabletSection(){
      <div class="agt-tablet-bezel">
       <div class="agt-tablet-screen">
        <div class="agt-tablet-bar">
-        <b>SETRAG Vendeur</b>
+        <span class="agt-brand"><span class="fap-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG"></span><b>SETRAG Vendeur</b></span>
         <div class="agt-modeswitch">
          <button class="active" data-agt-mode="sale">${I('shopping-cart')} Nouvelle vente</button>
          <button data-agt-mode="requests">${I('inbox')} Demandes reçues</button>
