@@ -482,14 +482,14 @@ function appSection(){
     ${['Recherche et achat en moins de 2 minutes','Six moyens de paiement, du Mobile Money à la carte bancaire','Billet et QR disponibles hors ligne après achat','Portefeuille et historique partagés avec le portail web'].map(x=>`<li style="color:#3f545c">${I('check-circle-2')} ${x}</li>`).join('')}
    </ul>
    <div class="fos-store-badges" style="filter:invert(0)">
-    ${[['smartphone','App Store','iOS'],['play','Google Play','Android']].map(x=>`<span style="border-color:#e3ebe8;background:#f3f7f6;color:#092238">${I(x[0])}<span><small>Disponible sur</small><b>${x[1]}</b></span></span>`).join('')}
+    ${[['App Store','iOS'],['Google Play','Android']].map(x=>`<span style="border-color:#e3ebe8;background:#f3f7f6;color:#092238"><img class="fap-store-icon" src="public/images/setrag-logo-official.jpg" alt="SETRAG"><span><small>Disponible sur</small><b>${x[0]}</b></span></span>`).join('')}
    </div>
   </div>
   <div class="fap-shell fos-reveal">
-   <div class="fap-phone"><div class="fap-notch"></div>
+   <div class="fap-phone"><div class="fap-notch"><i class="fap-cam"></i></div>
     <div class="fap-phone-screen">
-     <div class="fap-statusbar"><span>${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span><span class="fap-statusicons">${I('signal-high')}${I('battery-full')}</span></div>
-     <div class="fap-appbar"><span>S</span><b>SETRAG</b><button class="fap-bell" data-fap-bell>${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}</button></div>
+     <div class="fap-statusbar"><span>${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span><span class="fap-statusicons">${I('signal-high')}${I('wifi')}${I('battery-full')}</span></div>
+     <div class="fap-appbar"><span class="fap-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG"></span><b>SETRAG</b><button class="fap-bell" data-fap-bell>${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}</button></div>
      <div class="fap-screen" id="fapScreen"></div>
      <div class="fap-bottomnav">
       <button class="active" data-fap-nav="home">${I('house')}<small>Accueil</small></button>
@@ -497,6 +497,7 @@ function appSection(){
       <button data-fap-nav="tracking">${I('route')}<small>Suivi</small></button>
       <button data-fap-nav="wallet">${I('wallet')}<small>Portefeuille</small></button>
      </div>
+     <div class="fap-home-indicator"></div>
     </div>
    </div>
   </div>

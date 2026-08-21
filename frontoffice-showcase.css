@@ -487,3 +487,14 @@
 .fos-final{padding:28px}
 }
 @media(prefers-reduced-motion:reduce){.fos-reveal{opacity:1;transform:none;transition:none}}
+
+.fap-logo{background:#fff!important;padding:2px;overflow:hidden}
+.fap-logo img{width:100%;height:100%;object-fit:contain;border-radius:5px;display:block}
+.fap-store-icon{width:30px;height:30px;object-fit:contain;background:#fff;border-radius:8px;padding:3px;flex:none;box-shadow:0 2px 6px #0002}
+.fap-cam{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a4d5c,#0a1420 70%);box-shadow:inset 0 0 0 1px #ffffff14}
+.fap-phone{position:relative}
+.fap-phone:before,.fap-phone:after{content:"";position:absolute;left:-3px;width:3px;border-radius:2px 0 0 2px;background:#1a2c3f}
+.fap-phone:before{top:96px;height:28px;box-shadow:0 44px 0 #1a2c3f}
+.fap-phone:after{top:150px;height:52px}
+.fap-home-indicator{display:flex;justify-content:center;padding:8px 0 6px;background:#fff}
+.fap-home-indicator:before{content:"";width:120px;height:4px;border-radius:99px;background:#092238;opacity:.85}
