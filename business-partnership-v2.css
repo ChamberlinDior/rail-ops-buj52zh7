@@ -8,3 +8,31 @@
 @media(max-width:1100px){.bp-fork{grid-template-columns:1fr}.bp-cards.five{grid-template-columns:repeat(2,1fr)}.bp-compare table{min-width:680px}}
 @media(max-width:740px){.bp-cards.five{grid-template-columns:1fr}.bp-goal-box{grid-template-columns:1fr}.bp-cellblock header h3{font-size:20px}}
 body:has(.bp-page) .jr-demo-badge{display:none!important}
+
+.fm-lot-detail{display:none;margin:-4px 0 6px;padding:14px 15px 6px;border-radius:0 0 15px 15px;background:#ffffff08}
+.fm-lot.open .fm-lot-detail{display:block}
+.fm-lot-detail table{width:100%;border-collapse:collapse}
+.fm-lot-detail th{text-align:left;font-size:9px;color:#9db2ba;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;border-bottom:1px solid #ffffff22}
+.fm-lot-detail td{padding:9px 8px;border-bottom:1px solid #ffffff14;font-size:11px;color:#dce8ea;vertical-align:top}
+.fm-lot-detail td b{color:#fff}
+
+.fm-calc{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto 30px;padding:26px 30px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 17px 45px #0624380b}
+.fm-calc-input{display:flex;flex-direction:column;gap:10px;flex:1;min-width:260px}
+.fm-calc-input label{font-size:11px;font-weight:800;color:#5d717a;letter-spacing:.02em}
+.fm-calc-input input[type=range]{width:100%;accent-color:var(--green)}
+.fm-calc-value{font-size:20px;font-weight:800;color:var(--navy)}
+.fm-calc-results{display:flex;gap:14px;flex-wrap:wrap}
+.fm-calc-results div{padding:14px 18px;border-radius:14px;background:#eef8f3;text-align:center;min-width:160px}
+.fm-calc-results small{display:block;color:#5d717a;font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+.fm-calc-results b{font-size:20px;color:var(--green)}
+
+.fm-sign{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:36px auto 0}
+.fm-sign>div{padding:22px;border:1px dashed #ffffff40;border-radius:16px}
+.fm-sign small{display:block;color:var(--gold);font-weight:800;letter-spacing:.1em;margin-bottom:10px;font-size:10px}
+.fm-sign span{display:block;color:#b4c7cd;font-size:11px;margin-bottom:16px}
+.fm-sign i{display:block;height:1px;background:#ffffff30;margin-top:30px}
+
+@media(max-width:800px){
+ .fm-calc{flex-direction:column;align-items:stretch}
+ .fm-sign{grid-template-columns:1fr}
+}
