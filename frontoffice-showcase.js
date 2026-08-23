@@ -221,7 +221,7 @@ function stepsSection(){
 }
 
 /* ---------- interactive mobile app phone ---------- */
-let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
+let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',date:'2026-08-22',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
 function fosPositionLabel(r){
  if(!r)return '—';
  const gare=(r.fields||[]).find(f=>/départ/i.test(f[0]));
@@ -293,28 +293,47 @@ function fapTrainsFor(o,d){
  })
 }
 function fapHomeScreen(){
+ const hr=new Date().getHours();
+ const greet=hr<12?'Bonjour':hr<18?'Bon après-midi':'Bonsoir';
  return `<div class="fap-home">
-  <div class="fap-search-card">
-   <label>Départ<select id="fapFrom">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.o?' selected':''}>${s[1]}</option>`).join('')}</select></label>
-   <label>Arrivée<select id="fapTo">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></label>
-   <button data-fap-search>${I('search')} Rechercher un billet</button>
+  <div class="fap-greet"><span>${greet} ${I('sun')}</span><h2>Où voulez-vous aller ?</h2></div>
+  <div class="fap-field-card">
+   <label class="fap-field"><small>Départ</small><select id="fapFrom">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.o?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+   <label class="fap-field"><small>Arrivée</small><select id="fapTo">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+   <button class="fap-swap-btn" type="button" id="fapHomeSwap" title="Inverser">${I('repeat')}</button>
   </div>
-  ${WALLET.length?`<div class="fap-recent"><b>Vos billets récents</b>${WALLET.slice(0,2).map((r,i)=>`<button class="fap-recent-row" data-fap-wallet="${i}"><span>${I(kindIcon(r.kind))}</span><div><b>${esc(r.brand)}</b><small>${esc(r.code)}</small></div>${I('chevron-right')}</button>`).join('')}</div>`:''}
+  <div class="fap-field-card fap-field-card-single"><label class="fap-field"><small>Date</small><input type="date" id="fapDate" value="${fap.date}"></label>${I('calendar')}</div>
+  <button class="fap-cta" data-fap-search>${I('search')} Rechercher un billet</button>
+  ${WALLET.length?`<div class="fap-section-head"><b>Billet en cours</b><button class="fap-section-link" data-fap-nav="wallet">Voir tout</button></div><div class="fap-recent">${WALLET.slice(0,2).map((r,i)=>`<button class="fap-recent-row" data-fap-wallet="${i}"><span>${I(kindIcon(r.kind))}</span><div><b>${esc(r.brand)}</b><small>${esc(r.code)}</small></div>${I('chevron-right')}</button>`).join('')}</div>`:`<div class="fap-promo"><span class="fap-promo-badge">${I('shield-check')} Voyage en toute sécurité</span><p>Un seul billet électronique pour tous vos trajets sur le Transgabonais, valable même hors connexion.</p></div>`}
  </div>`
 }
 function fapResultsScreen(){
  const trains=fapTrainsFor(fap.o,fap.d);
  return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>${stName(fap.o)} → ${stName(fap.d)}</b></div>
-  ${trains.map(t=>`<button class="fap-train-card" data-fap-choose="${t.code}"><div><b>${t.code} · ${t.type}</b><small>${t.depart} → ${t.arrive}</small></div><span>${fmtMoney(t.prices['2e'])}</span></button>`).join('')}
+  ${trains.map(t=>`<button class="fap-train-card" data-fap-choose="${t.code}"><span class="fap-train-badge">${I('train-front')}</span><div class="fap-train-info"><b>${t.code} · ${t.type}</b><small>${t.depart} → ${t.arrive}</small></div><span class="fap-train-price">${fmtMoney(t.prices['2e'])}${I('chevron-right')}</span></button>`).join('')}
  </div>`
 }
 function fapSeatScreen(){
  const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train);
  const taken=[2,6,11,14,19];
- return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="results">${I('arrow-left')}</button><b>${t.code} · choisir une place</b></div>
-  <div class="fap-seatgrid">${Array.from({length:24},(_,i)=>`<button class="fap-seat ${taken.includes(i)?'taken':fap.seat===i?'picked':''}" ${taken.includes(i)?'disabled':''} data-fap-seat="${i}">${i+1}</button>`).join('')}</div>
+ const cell=i=>`<button class="fap-seat ${taken.includes(i)?'taken':fap.seat===i?'picked':''}" ${taken.includes(i)?'disabled':''} data-fap-seat="${i}">${i+1}</button>`;
+ let rows='';
+ for(let r=0;r<6;r++){
+  const base=r*4;
+  rows+=`<div class="fap-seat-row"><span class="fap-seat-num">${r+1}</span>${cell(base)}${cell(base+1)}<span></span>${cell(base+2)}${cell(base+3)}</div>`
+ }
+ return `<div class="fap-list fap-seatscreen"><div class="fap-list-head"><button class="fap-back" data-fap-back="results">${I('arrow-left')}</button><b>Choisir une place</b></div>
+  <div class="fap-route-card">
+   <div class="fap-route-top"><div><b>${fap.o}</b><small>${stName(fap.o)}</small></div><span class="fap-route-dur">${I('train-front')} ${t.code}</span><div><b>${fap.d}</b><small>${stName(fap.d)}</small></div></div>
+  </div>
   <div class="fap-classrow">${CLASSES.map(c=>`<button class="fap-classchip ${fap.cls===c[0]?'active':''}" data-fap-cls="${c[0]}">${c[1]}</button>`).join('')}</div>
-  <button data-fap-next="pay" ${fap.seat==null?'disabled':''}>${I('arrow-right')} Continuer · ${fmtMoney(t.prices[fap.cls||'2e'])}</button>
+  <div class="fap-seat-legend"><span><i class="avail"></i>Disponible</span><span><i class="picked"></i>Sélectionnée</span><span><i class="taken"></i>Vendue</span></div>
+  <div class="fap-seat-table">
+   <div class="fap-seat-colheads"><span></span><span>A</span><span>B</span><span></span><span>C</span><span>D</span></div>
+   ${rows}
+  </div>
+  <div class="fap-seat-summary"><div><small>Votre place</small><b>${fap.seat==null?'—':clsLabel(fap.cls||'2e')+' · '+(fap.seat+1)}</b></div><div><small>Prix total</small><b>${fmtMoney(t.prices[fap.cls||'2e'])}</b></div></div>
+  <button class="fap-cta" data-fap-next="pay" ${fap.seat==null?'disabled':''}>${I('arrow-right')} Continuer</button>
  </div>`
 }
 function fapPayForm(pay){
@@ -326,23 +345,41 @@ function fapPayForm(pay){
 function fapPayScreen(){
  const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train);
  const amount=t.prices[fap.cls||'2e'];
- return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="seat">${I('arrow-left')}</button><b>Paiement · ${fmtMoney(amount)}</b></div>
+ return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="seat">${I('arrow-left')}</button><b>Paiement</b></div>
+  <div class="fap-amount-card"><small>Montant à régler</small><b>${fmtMoney(amount)}</b></div>
   <div class="fap-paygrid">${PAYMENTS.map(p=>`<button class="fap-pay ${fap.pay===p[0]?'active':''}" data-fap-pay="${p[0]}" style="--c:${p[3]}"><i>${esc(p[1][0])}</i><b>${esc(p[1])}</b><small>${esc(p[2])}</small></button>`).join('')}</div>
   ${fap.pay?fapPayForm(fap.pay):''}
-  <button data-fap-confirm ${fap.pay?'':'disabled'}>${I('lock')} Payer ${fmtMoney(amount)}</button>
+  <button class="fap-cta" data-fap-confirm ${fap.pay?'':'disabled'}>${I('lock')} Payer ${fmtMoney(amount)}</button>
  </div>`
 }
 function fapTicketScreen(){
  const t=fapTrainsFor(fap.o,fap.d).find(x=>x.code===fap.train),r=fap.lastRec;
- return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('check-circle-2')}</span><b>Paiement confirmé</b></div>
-  <div class="fap-ticket-card">
-   <div class="fap-ticket-route"><b>${stName(fap.o)}</b>${I('arrow-right')}<b>${stName(fap.d)}</b></div>
-   <div class="fap-ticket-qr">${qr(r.id)}</div>
-   <div class="fap-ticket-grid"><span><small>Train</small><b>${t.code}</b></span><span><small>Classe</small><b>${clsLabel(fap.cls||'2e')}</b></span><span><small>Place</small><b>${(fap.seat??0)+1}</b></span><span><small>Montant</small><b>${fmtMoney(r.amount)}</b></span></div>
-   <small class="fap-ticket-id">${r.id}</small>
+ return `<div class="fap-boardingpass">
+  <div class="fap-bp-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Titre de transport</b><span class="fap-bp-share">${I('share-2')}</span></div>
+  <div class="fap-bp-card">
+   <div class="fap-bp-route">
+    <div><b>${fap.o}</b><small>${stName(fap.o)}</small></div>
+    <span class="fap-bp-dur">${I('train-front')} ${t.code}</span>
+    <div><b>${fap.d}</b><small>${stName(fap.d)}</small></div>
+   </div>
+   <div class="fap-bp-times">
+    <div><small>Départ</small><b>${t.depart}</b></div>
+    <div><small>Arrivée</small><b>${t.arrive}</b></div>
+   </div>
+   <button class="fap-bp-journey" data-fap-manage="journey">${I('route')} Voir le trajet</button>
+   <div class="fap-bp-rows">
+    <div class="fap-bp-row"><small>Classe</small><b>${clsLabel(fap.cls||'2e')}</b>${I('chevron-right')}</div>
+    <div class="fap-bp-row"><small>Place</small><b>N° ${(fap.seat??0)+1}</b>${I('chevron-right')}</div>
+   </div>
+   <div class="fap-bp-manage">
+    <b>Gérer ma réservation</b>
+    <button class="fap-manage-row" data-fap-manage="date"><span>${I('calendar-clock')}</span><b>Changer la date et l'heure</b>${I('chevron-right')}</button>
+    <button class="fap-manage-row" data-fap-manage="receipt"><span>${I('receipt')}</span><b>Reçu de paiement</b>${I('chevron-right')}</button>
+    <button class="fap-manage-row" data-fap-manage="refund"><span>${I('rotate-ccw')}</span><b>Remboursement</b>${I('chevron-right')}</button>
+   </div>
+   <button class="fap-cta" data-fap-wallet-open="last">${I('qr-code')} Afficher le QR / code-barres</button>
   </div>
-  <button data-fap-wallet-open="last">${I('wallet')} Voir dans mon portefeuille</button>
-  <button class="ghost" data-fap-back="home">${I('rotate-ccw')} Nouvel achat</button>
+  <button class="fap-ghost-btn" data-fap-back="home">${I('plus')} Nouvel achat</button>
  </div>`
 }
 function fapServicesScreen(){
@@ -377,9 +414,16 @@ function fapWalletDetailScreen(){
  if(!r)return fapWalletScreen();
  const live=r.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id):null;
  const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[])]:r.fields;
- return `<div class="fap-list"><div class="fap-list-head"><button class="fap-back" data-fap-back="${esc(fap.walletBack||'wallet')}">${I('arrow-left')}</button><b>${esc(r.brand)}</b></div>
+ const routeParts=r.kind==='billet'&&/→/.test(r.code)?r.code.split('→').map(s=>s.trim()):null;
+ return `<div class="fap-list fap-ticketdetail"><div class="fap-list-head"><button class="fap-back" data-fap-back="${esc(fap.walletBack||'wallet')}">${I('arrow-left')}</button><b>Détail du titre</b><span class="fap-bp-share">${I('share-2')}</span></div>
   ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span><b class="fap-track-live">${I('radio')} en direct</b></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p><div class="fap-track-position"><i>${I('map-pin')}</i><span>${esc(fosPositionLabel(live))}</span></div></div>`:''}
-  <div class="fap-ticket-card"><div class="fap-ticket-qr">${qr(r.id)}</div><div class="fap-ticket-grid">${fields.slice(0,8).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div><small class="fap-ticket-id">${r.id}</small></div>
+  <div class="fap-detail-grid">${fields.slice(0,4).map(f=>`<div class="fap-detail-cell"><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></div>`).join('')}</div>
+  <div class="fap-barcode-card"><div class="fap-barcode"></div><small>Code : ${esc(r.id)}</small></div>
+  ${routeParts?`<b class="fap-itin-title">Itinéraire du train</b><div class="fap-itin">
+   <div class="fap-itin-row"><span class="fap-itin-dot start"></span><div><b>${esc(stName(routeParts[0]))}</b><small>Départ</small></div></div>
+   <div class="fap-itin-line"></div>
+   <div class="fap-itin-row"><span class="fap-itin-dot end"></span><div><b>${esc(stName(routeParts[1]))}</b><small>Arrivée</small></div></div>
+  </div>`:`<div class="fap-ticket-grid" style="margin-top:2px">${fields.slice(4,8).map(f=>`<span><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></span>`).join('')}</div>`}
  </div>`
 }
 function fapTrackingListScreen(){
@@ -426,9 +470,16 @@ function wireFap(){
  const searchBtn=screenEl?.querySelector('[data-fap-search]');
  if(searchBtn)searchBtn.onclick=()=>{
   fap.o=document.getElementById('fapFrom').value;fap.d=document.getElementById('fapTo').value;
+  const dateEl=document.getElementById('fapDate');if(dateEl&&dateEl.value)fap.date=dateEl.value;
   if(fap.o===fap.d){if(typeof toast==='function')toast('Choisissez deux gares différentes');return}
   fap.screen='results';fapPaint()
  };
+ const homeSwap=screenEl?.querySelector('#fapHomeSwap');
+ if(homeSwap)homeSwap.onclick=()=>{const tmp=fap.o;fap.o=fap.d;fap.d=tmp;fapPaint()};
+ screenEl?.querySelectorAll('[data-fap-manage]').forEach(b=>b.onclick=()=>{
+  const msg={journey:'Trajet détaillé affiché',date:'Modification de date bientôt disponible',receipt:'Reçu de paiement envoyé par e-mail',refund:'Demande de remboursement transmise à SETRAG'}[b.dataset.fapManage]||'Action effectuée';
+  if(typeof toast==='function')toast(msg)
+ });
  document.querySelectorAll('[data-fap-choose]').forEach(b=>b.onclick=()=>{fap.train=b.dataset.fapChoose;fap.seat=null;fap.screen='seat';fapPaint()});
  document.querySelectorAll('[data-fap-seat]').forEach(b=>b.onclick=()=>{fap.seat=+b.dataset.fapSeat;fapPaint()});
  document.querySelectorAll('[data-fap-cls]').forEach(b=>b.onclick=()=>{fap.cls=b.dataset.fapCls;fapPaint()});
