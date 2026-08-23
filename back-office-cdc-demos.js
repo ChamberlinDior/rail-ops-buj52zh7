@@ -538,7 +538,7 @@ function agqSeed(){
  }
  return q
 }
-function agqStatusLabel(s){return{nouvelle:'Demande reçue',prise_en_charge:'Prise en charge',complement:'Complément requis',controle:'Contrôle physique requis',validee:'Validée',confirmee:'Confirmée',rejetee:'Rejetée'}[s]||s}
+function agqStatusLabel(s){return{nouvelle:'Demande reçue',prise_en_charge:'Prise en charge',complement:'Complément requis',controle:'Contrôle physique requis',validee:'Paiement requis',confirmee:'Paiement confirmé',rejetee:'Rejetée'}[s]||s}
 function agqFieldVal(r,part){const f=(r.fields||[]).find(x=>x[0].toLowerCase().includes(part.toLowerCase()));return f?f[1]:null}
 function agqStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4}[status]??0}
 function agqPricing(r){
@@ -561,7 +561,7 @@ function agqPricing(r){
  if(r.kind==='messagerie')return{montant:1500,detail:'Pli standard · régime voyageurs',code:'MSG-01'};
  return{montant:0,detail:'',code:'—'}
 }
-const AGQ_OPEN=['nouvelle','prise_en_charge','controle','complement'];
+const AGQ_OPEN=['nouvelle','prise_en_charge','controle','complement','validee'];
 function agqRowHtml(r){
  return `<div class="agq-row" data-agq-ref="${esc(r.ref)}"><div class="agq-icon">${I(AGQ_ICON[r.kind]||'file-text')}</div><div class="agq-main"><b>${esc(r.service)} · ${esc(r.ref)}</b><span>${esc(r.summary)}</span></div><div class="agq-meta"><small>Reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</small><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div><div class="agq-actions row-actions">${
   r.status==='nouvelle'?`<button data-agq-act="treat">Prendre en charge</button>`:
@@ -700,7 +700,6 @@ function agtReviewScreen(r,pricing){
   <div class="agt-calc"><div><small>Tarif</small><b>${esc(pricing.code)}</b></div><div><small>Base</small><b>${esc(pricing.detail)}</b></div><div><small>Montant estimé</small><b>${fmt(pricing.montant)} FCFA</b></div></div>
   <div class="agt-form-row">
    <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
-   ${finalStep?`<label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>`:''}
   </div>
   ${finalStep?'':`<div class="agt-form-row"><label>Date limite de convocation<input type="date" id="agtConvocationDate" value="${r.convocationDate||addDaysISO(3)}"></label></div>`}
   <div class="agt-actions">
@@ -721,7 +720,6 @@ function agtFuneralReviewScreen(r){
   ${allOk?'':`<p class="agt-doc-warn">${I('triangle-alert')} Tous les documents doivent être vérifiés avant de valider le dossier.</p>`}
   <div class="agt-form-row">
    <label>Agent affecté<select id="agtAgent">${AGT_AGENTS.map(a=>`<option${a===(r.agent||AGT_AGENTS[0])?' selected':''}>${a}</option>`).join('')}</select></label>
-   <label>Moyen de paiement<select id="agtPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label>
   </div>
   <div class="agt-form-row"><label>Date de convocation confirmée<input type="date" id="agtConvocationDate" value="${r.convocationDate||addDaysISO(5)}"></label></div>
   <div class="agt-actions">
@@ -744,8 +742,7 @@ function agtControlScreen(r,pricing){
    <label>${isTaa?'Tonnage contrôlé (t)':'Poids contrôlé (kg)'}<input type="number" step="${isTaa?'0.1':'1'}" id="agtCtrlPoids" placeholder="${esc(declared)}"></label>
   </div>
   <div class="agt-calc" id="agtCtrlCalc"><div><small>Écart</small><b>—</b></div><div><small>Nouveau tarif</small><b>Renseignez le contrôle</b></div></div>
-  <div class="agt-form-row"><label>Moyen de paiement<select id="agtCtrlPay">${AGT_PAYMENTS.map(p=>`<option>${p}</option>`).join('')}</select></label></div>
-  <div class="agt-actions"><button class="primary" data-agt-control-validate="${esc(r.ref)}">${I('scale')} Valider la pesée et encaisser</button></div>
+  <div class="agt-actions"><button class="primary" data-agt-control-validate="${esc(r.ref)}">${I('scale')} Valider la pesée → paiement</button></div>
  </div>`
 }
 function agtComplementScreen(r){
@@ -756,13 +753,30 @@ function agtComplementScreen(r){
   <div class="agt-actions"><button class="primary" data-agt-complement-received="${esc(r.ref)}">${I('inbox')} Informations reçues · revenir à la vérification</button></div>
  </div>`
 }
+function agtPaymentScreen(r,pricing){
+ return `<div class="agt-detail agt-payment-step">
+  <div class="agt-detail-head"><div><b>${I('credit-card')} Paiement · ${esc(r.service)}</b><span>${esc(r.ref)} · contrôle métier terminé</span></div><span class="agq-status validee">Paiement requis</span></div>
+  ${agtTrackingHtml(r)}
+  <div class="agt-payment-gate"><i>${I('lock-keyhole')}</i><div><b>Émission du document verrouillée</b><span>Le bordereau ne sera généré qu’après confirmation de la transaction.</span></div></div>
+  <div class="agt-bag-summary">
+   <div><small>Opération</small><b>${esc(r.ref)}</b></div>
+   <div><small>Code tarifaire</small><b>${esc(pricing.code)}</b></div>
+   <div><small>Base tarifaire</small><b>${esc(pricing.detail)}</b></div>
+   <div><small>Total TTC</small><b>${fmt(pricing.montant)} FCFA</b></div>
+  </div>
+  <div class="agt-form-row"><label>Moyen de paiement<select id="agtRequestPay">${AGT_PAYMENTS.map(p=>`<option${p===(r.payMethod||AGT_PAYMENTS[0])?' selected':''}>${p}</option>`).join('')}</select></label><label>Montant à encaisser<input value="${fmt(pricing.montant)} FCFA" disabled></label></div>
+  <label class="agt-payment-consent"><input type="checkbox" id="agtPaymentConsent"> <span>Je confirme avoir reçu et vérifié le paiement de <b>${fmt(pricing.montant)} FCFA</b>.</span></label>
+  <div class="agt-actions"><button class="primary" data-agt-payment-confirm="${esc(r.ref)}" disabled>${I('badge-check')} Confirmer le paiement et générer le document</button></div>
+ </div>`
+}
 function agtRequestDetailHtml(){
  const q=agqSeed();
  const r=q.find(x=>x.ref===agt.selected)||q.find(x=>AGQ_OPEN.includes(x.status))||q[0];
  if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
  agt.selected=r.ref;
  const pricing=agqPricing(r);
- if(r.status==='confirmee'||r.status==='validee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+ if(r.status==='confirmee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+ if(r.status==='validee')return agtPaymentScreen(r,pricing);
  if(r.status==='complement')return agtComplementScreen(r);
  if(r.status==='controle')return agtControlScreen(r,pricing);
  if(r.status==='nouvelle')return agtNouvelleScreen(r);
@@ -850,7 +864,7 @@ function agtDetailHtml(){
 }
 function agtStatsHtml(){
  const q=agqSeed();
- const aTraiter=q.filter(x=>AGQ_OPEN.includes(x.status)).length,traitees=q.filter(x=>x.status==='confirmee'||x.status==='validee').length;
+ const aTraiter=q.filter(x=>AGQ_OPEN.includes(x.status)).length,traitees=q.filter(x=>x.status==='confirmee').length;
  return[['Ventes guichet',agtGuichetCount],['Demandes à traiter',aTraiter],['Demandes traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
 }
 function agtPaint(){
@@ -942,13 +956,9 @@ function wireAgt(){
   const dateInp=document.getElementById('agtConvocationDate');
   if(dateInp)r.convocationDate=dateInp.value;
   if(r.kind==='messagerie'||r.kind==='funeraire'){
-   r.payMethod=document.getElementById('agtPay')?.value||'Espèces';
-   r.status='confirmee';
-   r.processedAt=ctrNow();
-   const pricing=agqPricing(r);
-   toastMsg(r.kind==='funeraire'?`${ref} validé · rendez-vous confirmé le ${fmtDateFR(r.convocationDate)} · client notifié par SMS`:`${ref} validé · document généré · client notifié par SMS`);
-   agtPaint();agqRefresh();
-   setragPrint('agtPrinter',agtReceiptLines(r,pricing))
+   r.status='validee';
+   toastMsg(r.kind==='funeraire'?`${ref} validé · rendez-vous confirmé le ${fmtDateFR(r.convocationDate)} · paiement requis`:`${ref} validé · paiement requis avant émission du document`);
+   agtPaint();agqRefresh()
   }else{
    r.status='controle';
    toastMsg(`${ref} validé pour contrôle physique · convocation avant le ${fmtDateFR(r.convocationDate)}`);
@@ -974,12 +984,20 @@ function wireAgt(){
   const declared=+(r.kind==='taa'?(agqFieldVal(r,'tonnage')||0):(agqFieldVal(r,'poids')||0));
   r.poidsControle=inp&&inp.value!==''?+inp.value:declared;
   const pricing=agqPricing(r);
-  r.payMethod=document.getElementById('agtCtrlPay')?.value||'Espèces';
-  r.status='confirmee';
-  r.processedAt=ctrNow();
-  toastMsg(`${ref} pesée validée · ${fmt(pricing.montant)} FCFA encaissés`);
-  agtPaint();agqRefresh();
-  setragPrint('agtPrinter',agtReceiptLines(r,pricing))
+  r.status='validee';
+  toastMsg(`${ref} · contrôle validé · paiement de ${fmt(pricing.montant)} FCFA requis avant émission`);
+  agtPaint();agqRefresh()
+ };
+ const paymentConsent=panel?.querySelector('#agtPaymentConsent');
+ const paymentConfirm=panel?.querySelector('[data-agt-payment-confirm]');
+ if(paymentConsent&&paymentConfirm)paymentConsent.onchange=()=>{paymentConfirm.disabled=!paymentConsent.checked};
+ if(paymentConfirm)paymentConfirm.onclick=()=>{
+  const ref=paymentConfirm.dataset.agtPaymentConfirm,r=agqSeed().find(x=>x.ref===ref);
+  if(!r||!paymentConsent?.checked)return;
+  const pricing=agqPricing(r),method=document.getElementById('agtRequestPay')?.value||AGT_PAYMENTS[0];
+  r.payMethod=method;r.paymentRef=`PAY-${Date.now().toString().slice(-8)}`;r.paymentStatus='confirme';r.status='confirmee';r.processedAt=ctrNow();
+  toastMsg(`${ref} · paiement confirmé (${r.paymentRef}) · document généré`);
+  agtPaint();agqRefresh();setragPrint('agtPrinter',agtReceiptLines(r,pricing))
  };
  const tCls=document.getElementById('agtTCls');
  if(tCls)tCls.onchange=()=>{
