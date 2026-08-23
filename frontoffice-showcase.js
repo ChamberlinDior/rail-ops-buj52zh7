@@ -221,7 +221,7 @@ function stepsSection(){
 }
 
 /* ---------- interactive mobile app phone ---------- */
-let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',date:'2026-08-22',roundTrip:false,train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
+let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',date:'2026-08-22',returnDate:'2026-08-25',roundTrip:false,train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
 function fapGaugeSvg(progress,tickProgress,tickLabel){
  const rad=d=>d*Math.PI/180;
  const pt=(p,r)=>{const a=180-180*p;return[100+r*Math.cos(rad(a)),100-r*Math.sin(rad(a))]};
@@ -316,8 +316,9 @@ function fapHomeScreen(){
    <div class="fap-metric"><small>${I('map-pin')} Arrivée</small><b>${fap.d}</b><em>${stName(fap.d)}</em><select id="fapTo" aria-label="Gare d’arrivée">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></div>
    <button class="fap-swap-btn" type="button" id="fapHomeSwap" title="Inverser">${I('repeat')}</button>
   </div>
-  <div class="fap-daterow"><span>${I('calendar')} Date</span><span class="fap-lcd">${fmtDate(fap.date)}</span><input type="date" id="fapDate" value="${fap.date}" aria-label="Date de voyage"></div>
+  <div class="fap-daterow"><span>${I('calendar')} Date${fap.roundTrip?' aller':''}</span><span class="fap-lcd">${fmtDate(fap.date)}</span><input type="date" id="fapDate" value="${fap.date}" aria-label="Date de voyage"></div>
   <div class="fap-toggle-row"><span>Aller-retour</span><button type="button" class="fap-toggle ${fap.roundTrip?'on':''}" id="fapRoundTrip">${fap.roundTrip?'Oui':'Non'}<i></i></button></div>
+  ${fap.roundTrip?`<div class="fap-daterow"><span>${I('calendar')} Date retour</span><span class="fap-lcd">${fmtDate(fap.returnDate)}</span><input type="date" id="fapReturnDate" value="${fap.returnDate}" aria-label="Date de retour"></div>`:''}
   <button class="fap-cta" data-fap-search>${I('search')} Rechercher un billet</button>
   <div class="fap-iconrow">
    ${SERVICES.filter(s=>s.id!=='ticket').slice(0,3).map(s=>`<button class="fap-iconbtn" data-fap-svc-quick="${s.id}"><span>${I(s.icon)}</span><small>${esc(s.title.split(' ')[0])}</small></button>`).join('')}
@@ -393,6 +394,8 @@ function fapTicketScreen(){
     <span class="fap-gauge-label right">Arrivée</span>
    </div>
    <button class="fap-bp-journey" data-fap-manage="journey">${I('route')} Voir le trajet</button>
+  </div>
+  <div class="fap-bp-card">
    <div class="fap-bp-rows">
     <div class="fap-bp-row"><small>Classe</small><b>${clsLabel(fap.cls||'2e')}</b>${I('chevron-right')}</div>
     <div class="fap-bp-row"><small>Place</small><b>N° ${(fap.seat??0)+1}</b>${I('chevron-right')}</div>
@@ -403,9 +406,9 @@ function fapTicketScreen(){
     <button class="fap-manage-row" data-fap-manage="receipt"><span>${I('receipt')}</span><b>Reçu de paiement</b>${I('chevron-right')}</button>
     <button class="fap-manage-row" data-fap-manage="refund"><span>${I('rotate-ccw')}</span><b>Remboursement</b>${I('chevron-right')}</button>
    </div>
-   <button class="fap-cta" data-fap-wallet-open="last">${I('qr-code')} Afficher le QR / code-barres</button>
   </div>
-  <button class="fap-ghost-btn" data-fap-back="home">${I('plus')} Nouvel achat</button>
+  <button class="fap-cta" data-fap-wallet-open="ticket">${I('qr-code')} Afficher le QR / code-barres</button>
+  <button class="fap-ghost-btn" data-fap-reset-home>${I('plus')} Nouvel achat</button>
  </div>`
 }
 function fapServicesScreen(){
@@ -425,7 +428,7 @@ function fapSvcDoneScreen(){
  return `<div class="fap-ticket"><div class="fap-ticket-head"><span>${I('send')}</span><b>Demande envoyée</b></div>
   <p class="fap-svc-pending">${I('info')} En attente de validation par un agent SETRAG. Vous serez notifié par SMS dès que votre dossier ${esc(r.id)} sera examiné.</p>
   <div class="fap-ticket-card"><div class="fap-ticket-route"><b>${esc(r.title)}</b></div><div class="fap-ticket-qr">${qr(r.id)}</div><small class="fap-ticket-id">${r.id}</small></div>
-  <button data-fap-wallet-open="last">${I('wallet')} Suivre ma demande</button>
+  <button data-fap-wallet-open="tracking">${I('wallet')} Suivre ma demande</button>
   <button class="ghost" data-fap-back="home">${I('arrow-left')} Retour à l’accueil</button>
  </div>`
 }
@@ -493,11 +496,17 @@ function wireFap(){
  document.querySelectorAll('[data-fap-nav]').forEach(b=>b.onclick=()=>{const k=b.dataset.fapNav;fap.screen=k;fapPaint()});
  document.querySelectorAll('[data-fap-back]').forEach(b=>b.onclick=()=>{fap.screen=b.dataset.fapBack;fapPaint()});
  const screenEl=document.getElementById('fapScreen');
+ const fromSel=screenEl?.querySelector('#fapFrom'),toSel=screenEl?.querySelector('#fapTo');
+ if(fromSel)fromSel.onchange=()=>{fap.o=fromSel.value;fapPaint()};
+ if(toSel)toSel.onchange=()=>{fap.d=toSel.value;fapPaint()};
+ const dateInput=screenEl?.querySelector('#fapDate');
+ if(dateInput)dateInput.onchange=()=>{if(dateInput.value)fap.date=dateInput.value;fapPaint()};
+ const returnDateInput=screenEl?.querySelector('#fapReturnDate');
+ if(returnDateInput)returnDateInput.onchange=()=>{if(returnDateInput.value)fap.returnDate=returnDateInput.value;fapPaint()};
  const searchBtn=screenEl?.querySelector('[data-fap-search]');
  if(searchBtn)searchBtn.onclick=()=>{
-  fap.o=document.getElementById('fapFrom').value;fap.d=document.getElementById('fapTo').value;
-  const dateEl=document.getElementById('fapDate');if(dateEl&&dateEl.value)fap.date=dateEl.value;
   if(fap.o===fap.d){if(typeof toast==='function')toast('Choisissez deux gares différentes');return}
+  if(fap.roundTrip&&fap.returnDate<=fap.date){if(typeof toast==='function')toast('La date de retour doit être après la date aller');return}
   fap.screen='results';fapPaint()
  };
  const homeSwap=screenEl?.querySelector('#fapHomeSwap');
@@ -506,9 +515,29 @@ function wireFap(){
  if(roundTrip)roundTrip.onclick=()=>{fap.roundTrip=!fap.roundTrip;fapPaint()};
  screenEl?.querySelectorAll('[data-fap-svc-quick]').forEach(b=>b.onclick=()=>{fap.svc=b.dataset.fapSvcQuick;fap.screen='svcform';fapPaint()});
  screenEl?.querySelectorAll('[data-fap-manage]').forEach(b=>b.onclick=()=>{
-  const msg={journey:'Trajet détaillé affiché',date:'Modification de date bientôt disponible',receipt:'Reçu de paiement envoyé par e-mail',refund:'Demande de remboursement transmise à SETRAG'}[b.dataset.fapManage]||'Action effectuée';
-  if(typeof toast==='function')toast(msg)
+  const action=b.dataset.fapManage;
+  if(action==='journey'||action==='receipt'){
+   fap.walletIdx=0;fap.walletBack='ticket';fap.screen='walletdetail';fapPaint();
+   if(typeof toast==='function')toast(action==='journey'?'Détail du trajet':'Reçu de paiement affiché');
+   return;
+  }
+  if(action==='date'){
+   fap.train=null;fap.seat=null;fap.pay=null;fap.screen='home';fapPaint();
+   if(typeof toast==='function')toast('Modifiez la date puis relancez la recherche');
+   return;
+  }
+  if(action==='refund'){
+   const id=fap.lastRec&&fap.lastRec.id;
+   const idx=WALLET.findIndex(x=>x.id===id);
+   if(idx>-1)WALLET.splice(idx,1);
+   updateWalletBadge();
+   fap.train=null;fap.seat=null;fap.pay=null;fap.lastRec=null;fap.screen='home';fapPaint();
+   if(typeof toast==='function')toast('Billet remboursé · montant recrédité sous 48h');
+   return;
+  }
  });
+ const resetBtn=screenEl?.querySelector('[data-fap-reset-home]');
+ if(resetBtn)resetBtn.onclick=()=>{fap.train=null;fap.seat=null;fap.pay=null;fap.lastRec=null;fap.screen='home';fapPaint()};
  document.querySelectorAll('[data-fap-choose]').forEach(b=>b.onclick=()=>{fap.train=b.dataset.fapChoose;fap.seat=null;fap.screen='seat';fapPaint()});
  document.querySelectorAll('[data-fap-seat]').forEach(b=>b.onclick=()=>{fap.seat=+b.dataset.fapSeat;fapPaint()});
  document.querySelectorAll('[data-fap-cls]').forEach(b=>b.onclick=()=>{fap.cls=b.dataset.fapCls;fapPaint()});
@@ -546,7 +575,7 @@ function wireFap(){
   if(typeof toast==='function')toast('Demande envoyée · en attente de validation par SETRAG')
  };
  document.querySelectorAll('[data-fap-wallet]').forEach(b=>b.onclick=()=>{fap.walletIdx=+b.dataset.fapWallet;fap.walletBack='wallet';fap.screen='walletdetail';fapPaint()});
- document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.walletBack='tracking';fap.screen='walletdetail';fapPaint()});
+ document.querySelectorAll('[data-fap-wallet-open]').forEach(b=>b.onclick=()=>{fap.walletIdx=0;fap.walletBack=b.dataset.fapWalletOpen||'wallet';fap.screen='walletdetail';fapPaint()});
  document.querySelectorAll('[data-fap-track-open]').forEach(b=>b.onclick=()=>{const idx=WALLET.findIndex(x=>x.id===b.dataset.fapTrackOpen);if(idx>=0){fap.walletIdx=idx;fap.walletBack='tracking';fap.screen='walletdetail';fapPaint()}});
  document.querySelectorAll('[data-fap-notif-open]').forEach(b=>b.onclick=()=>{const idx=WALLET.findIndex(x=>x.id===b.dataset.fapNotifOpen);if(idx>=0){fap.walletIdx=idx;fap.walletBack='notifs';fap.screen='walletdetail';fapPaint()}});
  document.querySelectorAll('[data-fap-bell]').forEach(b=>b.onclick=()=>{fap.notifUnread=0;fap.screen='notifs';fapPaint()});
