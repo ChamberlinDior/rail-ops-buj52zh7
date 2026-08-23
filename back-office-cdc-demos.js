@@ -603,7 +603,7 @@ function agentQueueSection(){
 }
 
 /* ---------- Part 3b : tablette caissier · application vendeur Front Office ---------- */
-let agt={mode:'sale',selected:null,svc:'billet',ticketCls:null,lastSale:null,lastSalePricing:null};
+let agt={mode:'sale',selected:null,svc:'billet',ticketCls:null,lastSale:null,lastSalePricing:null,saleStep:1,saleDraft:{}};
 let agtGuichetCount=0;
 const AGT_STATIONS=[['OWE','Owendo'],['NTM','N’Toum'],['NDJ','Ndjolé'],['LOP','Lopé'],['BOU','Booué'],['LAS','Lastourville'],['MOA','Moanda'],['FCV','Franceville']];
 const AGT_TRAINS=[['EXP-620','EXPRESS · 07:30'],['OMN-624','OMNIBUS · 11:20'],['SPE-551','SPÉCIAL · 14:00']];
@@ -797,6 +797,7 @@ function agtTicketFormHtml(){
  </div>`
 }
 function agtGenericSaleFormHtml(){
+ if(agt.svc==='bagage')return agtBaggageWizardHtml();
  const svc=AGT_SALE_SERVICES.find(s=>s[0]===agt.svc);
  const cfg=AGT_SVC_FIELDS[agt.svc]||[];
  return `<div class="agt-detail">
@@ -807,12 +808,36 @@ function agtGenericSaleFormHtml(){
   <div class="agt-actions"><button class="primary" data-agt-sale-confirm>${I('printer')} Encaisser et imprimer</button></div>
  </div>`
 }
+const AGT_BAG_STEPS=['Billet voyageur','Trajet','Pesée physique','Tarif et paiement','Confirmation','Étiquette'];
+function agtBagStepBar(){
+ return `<div class="agt-bag-steps">${AGT_BAG_STEPS.map((label,i)=>{const n=i+1,cls=n<agt.saleStep?'done':n===agt.saleStep?'active':'';return `<div class="${cls}"><i>${n<agt.saleStep?I('check'):n}</i><span>${esc(label)}</span></div>`}).join('')}</div>`
+}
+function agtBagSummary(d,pricing){
+ return `<div class="agt-bag-summary">
+  <div><small>Billet lié</small><b>${esc(d.ticket||'—')}</b></div>
+  <div><small>Trajet</small><b>${esc(d.from||'—')} → ${esc(d.to||'—')}</b></div>
+  <div><small>Poids contrôlé</small><b>${d.weight?esc(d.weight)+' kg':'—'}</b></div>
+  <div><small>Montant TTC</small><b>${pricing?fmt(pricing.montant)+' FCFA':'—'}</b></div>
+ </div>`
+}
+function agtBaggageWizardHtml(){
+ const d=agt.saleDraft||{},step=agt.saleStep||1;
+ const fields=[['Numéro de billet voyageur',d.ticket||''],['Poids contrôlé (kg)',d.weight||''],['Gare de départ',d.from||''],['Gare d’arrivée',d.to||'']];
+ const pricing=d.weight?agqPricing({kind:'bagage',poidsControle:+d.weight,fields}):null;
+ let body='';
+ if(step===1)body=`<p class="agt-review-note">${I('ticket-check')} Commencez par retrouver et vérifier le titre de transport du voyageur. Aucune étiquette ne peut être créée sans billet valide.</p><label>Numéro de billet voyageur<input id="agtBagTicket" value="${esc(d.ticket||'')}" placeholder="SET-260823-0000" autocomplete="off"></label><div class="agt-bag-validation ${d.ticketVerified?'ok':''}">${d.ticketVerified?I('badge-check')+' Billet valide · voyageur identifié · trajet accessible':I('info')+' Saisissez une référence SET valide puis vérifiez-la.'}</div>`;
+ if(step===2)body=`<p class="agt-review-note">${I('route')} Confirmez le trajet associé au bagage. Le départ et l’arrivée doivent être différents.</p><div class="agt-form-row"><label>Gare de départ<select id="agtBagFrom">${AGT_STATIONS.map(s=>`<option${s[1]===d.from?' selected':''}>${s[1]}</option>`).join('')}</select></label><label>Gare d’arrivée<select id="agtBagTo">${AGT_STATIONS.map((s,i)=>`<option${s[1]===(d.to||'Franceville')?' selected':''}>${s[1]}</option>`).join('')}</select></label></div>`;
+ if(step===3)body=`<p class="agt-review-note">${I('scale')} Posez le bagage sur la balance et saisissez uniquement le poids réellement contrôlé. Cette étape ne produit aucun document.</p><label>Poids contrôlé (kg)<input type="number" min="0.1" max="100" step="0.1" id="agtBagWeight" value="${esc(d.weight||'')}" placeholder="Ex. 18"></label><div class="agt-bag-validation">${I('shield-check')} Pesée physique obligatoire · valeur journalisée avec l’agent et le terminal.</div>`;
+ if(step===4)body=`<p class="agt-review-note">${I('calculator')} Vérifiez le tarif calculé avant l’encaissement.</p>${agtBagSummary(d,pricing)}<div class="agt-calc"><div><small>Code tarifaire</small><b>${pricing?esc(pricing.code):'—'}</b></div><div><small>Règle appliquée</small><b>${pricing?esc(pricing.detail):'—'}</b></div><div><small>Montant TTC</small><b>${pricing?fmt(pricing.montant)+' FCFA':'—'}</b></div></div><div class="agt-form-row"><label>Moyen de paiement<select id="agtBagPay">${AGT_PAYMENTS.map(p=>`<option${p===(d.pay||AGT_PAYMENTS[0])?' selected':''}>${p}</option>`).join('')}</select></label></div>`;
+ if(step===5)body=`<p class="agt-review-note">${I('clipboard-check')} Contrôle final : confirmez les données et l’encaissement. L’étiquette sera générée seulement après cette validation explicite.</p>${agtBagSummary(d,pricing)}<div class="agt-bag-checks"><span>${I('check')} Billet vérifié</span><span>${I('check')} Trajet confirmé</span><span>${I('check')} Poids contrôlé</span><span>${I('check')} Tarif accepté</span><span>${I('check')} Paiement prêt</span></div>`;
+ return `<div class="agt-detail agt-bag-wizard"><div class="agt-detail-head"><div><b>${I('luggage')} Enregistrement d’un bagage</b><span>Parcours obligatoire · émission sécurisée après paiement</span></div><em>Étape ${step} sur 6</em></div>${agtBagStepBar()}${body}<div class="agt-actions">${step>1?`<button class="ghost" data-agt-bag-prev>${I('arrow-left')} Retour</button>`:''}<button class="primary" data-agt-bag-next>${step===5?I('badge-check')+' Encaisser et générer l’étiquette':'Continuer '+I('arrow-right')}</button></div></div>`
+}
 function agtCollectSaleFields(){
  const cfg=AGT_SVC_FIELDS[agt.svc]||[];
  return cfg.map((f,i)=>{const el=document.getElementById(`agtSaleF${i}`);return[f[0],(el&&el.value.trim())||f[1]||'—']})
 }
 function agtSaleDocHtml(r,pricing){
- return `<div class="agt-doc-pro">${agtProDoc(r,pricing)}
+ return `<div class="agt-doc-pro">${r.kind==='bagage'?`<div class="agt-bag-complete">${I('circle-check-big')}<div><b>Parcours bagage terminé</b><span>Billet, trajet, pesée, tarif et paiement validés · étiquette désormais disponible</span></div></div>${agtBagStepBar()}`:''}${agtProDoc(r,pricing)}
   <div class="agt-actions" style="margin-top:12px"><button class="ghost" data-agt-print>${I('printer')} Imprimer</button><button class="primary" data-agt-new-sale>${I('plus')} Nouvelle vente</button></div>
  </div>`
 }
@@ -840,10 +865,35 @@ function agtPaint(){
  wireAgt()
 }
 function wireAgt(){
- document.querySelectorAll('[data-agt-mode]').forEach(b=>b.onclick=()=>{agt.mode=b.dataset.agtMode;agt.lastSale=null;agtPaint()});
+ document.querySelectorAll('[data-agt-mode]').forEach(b=>b.onclick=()=>{agt.mode=b.dataset.agtMode;agt.lastSale=null;agt.saleStep=1;agt.saleDraft={};agtPaint()});
  document.querySelectorAll('[data-agt-select]').forEach(b=>b.onclick=()=>{agt.selected=b.dataset.agtSelect;agtPaint()});
- document.querySelectorAll('[data-agt-svc]').forEach(b=>b.onclick=()=>{agt.svc=b.dataset.agtSvc;agt.lastSale=null;agtPaint()});
+ document.querySelectorAll('[data-agt-svc]').forEach(b=>b.onclick=()=>{agt.svc=b.dataset.agtSvc;agt.lastSale=null;agt.saleStep=1;agt.saleDraft={};agtPaint()});
  const panel=document.getElementById('agtDetail');
+ const bagPrev=panel?.querySelector('[data-agt-bag-prev]');
+ if(bagPrev)bagPrev.onclick=()=>{agt.saleStep=Math.max(1,agt.saleStep-1);agtPaint()};
+ const bagNext=panel?.querySelector('[data-agt-bag-next]');
+ if(bagNext)bagNext.onclick=()=>{
+  const d=agt.saleDraft||(agt.saleDraft={});
+  if(agt.saleStep===1){
+   d.ticket=(document.getElementById('agtBagTicket')?.value||'').trim().toUpperCase();
+   if(!/^SET-[A-Z0-9-]{6,}$/.test(d.ticket)){toastMsg('Saisissez un numéro de billet SETRAG valide avant de continuer');return}
+   d.ticketVerified=true
+  }else if(agt.saleStep===2){
+   d.from=document.getElementById('agtBagFrom')?.value||'';d.to=document.getElementById('agtBagTo')?.value||'';
+   if(!d.from||!d.to||d.from===d.to){toastMsg('Le départ et l’arrivée doivent être renseignés et différents');return}
+  }else if(agt.saleStep===3){
+   d.weight=(document.getElementById('agtBagWeight')?.value||'').trim();
+   if(!d.weight||+d.weight<=0||+d.weight>100){toastMsg('Saisissez un poids contrôlé compris entre 0,1 et 100 kg');return}
+  }else if(agt.saleStep===4){d.pay=document.getElementById('agtBagPay')?.value||AGT_PAYMENTS[0]}
+  if(agt.saleStep<5){agt.saleStep++;agtPaint();return}
+  const fields=[['Numéro de billet voyageur',d.ticket],['Poids contrôlé (kg)',d.weight],['Gare de départ',d.from],['Gare d’arrivée',d.to]];
+  const pricing=agqPricing({kind:'bagage',poidsControle:+d.weight,fields});
+  const ref=`BAG-${Math.floor(100000+Math.random()*900000)}`;
+  const r={ref,service:'Bagage',kind:'bagage',fields,poidsControle:+d.weight,agent:AGT_AGENTS[0],payMethod:d.pay,processedAt:ctrNow(),journeyComplete:true};
+  agt.lastSale=r;agt.lastSalePricing=pricing;agt.saleStep=6;agtGuichetCount++;
+  toastMsg(`Bagage enregistré · paiement confirmé · étiquette ${ref} générée`);
+  agtPaint();setragPrint('agtPrinter',agtReceiptLines(r,pricing))
+ };
  const takeBtn=panel?.querySelector('[data-agt-take]');
  if(takeBtn)takeBtn.onclick=()=>{
   const ref=takeBtn.dataset.agtTake,r=agqSeed().find(x=>x.ref===ref);
@@ -986,7 +1036,7 @@ function wireAgt(){
   if(agt.lastSale)setragPrint('agtPrinter',agtReceiptLines(agt.lastSale,agt.lastSalePricing));
   toastMsg('Impression envoyée à l’imprimante du poste POS-OW-01')
  });
- document.querySelectorAll('[data-agt-new-sale]').forEach(b=>b.onclick=()=>{agt.lastSale=null;agtPaint()});
+ document.querySelectorAll('[data-agt-new-sale]').forEach(b=>b.onclick=()=>{agt.lastSale=null;agt.saleStep=1;agt.saleDraft={};agtPaint()});
 }
 
 /* ---------- Imprimante thermique partagée : composant + animation ---------- */
