@@ -221,7 +221,21 @@ function stepsSection(){
 }
 
 /* ---------- interactive mobile app phone ---------- */
-let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',date:'2026-08-22',train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
+let fap={screen:'home',o:'OWE',d:'FCV',cls:'2e',date:'2026-08-22',roundTrip:false,train:null,seat:null,pay:null,lastRec:null,svc:null,walletIdx:null,walletBack:'wallet',notifications:[],notifUnread:0,lastKnownStatus:{}};
+function fapGaugeSvg(progress,tickProgress,tickLabel){
+ const rad=d=>d*Math.PI/180;
+ const pt=(p,r)=>{const a=180-180*p;return[100+r*Math.cos(rad(a)),100-r*Math.sin(rad(a))]};
+ const arcs=[88,70,52].map(r=>{const[x1,y1]=pt(0,r),[x2,y2]=pt(1,r);return `<path d="M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="var(--fap-line)" stroke-width="1.5"/>`}).join('');
+ const[nx,ny]=pt(progress,78);
+ const[tx,ty]=pt(tickProgress,88);
+ const[tlx,tly]=pt(tickProgress,99);
+ return `<svg viewBox="0 0 200 108" class="fap-gauge-svg" preserveAspectRatio="xMidYMax meet">
+ ${arcs}
+ <line x1="100" y1="100" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="var(--fap-ink)" stroke-width="2.5" stroke-linecap="round"/>
+ <circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="3" fill="var(--fap-accent)"/>
+ <text x="${tlx.toFixed(1)}" y="${tly.toFixed(1)}" font-size="7" fill="var(--fap-muted)" text-anchor="middle" font-family="Manrope">${esc(tickLabel)}</text>
+ </svg>`
+}
 function fosPositionLabel(r){
  if(!r)return '—';
  const gare=(r.fields||[]).find(f=>/départ/i.test(f[0]));
@@ -297,13 +311,18 @@ function fapHomeScreen(){
  const greet=hr<12?'Bonjour':hr<18?'Bon après-midi':'Bonsoir';
  return `<div class="fap-home">
   <div class="fap-greet"><span>${greet} ${I('sun')}</span><h2>Où voulez-vous aller ?</h2></div>
-  <div class="fap-field-card">
-   <label class="fap-field"><small>Départ</small><select id="fapFrom">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.o?' selected':''}>${s[1]}</option>`).join('')}</select></label>
-   <label class="fap-field"><small>Arrivée</small><select id="fapTo">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></label>
+  <div class="fap-metric-row">
+   <div class="fap-metric"><small>${I('map-pin')} Départ</small><b>${fap.o}</b><em>${stName(fap.o)}</em><select id="fapFrom" aria-label="Gare de départ">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.o?' selected':''}>${s[1]}</option>`).join('')}</select></div>
+   <div class="fap-metric"><small>${I('map-pin')} Arrivée</small><b>${fap.d}</b><em>${stName(fap.d)}</em><select id="fapTo" aria-label="Gare d’arrivée">${STATIONS.map(s=>`<option value="${s[0]}"${s[0]===fap.d?' selected':''}>${s[1]}</option>`).join('')}</select></div>
    <button class="fap-swap-btn" type="button" id="fapHomeSwap" title="Inverser">${I('repeat')}</button>
   </div>
-  <div class="fap-field-card fap-field-card-single"><label class="fap-field"><small>Date</small><input type="date" id="fapDate" value="${fap.date}"></label>${I('calendar')}</div>
+  <div class="fap-daterow"><span>${I('calendar')} Date</span><span class="fap-lcd">${fmtDate(fap.date)}</span><input type="date" id="fapDate" value="${fap.date}" aria-label="Date de voyage"></div>
+  <div class="fap-toggle-row"><span>Aller-retour</span><button type="button" class="fap-toggle ${fap.roundTrip?'on':''}" id="fapRoundTrip">${fap.roundTrip?'Oui':'Non'}<i></i></button></div>
   <button class="fap-cta" data-fap-search>${I('search')} Rechercher un billet</button>
+  <div class="fap-iconrow">
+   ${SERVICES.filter(s=>s.id!=='ticket').slice(0,3).map(s=>`<button class="fap-iconbtn" data-fap-svc-quick="${s.id}"><span>${I(s.icon)}</span><small>${esc(s.title.split(' ')[0])}</small></button>`).join('')}
+   <button class="fap-iconbtn" data-fap-nav="services"><span>${I('grid-2x2')}</span><small>Plus</small></button>
+  </div>
   ${WALLET.length?`<div class="fap-section-head"><b>Billet en cours</b><button class="fap-section-link" data-fap-nav="wallet">Voir tout</button></div><div class="fap-recent">${WALLET.slice(0,2).map((r,i)=>`<button class="fap-recent-row" data-fap-wallet="${i}"><span>${I(kindIcon(r.kind))}</span><div><b>${esc(r.brand)}</b><small>${esc(r.code)}</small></div>${I('chevron-right')}</button>`).join('')}</div>`:`<div class="fap-promo"><span class="fap-promo-badge">${I('shield-check')} Voyage en toute sécurité</span><p>Un seul billet électronique pour tous vos trajets sur le Transgabonais, valable même hors connexion.</p></div>`}
  </div>`
 }
@@ -365,6 +384,13 @@ function fapTicketScreen(){
    <div class="fap-bp-times">
     <div><small>Départ</small><b>${t.depart}</b></div>
     <div><small>Arrivée</small><b>${t.arrive}</b></div>
+   </div>
+   <div class="fap-gauge">
+    ${fapGaugeSvg(0.18,0.08,t.depart)}
+    <div class="fap-gauge-knob">${I('train-front')}</div>
+    <small class="fap-gauge-caption">Trajet</small>
+    <span class="fap-gauge-label left">Départ</span>
+    <span class="fap-gauge-label right">Arrivée</span>
    </div>
    <button class="fap-bp-journey" data-fap-manage="journey">${I('route')} Voir le trajet</button>
    <div class="fap-bp-rows">
@@ -476,6 +502,9 @@ function wireFap(){
  };
  const homeSwap=screenEl?.querySelector('#fapHomeSwap');
  if(homeSwap)homeSwap.onclick=()=>{const tmp=fap.o;fap.o=fap.d;fap.d=tmp;fapPaint()};
+ const roundTrip=screenEl?.querySelector('#fapRoundTrip');
+ if(roundTrip)roundTrip.onclick=()=>{fap.roundTrip=!fap.roundTrip;fapPaint()};
+ screenEl?.querySelectorAll('[data-fap-svc-quick]').forEach(b=>b.onclick=()=>{fap.svc=b.dataset.fapSvcQuick;fap.screen='svcform';fapPaint()});
  screenEl?.querySelectorAll('[data-fap-manage]').forEach(b=>b.onclick=()=>{
   const msg={journey:'Trajet détaillé affiché',date:'Modification de date bientôt disponible',receipt:'Reçu de paiement envoyé par e-mail',refund:'Demande de remboursement transmise à SETRAG'}[b.dataset.fapManage]||'Action effectuée';
   if(typeof toast==='function')toast(msg)
