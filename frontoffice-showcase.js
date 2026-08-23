@@ -499,10 +499,19 @@ function wireFap(){
  const fromSel=screenEl?.querySelector('#fapFrom'),toSel=screenEl?.querySelector('#fapTo');
  if(fromSel)fromSel.onchange=()=>{fap.o=fromSel.value;fapPaint()};
  if(toSel)toSel.onchange=()=>{fap.d=toSel.value;fapPaint()};
+ const openPicker=input=>{try{if(typeof input.showPicker==='function'){input.showPicker()}else{input.focus()}}catch(e){input.focus()}};
  const dateInput=screenEl?.querySelector('#fapDate');
- if(dateInput)dateInput.onchange=()=>{if(dateInput.value)fap.date=dateInput.value;fapPaint()};
+ if(dateInput){
+  dateInput.onchange=()=>{if(dateInput.value)fap.date=dateInput.value;fapPaint()};
+  dateInput.onclick=()=>openPicker(dateInput);
+  dateInput.parentElement.onclick=e=>{if(e.target!==dateInput)openPicker(dateInput)};
+ }
  const returnDateInput=screenEl?.querySelector('#fapReturnDate');
- if(returnDateInput)returnDateInput.onchange=()=>{if(returnDateInput.value)fap.returnDate=returnDateInput.value;fapPaint()};
+ if(returnDateInput){
+  returnDateInput.onchange=()=>{if(returnDateInput.value)fap.returnDate=returnDateInput.value;fapPaint()};
+  returnDateInput.onclick=()=>openPicker(returnDateInput);
+  returnDateInput.parentElement.onclick=e=>{if(e.target!==returnDateInput)openPicker(returnDateInput)};
+ }
  const searchBtn=screenEl?.querySelector('[data-fap-search]');
  if(searchBtn)searchBtn.onclick=()=>{
   if(fap.o===fap.d){if(typeof toast==='function')toast('Choisissez deux gares différentes');return}

@@ -266,7 +266,8 @@
 .fap-bell:active{box-shadow:inset 3px 3px 6px var(--fap-sd),inset -3px -3px 6px var(--fap-sl)}
 .fap-bell svg{width:14px}
 .fap-bell-badge{position:absolute;top:-3px;right:-3px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--fap-danger);color:#fff;font:800 8.5px Manrope;display:grid;place-items:center;line-height:1;box-shadow:0 0 0 2px var(--fap-bg1)}
-.fap-screen{position:relative;flex:1;background:transparent;padding:16px 14px;display:flex;flex-direction:column;overflow-y:auto;max-height:420px}
+.fap-screen{position:relative;flex:1;background:transparent;padding:16px 14px;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;max-height:420px;scrollbar-width:none;-ms-overflow-style:none}
+.fap-screen::-webkit-scrollbar{display:none;width:0;height:0}
 .fap-screen-inner{display:flex;flex-direction:column;flex:1;animation:fap-enter .3s cubic-bezier(.2,.8,.3,1)}
 @keyframes fap-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fap-bottomnav{display:flex;background:transparent;padding:8px 10px 4px}
@@ -309,12 +310,12 @@
 .fap-toggle i{width:16px;height:16px;border-radius:50%;background:var(--fap-card);box-shadow:2px 2px 4px var(--fap-sd),-2px -2px 4px var(--fap-sl);flex:none;transition:.2s}
 .fap-toggle.on{color:var(--fap-accent)}
 .fap-toggle.on i{background:var(--fap-accent)}
-.fap-iconrow{display:flex;justify-content:space-between;gap:8px;padding:2px 2px 0}
-.fap-iconbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;border:0;background:none;cursor:pointer;color:var(--fap-muted)}
-.fap-iconbtn>span{width:44px;height:44px;border-radius:50%;background:var(--fap-marble),var(--fap-surface);box-shadow:5px 5px 10px var(--fap-sd),-5px -5px 10px var(--fap-sl);display:grid;place-items:center;color:var(--fap-ink);transition:.15s}
+.fap-iconrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:2px 2px 0}
+.fap-iconbtn{min-width:0;display:flex;flex-direction:column;align-items:center;gap:7px;border:0;background:none;cursor:pointer;color:var(--fap-muted)}
+.fap-iconbtn>span{width:44px;height:44px;flex:none;border-radius:50%;background:var(--fap-marble),var(--fap-surface);box-shadow:5px 5px 10px var(--fap-sd),-5px -5px 10px var(--fap-sl);display:grid;place-items:center;color:var(--fap-ink);transition:.15s}
 .fap-iconbtn>span svg{width:18px}
 .fap-iconbtn:active>span{box-shadow:inset 3px 3px 6px var(--fap-sd),inset -3px -3px 6px var(--fap-sl)}
-.fap-iconbtn small{font:700 8.5px Manrope;text-transform:uppercase;letter-spacing:.03em;color:var(--fap-muted)}
+.fap-iconbtn small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 8.5px Manrope;text-transform:uppercase;letter-spacing:.03em;color:var(--fap-muted)}
 .fap-section-head{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
 .fap-section-head b{font:800 12px var(--fap-serif);color:var(--fap-ink);font-style:italic}
 .fap-section-link{border:0;background:none;color:var(--fap-accent);font:800 10.5px Manrope;cursor:pointer;padding:0}
@@ -406,7 +407,8 @@
 .fap-route-top small{font-size:9.5px;color:var(--fap-muted)}
 .fap-route-dur{flex:none;background:var(--fap-marble),var(--fap-surface2);border-radius:999px;padding:6px 10px;font:800 9.5px Manrope;color:var(--fap-muted);display:flex;align-items:center;gap:5px;box-shadow:inset 2px 2px 4px var(--fap-sd),inset -2px -2px 4px var(--fap-sl)}
 .fap-route-dur svg{width:11px}
-.fap-classrow{display:flex;gap:8px;overflow-x:auto}
+.fap-classrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.fap-classrow::-webkit-scrollbar{display:none;width:0;height:0}
 .fap-classchip{flex:1;border:0;background:var(--fap-marble),var(--fap-surface);border-radius:999px;padding:9px 4px;font:800 10px Manrope;color:var(--fap-muted);cursor:pointer;white-space:nowrap;box-shadow:4px 4px 8px var(--fap-sd),-4px -4px 8px var(--fap-sl)}
 .fap-classchip.active{color:var(--fap-accent);box-shadow:inset 3px 3px 6px var(--fap-sd),inset -3px -3px 6px var(--fap-sl)}
 .fap-seat-legend{display:flex;gap:14px;font-size:9.5px;color:var(--fap-muted);margin:0 2px}
