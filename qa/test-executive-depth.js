@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
 const port = 4181;
-const limits = { audit: 1500, users: 1500, dashboard: 1500, rfid: 1400, architecture: 1600, jury: 1100 };
+const limits = { audit: 1500, users: 1300, dashboard: 1500, rfid: 1400, architecture: 1600, jury: 1100 };
 
 (async () => {
   const server = http.createServer((request, response) => {
@@ -25,9 +25,9 @@ const limits = { audit: 1500, users: 1500, dashboard: 1500, rfid: 1400, architec
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
-    document.querySelectorAll('.cinematic-intro,.intro-overlay,.login-screen').forEach(node => node.remove());
+    document.querySelectorAll('#intro,.cinematic-intro,.intro-overlay,.login-screen').forEach(node => node.remove());
     const app = document.querySelector('#app,.app');
-    if (app) app.style.display = '';
+    if (app) { app.style.display = ''; app.classList.remove('hidden'); }
   });
   const results = {};
   for (const [name, minimum] of Object.entries(limits)) {

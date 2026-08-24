@@ -30,31 +30,39 @@ function ticket(){
  const [,arrTime]=dossier.arrival.split(' · ');
  return `<div class="tkt-page"><div class="tkt-top"><h1>Billet voyageur</h1><span class="tkt-badge ok">${ti('check')}Validé</span></div><p class="tkt-sub">Merci de vous présenter 30 minutes avant le départ.</p>
  <article class="setrag-document ticket-doc tkt-card">
-  <header class="tkt-head"><div class="tkt-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG" class="tkt-logo-img"></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
-  <div class="tkt-body">
-   <div class="tkt-col-left">
-    <div class="tkt-field"><i class="tkt-ic">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>
-    <div class="tkt-field"><i class="tkt-ic">${ti('tag')}</i><div><small>Référence</small><b>${dossier.sale}</b></div></div>
-    <div class="tkt-field"><i class="tkt-ic">${ti('store')}</i><div><small>Canal d’achat</small><b>Application SETRAG</b></div></div>
-    <div class="tkt-field"><i class="tkt-ic">${ti('calendar')}</i><div><small>Émis le</small><b>${dossier.issued}</b></div></div>
-   </div>
-   <div class="tkt-col-mid">
-    <div class="tkt-route"><b>${dossier.from}</b><i>${ti('arrow')}</i><b>${dossier.to}</b></div>
-    <div class="tkt-grid">
-     <div><i class="tkt-ic">${ti('train')}</i><small>Train</small><b>${dossier.train}</b></div>
-     <div class="tkt-dep"><span class="tkt-dot"></span><small>Départ</small><b>${depTime}</b><em>${dossier.from}</em></div>
-     <div><i class="tkt-ic">${ti('seat')}</i><small>Classe</small><b>${dossier.class}</b></div>
-     <div><i class="tkt-ic">${ti('calendar')}</i><small>Date</small><b>${depDate}</b></div>
-     <div class="tkt-arr"><span class="tkt-dot end"></span><small>Arrivée</small><b>${arrTime}</b><em>${dossier.to}</em></div>
-     <div><i class="tkt-ic">${ti('seat')}</i><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
+  <i class="tkt-notch top"></i><i class="tkt-notch bottom"></i>
+  <div class="tkt-main">
+   <header class="tkt-head"><div class="tkt-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG" class="tkt-logo-img"></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
+   <div class="tkt-shine"></div>
+   <div class="tkt-body">
+    <div class="tkt-col-left">
+     <div class="tkt-field"><i class="tkt-ic">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>
+     <div class="tkt-field"><i class="tkt-ic">${ti('tag')}</i><div><small>Référence</small><b>${dossier.sale}</b></div></div>
+     <div class="tkt-field"><i class="tkt-ic">${ti('store')}</i><div><small>Canal d’achat</small><b>Application SETRAG</b></div></div>
+     <div class="tkt-field"><i class="tkt-ic">${ti('calendar')}</i><div><small>Émis le</small><b>${dossier.issued}</b></div></div>
+    </div>
+    <div class="tkt-col-mid">
+     <div class="tkt-route"><b>${dossier.from}</b><i>${ti('arrow')}</i><b>${dossier.to}</b></div>
+     <div class="tkt-grid">
+      <div><i class="tkt-ic">${ti('train')}</i><small>Train</small><b>${dossier.train}</b></div>
+      <div class="tkt-dep"><span class="tkt-dot"></span><small>Départ</small><b>${depTime}</b><em>${dossier.from}</em></div>
+      <div><i class="tkt-ic">${ti('seat')}</i><small>Classe</small><b>${dossier.class}</b></div>
+      <div><i class="tkt-ic">${ti('calendar')}</i><small>Date</small><b>${depDate}</b></div>
+      <div class="tkt-arr"><span class="tkt-dot end"></span><small>Arrivée</small><b>${arrTime}</b><em>${dossier.to}</em></div>
+      <div><i class="tkt-ic">${ti('seat')}</i><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
+     </div>
     </div>
    </div>
-   <div class="tkt-col-right">${qr(dossier.sale).replace('doc-qr','doc-qr tkt-qr')}<small>Code billet</small><b>${dossier.sale}</b></div>
+   <div class="tkt-strip">
+    <div><i class="tkt-ic">${ti('track')}</i><div><small>Voie / quai</small><b>Voie 1</b></div></div>
+    <div><i class="tkt-ic">${ti('clock')}</i><div><small>Durée du trajet</small><b>8h50</b></div></div>
+    <div><i class="tkt-ic">${ti('tag')}</i><div><small>Type de billet</small><b>Plein tarif</b></div></div>
+   </div>
   </div>
-  <div class="tkt-strip">
-   <div><i class="tkt-ic">${ti('track')}</i><div><small>Voie / quai</small><b>Voie 1</b></div></div>
-   <div><i class="tkt-ic">${ti('clock')}</i><div><small>Durée du trajet</small><b>8h50</b></div></div>
-   <div><i class="tkt-ic">${ti('tag')}</i><div><small>Type de billet</small><b>Plein tarif</b></div></div>
+  <div class="tkt-stub">
+   <small class="tkt-stub-label">${ti('train')}TRANSGABONAIS</small>
+   <div class="tkt-stub-qr">${qr(dossier.sale).replace('doc-qr','doc-qr tkt-qr')}<small>Code billet</small><b>${dossier.sale}</b></div>
+   <div class="tkt-stub-seat"><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
   </div>
  </article>
  <div class="tkt-trust">

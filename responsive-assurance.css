@@ -7,3 +7,9 @@
  .oi-tabs{max-width:100%;scrollbar-width:thin}
  .oi-card,.oi-kpi{max-width:100%}
 }
+/* Align legacy full-bleed modules with the current 24px desktop gutter. */
+@media(min-width:741px){
+ .trn-page,.pyx-page,.trk-page,.fos-page,.bp-page,.to-page{margin:-24px}
+}
+/* Include the physical display casing padding in its declared width. */
+.stb-monitor,.stb-mount,.stb-panel{box-sizing:border-box;min-width:0;max-width:100%}
