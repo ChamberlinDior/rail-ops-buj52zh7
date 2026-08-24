@@ -3,7 +3,8 @@
 const dossier={sale:'SET-260812-5012',reservation:'RES-260812-78421',passenger:'Nadia Raponda',customer:'CL-009821',phone:'+241 06 45 22 19',emergency:'Rose Raponda · +241 06 22 11 04',from:'Owendo',to:'Franceville',distance:'648 km',train:'EXP-620',service:'SRV-620-120826',departure:'12 août 2026 · 07:30',arrival:'12 août 2026 · 16:20',class:'1re classe',car:'V2',seat:'18 · Fenêtre',fare:'TAR-EXP-1C',ht:'16 981 FCFA',vat:'849 FCFA',css:'170 FCFA',total:'18 000 FCFA',payment:'Moov Money',paymentRef:'MOOV-982114',seller:'Grâce Mavoungou',pos:'POS-OW-01',device:'OW-POS-014',issued:'12 août 2026 · 09:40:18',bag:'BAG-260812-0841',parcel:'COL-260812-0314',taa:'TAA-260812-0029',funeral:'FUN-260812-0018'};
 const qr=(value)=>`<div class="doc-qr"><img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&amp;format=png&amp;margin=0&amp;data=${encodeURIComponent('SETRAG|'+value+'|SIG=AUD-260812-9942')}" alt="QR code vérifiable ${value}"><small>QR signé</small></div>`;
 const meta=(items)=>`<div class="doc-meta">${items.map(x=>`<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')}</div>`;
-const brand=(type,ref,status='VALIDE')=>`<header class="doc-brand"><div class="doc-logo"><span>⚡</span><b>SETRAG</b><small>Le Transgabonais</small></div><div><small>${type}</small><strong>${ref}</strong></div><em>${status}</em></header>`;
+const brandTone={VALIDE:'ok','ENREGISTRÉ':'ok','EN TRANSIT':'info','CHARGEMENT AUTORISÉ':'warn','DOSSIER CONFORME':'ok',RAPPROCHÉ:'ok'};
+const brand=(type,ref,status='VALIDE')=>`<header class="doc-brand tkt-head"><div class="tkt-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG" class="tkt-logo-img"></div><div class="doc-brand-meta"><small>${type}</small><strong>${ref}</strong></div><span class="tkt-badge ${brandTone[status]||'ok'}">${ti('check')}${status}</span></header>`;
 const route=()=>`<div class="doc-route"><div><small>DÉPART</small><b>${dossier.from}</b><span>07:30 · Voie 1</span></div><i>→<small>648 KM</small></i><div><small>ARRIVÉE</small><b>${dossier.to}</b><span>16:20 · Voie 2</span></div></div>`;
 const tkIcon={
  user:'<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21c1.6-4 4.8-6 8-6s6.4 2 8 6"/>',
@@ -29,7 +30,7 @@ function ticket(){
  const [,arrTime]=dossier.arrival.split(' · ');
  return `<div class="tkt-page"><div class="tkt-top"><h1>Billet voyageur</h1><span class="tkt-badge ok">${ti('check')}Validé</span></div><p class="tkt-sub">Merci de vous présenter 30 minutes avant le départ.</p>
  <article class="setrag-document ticket-doc tkt-card">
-  <header class="tkt-head"><div class="tkt-logo">${tkLogo}<div><b>SETRAG</b><small>PILOTAGE</small></div></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
+  <header class="tkt-head"><div class="tkt-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG" class="tkt-logo-img"></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
   <div class="tkt-body">
    <div class="tkt-col-left">
     <div class="tkt-field"><i class="tkt-ic">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>

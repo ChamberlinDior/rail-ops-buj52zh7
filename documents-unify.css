@@ -1,0 +1,62 @@
+/* documents-unify.css — brings the real SETRAG logo, a semi-transparent train
+   background and the ticket's visual language to every document type
+   (bag/parcel/taa/funeral/receipt), via the shared brand()/qr()/serviceRoute()
+   helpers so no per-type template rewrite is needed. Loads after ticket-uxref.css. */
+
+/* ---------- semi-transparent train photo behind every document ---------- */
+.doc-center>main{position:relative}
+.doc-center>main:before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(245,246,251,.87),rgba(245,246,251,.94)),
+    url('public/images/setrag-login-hero.png') center 38%/cover no-repeat;
+}
+.doc-center>main>*{position:relative;z-index:1}
+
+/* ---------- real logo + unified header (used by every doc via brand()) ---------- */
+.doc-brand.tkt-head{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:22px 26px!important;border-top:0!important;border-bottom:1px solid #edeff5!important}
+.doc-brand.tkt-head .tkt-logo-img{height:34px;width:auto;display:block;mix-blend-mode:multiply}
+.doc-brand-meta{flex:1;text-align:center}
+.doc-brand-meta small{display:block;font-size:9px;font-weight:800;letter-spacing:.1em;color:#8a8fa3;text-transform:uppercase}
+.doc-brand-meta strong{display:block;margin-top:3px;font-size:13px;color:#14162b}
+
+/* ---------- unified card shell ---------- */
+.setrag-document{
+  font-family:'Manrope',Inter,system-ui,sans-serif!important;
+  border-radius:20px!important;border:1px solid #edeff5!important;
+  box-shadow:0 24px 60px rgba(20,22,60,.08)!important;color:#14162b!important;
+}
+
+/* ---------- unified route banner (bag/parcel/taa/funeral) ---------- */
+.premium-service-route,.bag-doc .premium-service-route,.parcel-doc .premium-service-route,
+.taa-doc .premium-service-route,.funeral-doc .premium-service-route{
+  background:linear-gradient(115deg,#4f6ef7,#7b93ff)!important;
+}
+.premium-service-route section strong{color:#fff}
+.premium-service-route>div i{color:#fff!important;opacity:.9}
+
+/* ---------- unified identity / keyline / control blocks ---------- */
+.premium-identity{background:#fff}
+.premium-identity>strong{background:#4f6ef7!important}
+.premium-keyline{background:#f5f6fb!important;border-color:#edeff5!important}
+.premium-keyline span{border-color:#edeff5!important}
+.premium-control{background:#f5f6fb!important;border-top-color:#dfe2ee!important}
+.premium-control aside em{color:#1e9e5a!important}
+.premium-barcode i{background:#14162b!important}
+
+/* ---------- unified meta grid ---------- */
+.doc-meta small{color:#8a8fa3!important}
+.doc-meta b{color:#14162b!important}
+.doc-finance{background:#f5f6fb!important}
+.doc-finance strong{color:#1e9e5a!important}
+
+/* ---------- bigger, cleaner QR everywhere (ticket already overrides via .tkt-qr) ---------- */
+.doc-qr{width:110px!important;grid-template-columns:110px!important;grid-template-rows:110px auto!important;
+  border-radius:12px!important;border:1px solid #edeff5!important}
+.doc-qr img{width:110px!important;height:110px!important}
+
+@media(max-width:800px){
+  .doc-brand.tkt-head{padding:14px 14px!important}
+  .doc-brand.tkt-head .tkt-logo-img{height:26px}
+}

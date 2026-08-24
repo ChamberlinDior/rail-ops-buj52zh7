@@ -1,6 +1,6 @@
 {
   "base": "http://127.0.0.1:4173/",
-  "generatedAt": "2026-08-24T07:37:57.078Z",
+  "generatedAt": "2026-08-24T07:46:19.885Z",
   "pageCount": 45,
   "runtimeErrors": [],
   "pages": [
@@ -518,14 +518,14 @@
     {
       "id": "control",
       "title": "Contrôles & fraude",
-      "textLength": 2738,
-      "buttonCount": 33,
+      "textLength": 2920,
+      "buttonCount": 37,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 25,
+        "tinyText": 29,
         "garbled": false,
         "duplicateIds": []
       },
@@ -713,7 +713,7 @@
     {
       "id": "tracking",
       "title": "Centre des opérations",
-      "textLength": 3073,
+      "textLength": 3077,
       "buttonCount": 29,
       "empty": false,
       "visual": {
@@ -731,7 +731,7 @@
           {
             "tag": "DIV",
             "cls": "trk-kpis",
-            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord824sur 1"
+            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord793sur 1"
           },
           {
             "tag": "BUTTON",
@@ -773,7 +773,7 @@
           {
             "tag": "DIV",
             "cls": "trk-kpis",
-            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord824sur 1"
+            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord793sur 1"
           }
         ],
         "documentOverflow": 4,
@@ -799,12 +799,12 @@
         },
         {
           "index": 3,
-          "label": "Owendo PK 0 5 ATTENTE 38 EMBARQ.",
+          "label": "Owendo PK 0 27 ATTENTE 19 EMBARQ.",
           "result": "changed"
         },
         {
           "index": 4,
-          "label": "N’Toum PK 35 18 ATTENTE 24 EMBARQ.",
+          "label": "N’Toum PK 35 11 ATTENTE 23 EMBARQ.",
           "result": "changed"
         }
       ],
@@ -813,14 +813,14 @@
     {
       "id": "devices",
       "title": "Terminaux & batteries",
-      "textLength": 1164,
-      "buttonCount": 15,
+      "textLength": 1361,
+      "buttonCount": 19,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 0,
+        "tinyText": 4,
         "garbled": false,
         "duplicateIds": []
       },
@@ -855,15 +855,15 @@
     },
     {
       "id": "analytics",
-      "title": "Analytique opérationnelle locale",
-      "textLength": 702,
-      "buttonCount": 2,
+      "title": "Analytique opérationnelle souveraine",
+      "textLength": 1292,
+      "buttonCount": 6,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 0,
+        "tinyText": 4,
         "garbled": false,
         "duplicateIds": []
       },
@@ -876,6 +876,21 @@
         {
           "index": 1,
           "label": "Nouvelle analyse",
+          "result": "changed"
+        },
+        {
+          "index": 2,
+          "label": "Réimpressions répétées ÉLEVÉ Agence Booué · 7 en 24 h",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "Remboursement hors profil MOYEN Owendo · 850 000 FCFA",
+          "result": "changed"
+        },
+        {
+          "index": 4,
+          "label": "Activité vendeur inhabituelle MOYEN Compte USR-214 · +340 %",
           "result": "changed"
         }
       ],
@@ -1480,42 +1495,32 @@
     },
     {
       "id": "monitoring",
-      "title": "Monitoring technique",
-      "textLength": 1209,
-      "buttonCount": 16,
+      "title": "Monitoring & disponibilité",
+      "textLength": 1424,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 0,
+        "tinyText": 19,
         "garbled": false,
         "duplicateIds": []
       },
       "actions": [
         {
           "index": 0,
-          "label": "Exporter",
+          "label": "Exporter le SLA",
           "result": "changed"
         },
         {
           "index": 1,
-          "label": "Créer une règle d’alerte",
+          "label": "Déclarer un incident",
           "result": "changed"
         },
         {
           "index": 2,
-          "label": "Temps réel",
-          "result": "changed"
-        },
-        {
-          "index": 3,
-          "label": "Incidents",
-          "result": "changed"
-        },
-        {
-          "index": 4,
-          "label": "Historique",
+          "label": "•••",
           "result": "changed"
         }
       ],
@@ -1792,42 +1797,32 @@
     },
     {
       "id": "manual",
-      "title": "Mode dégradé",
-      "textLength": 1329,
-      "buttonCount": 7,
+      "title": "Mode dégradé & reprise contrôlée",
+      "textLength": 1257,
+      "buttonCount": 3,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 0,
+        "tinyText": 18,
         "garbled": false,
         "duplicateIds": []
       },
       "actions": [
         {
           "index": 0,
-          "label": "Historique des reprises",
+          "label": "Historique",
           "result": "changed"
         },
         {
           "index": 1,
-          "label": "Intégrer une vente manuelle",
+          "label": "Lancer un exercice",
           "result": "changed"
         },
         {
           "index": 2,
-          "label": "Contrôler",
-          "result": "changed"
-        },
-        {
-          "index": 3,
-          "label": "Intégrer sans réémission",
-          "result": "changed"
-        },
-        {
-          "index": 4,
-          "label": "•••",
+          "label": "Contrôler localement",
           "result": "changed"
         }
       ],
@@ -1921,15 +1916,15 @@
     },
     {
       "id": "security",
-      "title": "Cybersécurité & conformité",
-      "textLength": 1627,
-      "buttonCount": 5,
+      "title": "Cybersécurité, conformité & résilience",
+      "textLength": 1583,
+      "buttonCount": 6,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
         "uncontainedOverflow": [],
         "documentOverflow": 0,
-        "tinyText": 0,
+        "tinyText": 8,
         "garbled": false,
         "duplicateIds": []
       },
@@ -2096,7 +2091,7 @@
           {
             "tag": "DIV",
             "cls": "stb-panel",
-            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+            "text": "ARRIVÉES · OWENDO03:46\n    HeureTrainEn provenance deVoieStatut\n    \n  03:08\n  E"
           },
           {
             "tag": "DIV",
@@ -2106,12 +2101,12 @@
           {
             "tag": "DIV",
             "cls": "stb-monitor",
-            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+            "text": "ARRIVÉES · OWENDO03:46\n    HeureTrainEn provenance deVoieStatut\n    \n  03:08\n  E"
           },
           {
             "tag": "DIV",
             "cls": "stb-ticker-track",
-            "text": "Prochain départ : EXPRESS 773-842 à destination de N’Toum — voie 4 — dans 16 min"
+            "text": "Prochain départ : EXPRESS 773-842 à destination de N’Toum — voie 4 — dans 17 min"
           },
           {
             "tag": "SPAN",
@@ -2138,7 +2133,7 @@
           {
             "tag": "DIV",
             "cls": "stb-panel",
-            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+            "text": "ARRIVÉES · OWENDO03:46\n    HeureTrainEn provenance deVoieStatut\n    \n  03:08\n  E"
           },
           {
             "tag": "DIV",
@@ -2148,7 +2143,7 @@
           {
             "tag": "DIV",
             "cls": "stb-monitor",
-            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+            "text": "ARRIVÉES · OWENDO03:46\n    HeureTrainEn provenance deVoieStatut\n    \n  03:08\n  E"
           }
         ],
         "documentOverflow": 6,
