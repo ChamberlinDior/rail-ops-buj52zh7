@@ -19,7 +19,7 @@ const limits = { audit: 1500, users: 1500, dashboard: 1500, rfid: 1400, architec
     });
   });
   await new Promise(resolve => server.listen(port, '127.0.0.1', resolve));
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -31,19 +31,19 @@ const limits = { audit: 1500, users: 1500, dashboard: 1500, rfid: 1400, architec
   });
   const results = {};
   for (const [name, minimum] of Object.entries(limits)) {
-    await page.evaluate(pageName => window.showPage(pageName), name);
+    await page.evaluate(pageName => navigate(pageName), name);
     await page.waitForTimeout(120);
     const textLength = await page.locator('#content').innerText().then(text => text.trim().length);
-    const evidence = await page.locator('#content .exd').count();
+    const evidence = await page.locator('#content .exd, #content .exd-append').count();
     results[name] = { textLength, minimum, evidence };
     if (textLength < minimum || evidence < 1) throw new Error(`${name}: profondeur insuffisante (${textLength}, preuve ${evidence})`);
   }
-  await page.evaluate(() => window.showPage('audit'));
-  await page.locator('#content [data-exd-detail]').first().click();
+  await page.evaluate(() => navigate('audit'));
+  await page.locator('#content [data-exd-row]').first().click();
   const dialog = await page.locator('.txd-dialog').count();
   if (!dialog) throw new Error('Le détail de preuve audit ne s’ouvre pas');
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => window.showPage('jury'));
+  await page.evaluate(() => navigate('jury'));
   const mobileOverflow = await page.evaluate(() => Math.max(0, document.documentElement.scrollWidth - innerWidth));
   if (mobileOverflow > 2) throw new Error(`Débordement mobile: ${mobileOverflow}px`);
   if (errors.length) throw new Error(`Erreurs runtime: ${errors.join(' | ')}`);

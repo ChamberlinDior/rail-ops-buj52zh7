@@ -15,8 +15,8 @@
 
 /* ---------- real logo + unified header (used by every doc via brand()) ---------- */
 .doc-brand.tkt-head{display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:22px 26px!important;border-top:0!important;border-bottom:1px solid #edeff5!important}
-.doc-brand.tkt-head .tkt-logo-img{height:34px;width:auto;display:block;mix-blend-mode:multiply}
+  padding:13px 22px!important;border-top:0!important;border-bottom:1px solid #edeff5!important}
+.doc-brand.tkt-head .tkt-logo-img{height:22px;width:auto;display:block;mix-blend-mode:multiply}
 .doc-brand-meta{flex:1;text-align:center}
 .doc-brand-meta small{display:block;font-size:9px;font-weight:800;letter-spacing:.1em;color:#8a8fa3;text-transform:uppercase}
 .doc-brand-meta strong{display:block;margin-top:3px;font-size:13px;color:#14162b}
@@ -52,11 +52,11 @@
 .doc-finance strong{color:#1e9e5a!important}
 
 /* ---------- bigger, cleaner QR everywhere (ticket already overrides via .tkt-qr) ---------- */
-.doc-qr{width:110px!important;grid-template-columns:110px!important;grid-template-rows:110px auto!important;
+.doc-qr{width:96px!important;grid-template-columns:96px!important;grid-template-rows:96px auto!important;
   border-radius:12px!important;border:1px solid #edeff5!important}
-.doc-qr img{width:110px!important;height:110px!important}
+.doc-qr img{width:96px!important;height:96px!important}
 
 @media(max-width:800px){
-  .doc-brand.tkt-head{padding:14px 14px!important}
-  .doc-brand.tkt-head .tkt-logo-img{height:26px}
+  .doc-brand.tkt-head{padding:10px 14px!important}
+  .doc-brand.tkt-head .tkt-logo-img{height:18px}
 }
