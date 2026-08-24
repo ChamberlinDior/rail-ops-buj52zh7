@@ -137,8 +137,8 @@ function svgMap(){
   <path class="trk-track" d="M${MAP_X0} ${TRACK_Y1} H ${MAP_X1}"></path>
   <path class="trk-track" d="M${MAP_X0} ${TRACK_Y2} H ${MAP_X1}"></path>
   ${crossoverHtml}
-  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y1-8}" text-anchor="start">VOIE 1</text>
-  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y2+16}" text-anchor="start">VOIE 2</text>
+  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y1-8}" text-anchor="start">SENS FRANCEVILLE</text>
+  <text class="trk-line-label" x="${MAP_X0-4}" y="${TRACK_Y2+16}" text-anchor="start">SENS OWENDO</text>
   <g class="trk-terminal"><rect x="${MAP_X0-14}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X0-14+59}" y="${MAP_Y+69}">DÉPÔT OWENDO</text></g>
   <g class="trk-terminal"><rect x="${MAP_X1-104}" y="${MAP_Y+56}" width="118" height="20" rx="5"></rect><text x="${MAP_X1-104+59}" y="${MAP_Y+69}">TERMINAL FRANCEVILLE</text></g>
   ${signalsHtml}
@@ -259,7 +259,7 @@ function render(){
  <div class="trk-kpis" id="trkKpis">${kpisHtml()}</div>
  <div class="trk-map-card">
   <div class="trk-map-head">
-   <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · signalisation automatique des cantons</p></div>
+   <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · voie unique schématisée par sens · 8 gares principales affichées</p></div>
    <div class="trk-legend">
     <span><i class="exp"></i> Voyageurs</span><span><i class="omn"></i> Omnibus</span><span><i class="fret"></i> Fret</span><span><i class="maint"></i> Maintenance</span>
     <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>

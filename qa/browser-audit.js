@@ -1,11 +1,26 @@
 const { chromium } = require('playwright-core');
 const fs = require('fs');
+const http = require('http');
+const path = require('path');
 
 const base = process.argv[2] || 'http://127.0.0.1:4173/';
 const edge = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
 
 (async () => {
+  const projectRoot = path.resolve(__dirname, '..');
+  const mime = { '.html':'text/html; charset=utf-8', '.js':'application/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.png':'image/png', '.jpg':'image/jpeg', '.mp4':'video/mp4' };
+  const localServer = http.createServer((request, response) => {
+    const pathname = decodeURIComponent(new URL(request.url, 'http://local').pathname);
+    const target = path.resolve(projectRoot, pathname === '/' ? 'index.html' : pathname.slice(1));
+    if (!target.startsWith(projectRoot)) return response.writeHead(403).end();
+    fs.readFile(target, (error, data) => {
+      if (error) return response.writeHead(404).end();
+      response.setHeader('Content-Type', mime[path.extname(target)] || 'application/octet-stream');
+      response.end(data);
+    });
+  });
+  await new Promise(resolve => localServer.listen(4173, '127.0.0.1', resolve));
   const browser = await chromium.launch({ executablePath: edge, headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const runtimeErrors = [];
@@ -33,7 +48,7 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
     const textLength = await page.locator('#content').innerText().then(text => text.trim().length).catch(() => 0);
     const buttons = page.locator('#content button:visible');
     const count = await buttons.count();
-    const buttonIndexes = await buttons.evaluateAll(nodes => {
+    const buttonIndexes = await buttons.evaluateAll((nodes, maxActions) => {
       const seen = new Set();
       const indexes = [];
       nodes.forEach((node, index) => {
@@ -44,8 +59,8 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
           indexes.push(index);
         }
       });
-      return indexes.slice(0, Number(process.env.MAX_ACTIONS || 15));
-    });
+      return indexes.slice(0, maxActions);
+    }, Number(process.env.MAX_ACTIONS || 15));
     const actions = [];
     for (const index of buttonIndexes) {
       await page.evaluate(() => {
@@ -112,6 +127,7 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
     clickErrors: results.reduce((sum, result) => sum + result.actions.filter(action => action.result === 'click-error').length, 0)
   }, null, 2));
   await browser.close();
+  localServer.close();
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

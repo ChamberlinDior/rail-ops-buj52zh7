@@ -560,7 +560,7 @@ function render(){
  <div class="trn-section">
   <div class="trn-map-card">
    <div class="trn-map-head">
-    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares · 3 lignes schématiques (voyageurs / fret-mine / maintenance) · 12 signaux tricolores</p></div>
+    <div><h2>Réseau Transgabonais · Owendo ↔ Franceville</h2><p>648 km · 8 gares principales affichées · flux schématiques voyageurs, fret-mine et maintenance · 12 signaux</p></div>
     <div class="trn-legend">
      <span><i class="line-pax"></i> Ligne voyageurs</span><span><i class="line-fret"></i> Ligne fret / mine</span><span><i class="line-maint"></i> Ligne maintenance</span>
      <span><i class="sig-g"></i> Voie libre</span><span><i class="sig-r"></i> Canton fermé</span>

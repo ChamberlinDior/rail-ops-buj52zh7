@@ -254,6 +254,10 @@
 .fap-phone{position:relative;width:286px;border-radius:40px;background:linear-gradient(160deg,#0d2338,#081726);padding:12px;box-shadow:0 40px 80px #00000055;border:1px solid #223142}
 .fap-notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:20px;border-radius:0 0 14px 14px;background:#081726;z-index:3}
 .fap-phone-screen{position:relative;background:radial-gradient(circle at 8% 4%,rgba(0,158,96,.16),transparent 34%),radial-gradient(circle at 94% 16%,rgba(252,209,22,.18),transparent 30%),radial-gradient(circle at 78% 88%,rgba(58,117,196,.14),transparent 36%),linear-gradient(160deg,var(--fap-bg1),var(--fap-bg2));border-radius:30px;overflow:hidden;min-height:536px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff38}
+.fap-phone-screen:before,.fap-phone-screen:after{content:"";position:absolute;pointer-events:none;z-index:0;background-repeat:no-repeat;background-size:cover;filter:saturate(.7) contrast(.85);mix-blend-mode:multiply}
+.fap-phone-screen:before{width:270px;height:165px;top:68px;right:-72px;background-image:linear-gradient(90deg,rgba(237,245,241,.92),rgba(237,245,241,0)),url('public/images/setrag-login-hero.png');background-position:center;opacity:.12;transform:rotate(-7deg);border-radius:50%}
+.fap-phone-screen:after{width:260px;height:158px;left:-80px;bottom:62px;background-image:linear-gradient(270deg,rgba(226,235,238,.9),rgba(226,235,238,0)),url('public/images/setrag-cinematic-hero-v2.png');background-position:70% center;opacity:.1;transform:rotate(8deg);border-radius:50%}
+.fap-phone-screen>.fap-statusbar,.fap-phone-screen>.fap-appbar,.fap-phone-screen>.fap-screen,.fap-phone-screen>.fap-bottomnav,.fap-phone-screen>.fap-home-indicator{position:relative;z-index:1}
 .fap-statusbar,.fap-appbar{background:transparent}
 .fap-home-indicator{background:transparent!important}
 .fap-statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 2px;font:800 10.5px Manrope,sans-serif;color:var(--fap-ink)}

@@ -1,0 +1,160 @@
+/* capacity-elite.css — dark "control tower" HUD skin for Voitures & places (.capx-*)
+   Pure CSS, scoped strictly to .capx so it cannot affect any other page.
+   Loads after capacity-cdc-pro.css to win the cascade; safe to remove via one <link> tag. */
+
+@property --capx-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+/* ---------- base surface ---------- */
+.capx{
+  position:relative;color:#d9ecff;
+  padding:22px;border-radius:20px;
+  background:
+    radial-gradient(1100px 420px at 100% -10%,rgba(31,216,143,.10),transparent 60%),
+    radial-gradient(900px 500px at -10% 110%,rgba(63,196,255,.10),transparent 55%),
+    linear-gradient(160deg,#040f1c,#071c30 55%,#04101d);
+  box-shadow:inset 0 0 0 1px rgba(120,180,210,.14);
+  overflow:hidden;isolation:isolate;
+}
+.capx:before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.capx > *{position:relative;z-index:1}
+.capx-head h1{
+  color:#fff;letter-spacing:-.01em;
+  background:linear-gradient(90deg,#eafff5,#8be9c8 55%,#3fc4ff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(31,216,143,.18))
+}
+.capx-head p,.capx-panel-head p{color:#7fa0bb}
+
+/* ---------- buttons ---------- */
+.capx-btn{
+  border:1px solid rgba(140,190,220,.28);background:rgba(15,38,60,.6);color:#e6f2ff;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:.2s;
+}
+.capx-btn:hover{border-color:#3fc4ff;box-shadow:0 0 0 1px rgba(63,196,255,.3),0 8px 22px rgba(63,196,255,.18);transform:translateY(-1px)}
+.capx-btn.primary{border-color:#1fd88f;background:linear-gradient(135deg,#0b8a56,#12b578);color:#04170f;box-shadow:0 8px 22px rgba(31,216,143,.28)}
+.capx-btn.primary:hover{box-shadow:0 10px 28px rgba(31,216,143,.4)}
+.capx-btn.warn{border-color:#f0ae28;color:#ffd98a;background:rgba(60,42,10,.5)}
+.capx-btn.warn:hover{box-shadow:0 8px 22px rgba(240,174,40,.25)}
+
+/* ---------- context bar ---------- */
+.capx-context{background:rgba(12,32,52,.55);border:1px solid rgba(120,180,210,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.capx-context label{color:#89a9c2}
+.capx-context select,.capx-context input{
+  background:rgba(4,16,28,.65);border:1px solid rgba(120,180,210,.28);color:#eaf6ff;
+}
+.capx-context select:focus,.capx-context input:focus{outline:none;border-color:#3fc4ff;box-shadow:0 0 0 3px rgba(63,196,255,.2)}
+.capx-sync{display:inline-block;padding:6px 12px 6px 8px;border-radius:999px;background:rgba(31,216,143,.1);border:1px solid rgba(31,216,143,.35);color:#8be9c8;font-weight:800}
+.capx-sync::first-letter{color:#1fd88f;text-shadow:0 0 10px #1fd88f;animation:capx-pulse 1.6s ease-out infinite}
+
+/* ---------- KPI tiles ---------- */
+.capx-kpis{gap:12px}
+.capx-kpi{
+  position:relative;background:rgba(11,30,50,.6);border:1px solid rgba(120,180,210,.22);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  animation:capx-rise .6s cubic-bezier(.2,.8,.2,1) both;
+}
+.capx-kpis .capx-kpi:nth-child(1){animation-delay:.02s}
+.capx-kpis .capx-kpi:nth-child(2){animation-delay:.08s}
+.capx-kpis .capx-kpi:nth-child(3){animation-delay:.14s}
+.capx-kpis .capx-kpi:nth-child(4){animation-delay:.2s}
+.capx-kpis .capx-kpi:nth-child(5){animation-delay:.26s}
+.capx-kpis .capx-kpi:nth-child(6){animation-delay:.32s}
+.capx-kpi small{color:#7fa0bb}
+.capx-kpi span{color:#5f8098}
+.capx-kpi b{
+  background:linear-gradient(90deg,#fff,#a9f5d4);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;font-size:22px
+}
+.capx-kpi:after{background:linear-gradient(90deg,#1fd88f,#3fc4ff);box-shadow:0 0 12px rgba(31,216,143,.6)}
+.capx-kpi:hover{transform:translateY(-3px);border-color:rgba(63,196,255,.45);box-shadow:0 16px 34px rgba(4,16,28,.5)}
+.capx-kpi{transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
+
+/* ---------- panels ---------- */
+.capx-panel{background:rgba(9,26,44,.6);border:1px solid rgba(120,180,210,.2);box-shadow:0 20px 50px rgba(2,10,18,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.capx-panel-head{border-bottom-color:rgba(120,180,210,.18)}
+.capx-panel-head b{color:#fff}
+
+/* ---------- car composition strip ---------- */
+.capx-car{background:rgba(6,20,34,.6);border:1px solid rgba(120,180,210,.22);color:#dcecf9;transition:.25s}
+.capx-car:hover{border-color:rgba(63,196,255,.4);transform:translateY(-2px)}
+.capx-car span{color:#8be9c8}
+.capx-car small,.capx-car em{color:#6f92ab}
+.capx-car.active{border:1px solid #1fd88f;background:rgba(31,216,143,.1);box-shadow:0 0 0 1px rgba(31,216,143,.35),0 10px 26px rgba(31,216,143,.18)}
+
+/* ---------- seat map ---------- */
+.capx-legend{color:#7fa0bb}
+.capx-legend i{background:transparent;border-color:rgba(120,180,210,.4)}
+.capx-legend .sold i{background:#4c6478;border-color:#4c6478}
+.capx-legend .blocked i{background:#f0ae28;border-color:#f0ae28}
+.capx-legend .priority i{border-color:#3fc4ff}
+.capx-seats{
+  background:linear-gradient(90deg,rgba(255,255,255,.025) 0 47%,rgba(63,196,255,.14) 47% 53%,rgba(255,255,255,.025) 53%);
+  border:1px solid rgba(120,180,210,.16);
+}
+.capx-seat{
+  background:rgba(9,26,44,.75);border:1px solid rgba(120,180,210,.28);color:#eaf6ff;
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.capx-seat:hover{transform:translateY(-2px) scale(1.05);border-color:#3fc4ff;box-shadow:0 0 0 1px rgba(63,196,255,.4),0 6px 16px rgba(63,196,255,.25)}
+.capx-seat.sold{background:#3a4c5c;border-color:#3a4c5c;color:#c7d6e2}
+.capx-seat.blocked{background:linear-gradient(135deg,#a9670f,#f0ae28);border-color:#f0ae28;color:#2b1b02;box-shadow:0 0 14px rgba(240,174,40,.35)}
+.capx-seat.priority{border-color:#3fc4ff;box-shadow:0 0 0 1px rgba(63,196,255,.35)}
+.capx-seat.selected{outline-color:#1fd88f;box-shadow:0 0 0 3px rgba(31,216,143,.35),0 0 18px rgba(31,216,143,.5)}
+
+/* ---------- summary / meta / alert ---------- */
+.capx-meta div{background:rgba(6,20,34,.55);border:1px solid rgba(120,180,210,.16)}
+.capx-meta small{color:#7fa0bb}
+.capx-meta b{color:#eaf6ff}
+.capx-alert{background:rgba(240,174,40,.1);border:1px solid rgba(240,174,40,.35);color:#ffd98a}
+.capx-proof{background:rgba(31,216,143,.08);border:1px solid rgba(31,216,143,.32);color:#a9f5d4}
+
+/* ---------- tabs ---------- */
+.capx-tabs{border-bottom-color:rgba(120,180,210,.18)}
+.capx-tabs button{background:transparent;color:#7fa0bb}
+.capx-tabs button.active{background:rgba(31,216,143,.1);color:#8be9c8;border-bottom-color:#1fd88f;box-shadow:0 -1px 0 rgba(31,216,143,.5) inset}
+
+/* ---------- segment availability timeline: the core CDC differentiator, made visual ---------- */
+.capx-segments{position:relative;padding-top:26px;gap:0}
+.capx-segments:before{
+  content:"";position:absolute;top:38px;left:4%;right:4%;height:2px;
+  background:linear-gradient(90deg,#1fd88f,#3fc4ff);opacity:.35;
+}
+.capx-segment{
+  position:relative;margin:0 4px;background:rgba(9,26,44,.65);border:1px solid rgba(120,180,210,.2);
+  transition:transform .25s;
+}
+.capx-segment:before{
+  content:"";position:absolute;left:50%;top:-22px;translate:-50% 0;width:11px;height:11px;border-radius:50%;
+  background:#04101d;border:2px solid currentColor;box-shadow:0 0 10px currentColor;
+}
+.capx-segment:hover{transform:translateY(-3px)}
+.capx-segment.occupied{background:rgba(227,72,80,.08);border-color:rgba(227,72,80,.4);color:#ff8a91}
+.capx-segment.free{background:rgba(31,216,143,.08);border-color:rgba(31,216,143,.4);color:#7be8bb}
+
+/* ---------- tables ---------- */
+.capx-table{color:#dcecf9}
+.capx-table th{color:#7fa0bb;font-weight:800}
+.capx-table th,.capx-table td{border-bottom-color:rgba(120,180,210,.15)}
+.capx-content{background:transparent}
+
+/* ---------- modal ---------- */
+.capx-modal{background:rgba(2,10,18,.82)}
+.capx-dialog{background:#081a2c;border:1px solid rgba(120,180,210,.22);box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.capx-modal-head{background:linear-gradient(110deg,#04101d,#0b8a56)}
+.capx-form label{color:#89a9c2}
+.capx-form input,.capx-form select,.capx-form textarea{background:rgba(6,20,34,.7);border:1px solid rgba(120,180,210,.28);color:#eaf6ff}
+.capx-form input:focus,.capx-form select:focus,.capx-form textarea:focus{outline:none;border-color:#3fc4ff;box-shadow:0 0 0 3px rgba(63,196,255,.2)}
+.capx-footer{border-top-color:rgba(120,180,210,.18);color:#7fa0bb}
+.capx-seat-card h3{color:#fff}
+
+/* ---------- entrance + pulse motion ---------- */
+@keyframes capx-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes capx-pulse{0%{opacity:1}70%{opacity:.35}100%{opacity:1}}
+
+@media(prefers-reduced-motion:reduce){
+  .capx-kpi{animation:none!important}
+  .capx-sync::first-letter{animation:none!important}
+}
