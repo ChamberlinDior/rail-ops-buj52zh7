@@ -538,9 +538,9 @@ function agqSeed(){
  }
  return q
 }
-function agqStatusLabel(s){return{nouvelle:'Demande reçue',prise_en_charge:'Prise en charge',complement:'Complément requis',controle:'Contrôle physique requis',validee:'Paiement requis',confirmee:'Paiement confirmé',rejetee:'Rejetée'}[s]||s}
+function agqStatusLabel(s){return{nouvelle:'Demande reçue',prise_en_charge:'Examen en cours',complement:'Complément requis',controle:'Contrôle physique requis',validee:'Paiement requis',confirmee:'Prise en charge',service_pris_en_charge:'Prise en charge',transport:'Transport en cours',cloturee:'Remise confirmée · clôturée',rejetee:'Rejetée'}[s]||s}
 function agqFieldVal(r,part){const f=(r.fields||[]).find(x=>x[0].toLowerCase().includes(part.toLowerCase()));return f?f[1]:null}
-function agqStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4}[status]??0}
+function agqStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4,service_pris_en_charge:4,transport:5,cloturee:6}[status]??0}
 function agqPricing(r){
  if(r.kind==='bagage'){
   const poids=r.poidsControle!=null?r.poidsControle:+(agqFieldVal(r,'poids')||20);
@@ -561,13 +561,13 @@ function agqPricing(r){
  if(r.kind==='messagerie')return{montant:1500,detail:'Pli standard · régime voyageurs',code:'MSG-01'};
  return{montant:0,detail:'',code:'—'}
 }
-const AGQ_OPEN=['nouvelle','prise_en_charge','controle','complement','validee'];
+const AGQ_OPEN=['nouvelle','prise_en_charge','controle','complement','validee','confirmee','service_pris_en_charge','transport'];
 function agqRowHtml(r){
  return `<div class="agq-row" data-agq-ref="${esc(r.ref)}"><div class="agq-icon">${I(AGQ_ICON[r.kind]||'file-text')}</div><div class="agq-main"><b>${esc(r.service)} · ${esc(r.ref)}</b><span>${esc(r.summary)}</span></div><div class="agq-meta"><small>Reçu à ${esc(r.time)} · ${esc(r.channel||'Portail web')}</small><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div><div class="agq-actions row-actions">${
   r.status==='nouvelle'?`<button data-agq-act="treat">Prendre en charge</button>`:
   AGQ_OPEN.includes(r.status)?`<button data-agq-act="tablet">${I('tablet')} Traiter sur la tablette ↓</button>`:
   r.status==='rejetee'?`<span class="agq-rejected">${I('x')} Rejetée</span>`:
-  `<span class="agq-done">${I('check')} Confirmée · ${esc(r.agent||'agent')}</span>`
+  `<span class="agq-done">${I('check')} Clôturée · ${esc(r.agent||'agent')}</span>`
  }</div></div>`
 }
 function agqListHtml(){
@@ -769,13 +769,27 @@ function agtPaymentScreen(r,pricing){
   <div class="agt-actions"><button class="primary" data-agt-payment-confirm="${esc(r.ref)}" disabled>${I('badge-check')} Confirmer le paiement et générer le document</button></div>
  </div>`
 }
+function agtFulfilmentScreen(r,pricing){
+ const inTransport=r.status==='transport';
+ const current=inTransport?'Transport en cours':'Prise en charge opérationnelle';
+ const next=inTransport?'Confirmer la remise et clôturer':'Démarrer le transport';
+ return `<div class="agt-detail agt-fulfilment-step">
+  <div class="agt-detail-head"><div><b>${I(inTransport?'train-front':'package-check')} ${esc(r.service)} · ${current}</b><span>${esc(r.ref)} · paiement ${esc(r.paymentRef||'confirmé')}</span></div><span class="agq-status ${r.status}">${agqStatusLabel(r.status)}</span></div>
+  ${agtTrackingHtml(r)}
+  <div class="agt-sync-banner">${I('smartphone')}<div><b>Application client synchronisée</b><span>${inTransport?'Le voyageur voit « Transport en cours » et reçoit les mises à jour de progression.':'Le voyageur voit « Prise en charge » et a reçu la confirmation du paiement.'}</span></div><em>${I('radio')} En direct</em></div>
+  ${agtProDoc(r,pricing)}
+  ${inTransport?`<div class="agt-form-row"><label>Personne destinataire / bénéficiaire<input id="agtHandoverName" placeholder="Nom complet"></label><label>Code ou preuve de remise<input id="agtHandoverProof" placeholder="Code SMS, pièce ou signature"></label></div><label class="agt-payment-consent"><input type="checkbox" id="agtHandoverConsent"> <span>Je confirme l’arrivée, l’identité du destinataire et la remise effective du service.</span></label>`:`<div class="agt-operation-checks"><span>${I('check')} Paiement rapproché</span><span>${I('check')} Document signé</span><span>${I('check')} Prise en charge enregistrée</span><span>${I('smartphone')} Client notifié</span></div>`}
+  <div class="agt-actions"><button class="primary" data-agt-fulfilment-next="${esc(r.ref)}" ${inTransport?'disabled':''}>${I(inTransport?'badge-check':'truck')} ${next}</button></div>
+ </div>`
+}
 function agtRequestDetailHtml(){
  const q=agqSeed();
  const r=q.find(x=>x.ref===agt.selected)||q.find(x=>AGQ_OPEN.includes(x.status))||q[0];
  if(!r)return `<div class="ctr-scan-view"><p class="ctr-log-empty">File vide.</p></div>`;
  agt.selected=r.ref;
  const pricing=agqPricing(r);
- if(r.status==='confirmee'||r.status==='rejetee')return agtDoneHtml(r,pricing);
+ if(r.status==='rejetee'||r.status==='cloturee')return agtDoneHtml(r,pricing);
+ if(r.status==='confirmee'||r.status==='service_pris_en_charge'||r.status==='transport')return agtFulfilmentScreen(r,pricing);
  if(r.status==='validee')return agtPaymentScreen(r,pricing);
  if(r.status==='complement')return agtComplementScreen(r);
  if(r.status==='controle')return agtControlScreen(r,pricing);
@@ -864,7 +878,7 @@ function agtDetailHtml(){
 }
 function agtStatsHtml(){
  const q=agqSeed();
- const aTraiter=q.filter(x=>AGQ_OPEN.includes(x.status)).length,traitees=q.filter(x=>x.status==='confirmee').length;
+ const aTraiter=q.filter(x=>AGQ_OPEN.includes(x.status)).length,traitees=q.filter(x=>x.status==='cloturee').length;
  return[['Ventes guichet',agtGuichetCount],['Demandes à traiter',aTraiter],['Demandes traitées',traitees]].map(x=>`<div class="ctr-stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')
 }
 function agtPaint(){
@@ -995,9 +1009,26 @@ function wireAgt(){
   const ref=paymentConfirm.dataset.agtPaymentConfirm,r=agqSeed().find(x=>x.ref===ref);
   if(!r||!paymentConsent?.checked)return;
   const pricing=agqPricing(r),method=document.getElementById('agtRequestPay')?.value||AGT_PAYMENTS[0];
-  r.payMethod=method;r.paymentRef=`PAY-${Date.now().toString().slice(-8)}`;r.paymentStatus='confirme';r.status='confirmee';r.processedAt=ctrNow();
-  toastMsg(`${ref} · paiement confirmé (${r.paymentRef}) · document généré`);
+  r.payMethod=method;r.paymentRef=`PAY-${Date.now().toString().slice(-8)}`;r.paymentStatus='confirme';r.status='service_pris_en_charge';r.processedAt=ctrNow();r.history=(r.history||[]).concat({status:'service_pris_en_charge',at:r.processedAt});
+  toastMsg(`${ref} · paiement confirmé (${r.paymentRef}) · service pris en charge · client notifié`);
   agtPaint();agqRefresh();setragPrint('agtPrinter',agtReceiptLines(r,pricing))
+ };
+ const handoverConsent=panel?.querySelector('#agtHandoverConsent');
+ const fulfilmentNext=panel?.querySelector('[data-agt-fulfilment-next]');
+ if(handoverConsent&&fulfilmentNext)handoverConsent.onchange=()=>{fulfilmentNext.disabled=!handoverConsent.checked};
+ if(fulfilmentNext)fulfilmentNext.onclick=()=>{
+  const ref=fulfilmentNext.dataset.agtFulfilmentNext,r=agqSeed().find(x=>x.ref===ref);
+  if(!r)return;
+  if(r.status==='transport'){
+   const recipient=(document.getElementById('agtHandoverName')?.value||'').trim(),proof=(document.getElementById('agtHandoverProof')?.value||'').trim();
+   if(!handoverConsent?.checked||!recipient||!proof){toastMsg('Renseignez le destinataire, la preuve de remise et confirmez la clôture');return}
+   r.status='cloturee';r.closedAt=ctrNow();r.handover={recipient,proof};r.history=(r.history||[]).concat({status:'cloturee',at:r.closedAt});
+   toastMsg(`${ref} · remise confirmée · dossier clôturé · application client synchronisée`)
+  }else{
+   r.status='transport';r.transportStartedAt=ctrNow();r.history=(r.history||[]).concat({status:'transport',at:r.transportStartedAt});
+   toastMsg(`${ref} · transport démarré · suivi client mis à jour en direct`)
+  }
+  agtPaint();agqRefresh()
  };
  const tCls=document.getElementById('agtTCls');
  if(tCls)tCls.onchange=()=>{

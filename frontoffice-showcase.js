@@ -32,8 +32,8 @@ const kindIcon=k=>({billet:'ticket',bagage:'luggage',colis:'package',taa:'car-fr
 function addToWallet(rec){WALLET.unshift(rec);updateWalletBadge()}
 function updateWalletBadge(){const b=document.getElementById('fosWalletBadge');if(!b)return;if(WALLET.length){b.style.display='inline-flex';b.textContent=WALLET.length}else{b.style.display='none'}}
 const FOS_STEPS=['Demande envoyée','Examen SETRAG','Contrôle / validation','Paiement','Prise en charge','Transport','Remise / clôture'];
-function fosStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4}[status]??0}
-function fosStatusLabel(status){return{nouvelle:'Demande reçue · en attente de validation par un agent SETRAG',prise_en_charge:'En cours de vérification par un agent SETRAG',complement:'Complément d’information requis — consultez vos messages',controle:'Contrôle physique requis : présentez-vous au point de dépôt en gare',validee:'Dossier validé',confirmee:'Demande confirmée et prise en charge',rejetee:'Demande rejetée — contactez le service client'}[status]||status}
+function fosStepIndex(status){return{nouvelle:0,prise_en_charge:1,complement:1,controle:2,validee:3,confirmee:4,service_pris_en_charge:4,transport:5,cloturee:6}[status]??0}
+function fosStatusLabel(status){return{nouvelle:'Demande reçue · en attente de validation par un agent SETRAG',prise_en_charge:'En cours de vérification par un agent SETRAG',complement:'Complément d’information requis — consultez vos messages',controle:'Contrôle physique requis : présentez-vous au point de dépôt en gare',validee:'Paiement requis avant la prise en charge',confirmee:'Paiement confirmé · service pris en charge',service_pris_en_charge:'Paiement confirmé · service pris en charge par SETRAG',transport:'Transport en cours · progression suivie en direct',cloturee:'Remise confirmée · service terminé et dossier clôturé',rejetee:'Demande rejetée — contactez le service client'}[status]||status}
 function fosTrackingHtml(status){
  if(status==='rejetee')return `<div class="fos-track-row rejected">${I('x-circle')}<span>Demande rejetée</span></div>`;
  const idx=fosStepIndex(status);
@@ -41,7 +41,7 @@ function fosTrackingHtml(status){
 }
 function docCardHtml(rec){
  const live=rec.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===rec.id):null;
- const liveFields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[])]:rec.fields;
+ const liveFields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[]),...(live.paymentRef?[['Paiement',`${live.payMethod} · confirmé`],['Référence paiement',live.paymentRef]]:[]),...(live.transportStartedAt?[['Transport démarré',live.transportStartedAt]]:[]),...(live.handover?[['Remis à',live.handover.recipient],['Preuve de remise',live.handover.proof],['Clôturé à',live.closedAt]]:[])]:rec.fields;
  return `<div class="fos-ticket">
   <div class="fos-ticket-holo"></div>
   <div class="fos-ticket-headbar">
@@ -248,6 +248,9 @@ function fosPositionLabel(r){
   controle:`Agence ${agence} · présentez-vous${dateTxt?` avant le ${dateTxt}`:''} pour le contrôle`,
   validee:`Agence ${agence} · dossier validé, prise en charge imminente`,
   confirmee:`Agence ${agence} · pris en charge${dateTxt?` · rendez-vous du ${dateTxt}`:''}`,
+  service_pris_en_charge:`Agence ${agence} · service pris en charge par SETRAG`,
+  transport:`En transport · suivi opérationnel actif`,
+  cloturee:`Destination · remise confirmée et dossier clôturé`,
   rejetee:'Dossier rejeté · contactez le service client'
  }[r.status]||'—'
 }
@@ -259,6 +262,9 @@ function fapNotifMessage(live){
   controle:`Présentez-vous en gare${dateTxt?` avant le ${dateTxt}`:''} pour le contrôle physique de ${id}.`,
   validee:`Votre dossier ${id} a été validé par SETRAG.`,
   confirmee:`Votre demande ${id} est confirmée et prise en charge${dateTxt?` · rendez-vous du ${dateTxt}`:''} !`,
+  service_pris_en_charge:`Paiement confirmé : votre service ${id} est pris en charge par SETRAG.`,
+  transport:`Votre service ${id} est maintenant en transport.`,
+  cloturee:`La remise de ${id} est confirmée. Votre dossier est clôturé.`,
   rejetee:`Votre demande ${id} a été rejetée.`
  }[live.status]||`Mise à jour de votre demande ${id}.`
 }
@@ -442,10 +448,12 @@ function fapWalletDetailScreen(){
  const r=WALLET[fap.walletIdx];
  if(!r)return fapWalletScreen();
  const live=r.kind!=='billet'?(window.SETRAG_SERVICE_REQUESTS||[]).find(x=>x.ref===r.id):null;
- const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[])]:r.fields;
+ const fields=live?[...live.fields,...(live.poidsControle!=null?[[live.kind==='taa'?'Tonnage contrôlé':'Poids contrôlé',`${live.poidsControle} ${live.kind==='taa'?'t':'kg'}`]]:[]),...(live.convocationDate?[['Date de convocation',fmtDate(live.convocationDate)]]:[]),...(live.paymentRef?[['Paiement',`${live.payMethod} · confirmé`],['Référence paiement',live.paymentRef]]:[]),...(live.transportStartedAt?[['Transport démarré',live.transportStartedAt]]:[]),...(live.handover?[['Remis à',live.handover.recipient],['Preuve de remise',live.handover.proof],['Clôturé à',live.closedAt]]:[])]:r.fields;
  const routeParts=r.kind==='billet'&&/→/.test(r.code)?r.code.split('→').map(s=>s.trim()):null;
  return `<div class="fap-list fap-ticketdetail"><div class="fap-list-head"><button class="fap-back" data-fap-back="${esc(fap.walletBack||'wallet')}">${I('arrow-left')}</button><b>Détail du titre</b><span class="fap-bp-share">${I('share-2')}</span></div>
   ${live?`<div class="fap-track-block"><div class="fap-track-head"><span>${I('route')} Suivi de la demande</span><b class="fap-track-live">${I('radio')} en direct</b></div>${fosTrackingHtml(live.status)}<p class="fap-track-status">${esc(fosStatusLabel(live.status))}</p><div class="fap-track-position"><i>${I('map-pin')}</i><span>${esc(fosPositionLabel(live))}</span></div></div>`:''}
+  ${live?.paymentRef?`<div class="fap-proof-card"><span>${I('receipt-text')}</span><div><small>PAIEMENT CONFIRMÉ</small><b>${esc(live.payMethod)} · ${esc(live.paymentRef)}</b></div>${I('shield-check')}</div>`:''}
+  ${live?.handover?`<div class="fap-proof-card success"><span>${I('package-check')}</span><div><small>PREUVE DE REMISE</small><b>${esc(live.handover.recipient)} · ${esc(live.handover.proof)}</b></div>${I('badge-check')}</div>`:''}
   <div class="fap-detail-grid">${fields.slice(0,4).map(f=>`<div class="fap-detail-cell"><small>${esc(f[0])}</small><b>${esc(String(f[1]))}</b></div>`).join('')}</div>
   <div class="fap-barcode-card"><div class="fap-barcode"></div><small>Code : ${esc(r.id)}</small></div>
   ${routeParts?`<b class="fap-itin-title">Itinéraire du train</b><div class="fap-itin">
@@ -466,7 +474,7 @@ function fapTrackingListScreen(){
   }).join('')}
  </div>`
 }
-function agqStatusLabelFos(s){return{nouvelle:'Reçue',prise_en_charge:'Vérification',complement:'Complément',controle:'Contrôle',validee:'Validée',confirmee:'Confirmée',rejetee:'Rejetée'}[s]||s}
+function agqStatusLabelFos(s){return{nouvelle:'Reçue',prise_en_charge:'Vérification',complement:'Complément',controle:'Contrôle',validee:'Paiement',confirmee:'Prise en charge',service_pris_en_charge:'Prise en charge',transport:'En transport',cloturee:'Clôturée',rejetee:'Rejetée'}[s]||s}
 function fapNotifsScreen(){
  const head=`<div class="fap-list-head"><button class="fap-back" data-fap-back="home">${I('arrow-left')}</button><b>Notifications</b></div>`;
  if(!fap.notifications.length)return `<div class="fap-list">${head}<p class="fap-empty">${I('bell-off')} Aucune notification pour l’instant.</p></div>`;
