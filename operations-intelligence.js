@@ -26,7 +26,7 @@ function credibilityScrub(){
 function isolateCockpit(){const root=document.querySelector('.oi');if(root&&!root.dataset.isolated){root.dataset.isolated='true';root.addEventListener('click',event=>event.stopPropagation())}}
 function installActionAssurance(){
  if(document.documentElement.dataset.actionAssurance)return;document.documentElement.dataset.actionAssurance='true';
- document.addEventListener('click',event=>{
+ window.addEventListener('click',event=>{
   const button=event.target.closest('#content button');if(!button||button.closest('.oi')||button.disabled)return;
   const content=document.querySelector('#content'),modalRoot=document.querySelector('#modalRoot'),toastRoot=document.querySelector('#toastRoot');
   const before={content:content?.innerHTML,modal:modalRoot?.innerHTML,toast:toastRoot?.innerHTML,url:location.href};

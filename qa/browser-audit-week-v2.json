@@ -1,6 +1,6 @@
 {
   "base": "http://127.0.0.1:4173/",
-  "generatedAt": "2026-08-24T07:13:54.648Z",
+  "generatedAt": "2026-08-24T07:37:57.078Z",
   "pageCount": 45,
   "runtimeErrors": [],
   "pages": [
@@ -12,6 +12,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -53,6 +55,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 8,
         "garbled": false,
         "duplicateIds": []
@@ -81,7 +85,7 @@
         {
           "index": 4,
           "label": "Détails",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -125,6 +129,39 @@
             "text": "Flux gares · temps réelVoyageurs en attente et embarqués depuis l’ouverture\n   O"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "trn-page",
+            "text": "Trains & circulationsRéseau Transgabonais en direct — voies, embranchements, sig"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trn-head",
+            "text": "Trains & circulationsRéseau Transgabonais en direct — voies, embranchements, sig"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trn-kpis",
+            "text": "Trains actifs66 en circulationPonctualité67 %2 en retardVoyageurs à bord821sur 1"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trn-section",
+            "text": "Circulations en temps réelComposition, voitures, classes, places et disponibilit"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trn-section",
+            "text": "Réseau Transgabonais · Owendo → Franceville648 km · 8 gares principales affichée"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trn-section",
+            "text": "Flux gares · temps réelVoyageurs en attente et embarqués depuis l’ouverture\n   O"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 26,
         "garbled": false,
         "duplicateIds": []
@@ -153,7 +190,7 @@
         {
           "index": 4,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -166,6 +203,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 12,
         "garbled": false,
         "duplicateIds": []
@@ -238,6 +277,39 @@
             "text": "Simulation Yield\n   \n    RelationOwendo → FrancevilleOwendo → BoouéOwendo → Ndjo"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "pyx-page",
+            "text": "COUVERTURE CDC SETRAG · PAGE 7/16Tarification & Yield ManagementCatalogue, calcu"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-head",
+            "text": "COUVERTURE CDC SETRAG · PAGE 7/16Tarification & Yield ManagementCatalogue, calcu"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-kpis",
+            "text": "Tarifs actifs162 planifiésPromotions32 expirent bientôtPrix moyen/km43 FCFAstabl"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-section",
+            "text": "Catalogue tarifaireConforme au périmètre CDC — général, réduit, abonnements, bag"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-section pyx-2col",
+            "text": "Barème kilométrique et règles d’arrondiOMNIBUS · 0–99 km1re 46,93 · 2e 37,54OMNI"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-section pyx-2col",
+            "text": "Simulation Yield\n   \n    RelationOwendo → FrancevilleOwendo → BoouéOwendo → Ndjo"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -279,6 +351,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -320,6 +394,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -361,6 +437,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -402,6 +480,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -420,7 +500,7 @@
         {
           "index": 2,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 10,
@@ -443,6 +523,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 25,
         "garbled": false,
         "duplicateIds": []
@@ -484,6 +566,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -502,17 +586,17 @@
         {
           "index": 2,
           "label": "Ventes & recettes Ventes · HT/TTC · gares · périodes PDF · XLSX",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 3,
           "label": "Trains & occupation Trains · classes · places · segments PDF · XLSX",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 4,
           "label": "Voyageurs Listes · contacts · nationalités PDF · XLSX",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -525,6 +609,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -538,12 +624,12 @@
         {
           "index": 1,
           "label": "＋ Créer un compte",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 2,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -556,6 +642,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -574,19 +662,21 @@
         {
           "index": 2,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "settings",
-      "title": "Paramètres",
-      "textLength": 461,
-      "buttonCount": 1,
+      "title": "Paramètres système",
+      "textLength": 1858,
+      "buttonCount": 18,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -594,7 +684,27 @@
       "actions": [
         {
           "index": 0,
-          "label": "Enregistrer les modifications",
+          "label": "Comparer les versions",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Enregistrer le brouillon",
+          "result": "changed"
+        },
+        {
+          "index": 2,
+          "label": "Modifier Réservation temporaire de place",
+          "result": "changed"
+        },
+        {
+          "index": 5,
+          "label": "Modifier Réimpression sans motif",
+          "result": "changed"
+        },
+        {
+          "index": 14,
+          "label": "•••",
           "result": "changed"
         }
       ],
@@ -603,7 +713,7 @@
     {
       "id": "tracking",
       "title": "Centre des opérations",
-      "textLength": 3082,
+      "textLength": 3073,
       "buttonCount": 29,
       "empty": false,
       "visual": {
@@ -621,7 +731,7 @@
           {
             "tag": "DIV",
             "cls": "trk-kpis",
-            "text": "Trains actifs65 en circulationPonctualité67 %2 en retardVoyageurs à bord795sur 1"
+            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord824sur 1"
           },
           {
             "tag": "BUTTON",
@@ -649,6 +759,24 @@
             "text": "BoouéPK 357"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "trk-page",
+            "text": "Centre des opérationsSuivi ferroviaire temps réel — positions, signalisation, ga"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trk-head",
+            "text": "Centre des opérationsSuivi ferroviaire temps réel — positions, signalisation, ga"
+          },
+          {
+            "tag": "DIV",
+            "cls": "trk-kpis",
+            "text": "Trains actifs64 en circulationPonctualité67 %2 en retardVoyageurs à bord824sur 1"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 53,
         "garbled": false,
         "duplicateIds": []
@@ -671,12 +799,12 @@
         },
         {
           "index": 3,
-          "label": "Owendo PK 0 38 ATTENTE 0 EMBARQ.",
+          "label": "Owendo PK 0 5 ATTENTE 38 EMBARQ.",
           "result": "changed"
         },
         {
           "index": 4,
-          "label": "N’Toum PK 35 5 ATTENTE 31 EMBARQ.",
+          "label": "N’Toum PK 35 18 ATTENTE 24 EMBARQ.",
           "result": "changed"
         }
       ],
@@ -690,6 +818,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -731,6 +861,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -798,6 +930,14 @@
             "text": "APPLICATION MOBILE & WEB\n   La même expérience, dans la poche du voyageur\n   Une"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "fos-page",
+            "text": "SETRAG · Front Office voyageur\n RéserverServicesApplicationPaiement\n  Tous les s"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 35,
         "garbled": false,
         "duplicateIds": []
@@ -833,13 +973,15 @@
     },
     {
       "id": "bags",
-      "title": "Bagages voyageurs",
-      "textLength": 1170,
-      "buttonCount": 3,
+      "title": "Bagages & traçabilité",
+      "textLength": 1703,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -851,13 +993,18 @@
         },
         {
           "index": 1,
-          "label": "＋ Enregistrer un bagage",
-          "result": "no-visible-effect"
+          "label": "Enregistrer un bagage",
+          "result": "changed"
         },
         {
           "index": 2,
-          "label": "Valider, encaisser et générer les documents",
-          "result": "no-visible-effect"
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
@@ -865,12 +1012,14 @@
     {
       "id": "parcels",
       "title": "Colis express & COLIRAIL",
-      "textLength": 1180,
-      "buttonCount": 3,
+      "textLength": 1750,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -882,26 +1031,33 @@
         },
         {
           "index": 1,
-          "label": "＋ Créer une expédition",
-          "result": "no-visible-effect"
+          "label": "Créer une expédition",
+          "result": "changed"
         },
         {
           "index": 2,
-          "label": "Valider, encaisser et générer les documents",
-          "result": "no-visible-effect"
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "taa",
-      "title": "Transport Auto Accompagné · TAA",
-      "textLength": 1212,
-      "buttonCount": 3,
+      "title": "Transport Auto Accompagné",
+      "textLength": 1725,
+      "buttonCount": 6,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -913,26 +1069,33 @@
         },
         {
           "index": 1,
-          "label": "＋ Créer un dossier TAA",
-          "result": "no-visible-effect"
+          "label": "Créer un dossier TAA",
+          "result": "changed"
         },
         {
           "index": 2,
-          "label": "Valider, encaisser et générer les documents",
-          "result": "no-visible-effect"
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "funeral",
-      "title": "Transport funéraire",
-      "textLength": 1178,
-      "buttonCount": 3,
+      "title": "Transport funéraire & accompagnement",
+      "textLength": 1772,
+      "buttonCount": 6,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -944,54 +1107,56 @@
         },
         {
           "index": 1,
-          "label": "＋ Créer un dossier funéraire",
-          "result": "no-visible-effect"
+          "label": "Créer un dossier funéraire",
+          "result": "changed"
         },
         {
           "index": 2,
-          "label": "Valider, encaisser et générer les documents",
-          "result": "no-visible-effect"
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "stations",
-      "title": "Gares",
-      "textLength": 563,
-      "buttonCount": 10,
+      "title": "Gares & escales opérationnelles",
+      "textLength": 1565,
+      "buttonCount": 9,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 8,
         "garbled": false,
         "duplicateIds": []
       },
       "actions": [
         {
           "index": 0,
-          "label": "Comprendre cette page",
-          "result": "changed"
-        },
-        {
-          "index": 1,
           "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 2,
-          "label": "＋ Nouvelle opération",
-          "result": "no-visible-effect"
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
         },
         {
-          "index": 3,
+          "index": 2,
           "label": "Actualiser",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "OWE",
-          "result": "no-visible-effect"
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
@@ -1045,6 +1210,8 @@
             "text": "ModifierAnnuler"
           }
         ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1080,12 +1247,14 @@
     },
     {
       "id": "pos",
-      "title": "Points de vente",
-      "textLength": 543,
-      "buttonCount": 8,
+      "title": "Points de vente & sessions",
+      "textLength": 1332,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1093,28 +1262,23 @@
       "actions": [
         {
           "index": 0,
-          "label": "Comprendre cette page",
-          "result": "changed"
-        },
-        {
-          "index": 1,
           "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 2,
-          "label": "＋ Nouvelle opération",
-          "result": "no-visible-effect"
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
         },
         {
-          "index": 3,
+          "index": 2,
           "label": "Actualiser",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "POS-OW-01",
-          "result": "no-visible-effect"
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
@@ -1127,6 +1291,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1163,24 +1329,36 @@
     {
       "id": "cancellations",
       "title": "Annulations & réimpressions contrôlées",
-      "textLength": 782,
-      "buttonCount": 2,
+      "textLength": 1793,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
       "actions": [
         {
           "index": 0,
-          "label": "＋ Nouvelle demande",
-          "result": "no-visible-effect"
+          "label": "Exporter",
+          "result": "changed"
         },
         {
           "index": 1,
-          "label": "Valider l’annulation",
+          "label": "Nouvelle demande",
+          "result": "changed"
+        },
+        {
+          "index": 2,
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
           "result": "changed"
         }
       ],
@@ -1188,39 +1366,15 @@
     },
     {
       "id": "refunds",
-      "title": "Remboursements",
-      "textLength": 695,
-      "buttonCount": 2,
+      "title": "Remboursements & restitutions",
+      "textLength": 1756,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
-        "garbled": false,
-        "duplicateIds": []
-      },
-      "actions": [
-        {
-          "index": 0,
-          "label": "＋ Nouveau remboursement",
-          "result": "no-visible-effect"
-        },
-        {
-          "index": 1,
-          "label": "•••",
-          "result": "no-visible-effect"
-        }
-      ],
-      "errors": []
-    },
-    {
-      "id": "accounting",
-      "title": "Comptabilité · Sage X3",
-      "textLength": 1453,
-      "buttonCount": 21,
-      "empty": false,
-      "visual": {
-        "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -1232,22 +1386,55 @@
         },
         {
           "index": 1,
-          "label": "Déverser dans Sage X3",
+          "label": "Nouveau remboursement",
           "result": "changed"
         },
         {
           "index": 2,
-          "label": "À contrôler",
+          "label": "Actualiser",
           "result": "changed"
         },
         {
           "index": 3,
-          "label": "Prêtes",
+          "label": "•••",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "accounting",
+      "title": "Comptabilité & journaux de vente",
+      "textLength": 1665,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "Déversées",
+          "index": 1,
+          "label": "Créer un journal",
+          "result": "changed"
+        },
+        {
+          "index": 2,
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "•••",
           "result": "changed"
         }
       ],
@@ -1255,13 +1442,15 @@
     },
     {
       "id": "sage",
-      "title": "Comptabilité · Sage X3",
-      "textLength": 1453,
-      "buttonCount": 21,
+      "title": "Interface comptable Sage X3 V12",
+      "textLength": 1596,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
-        "tinyText": 0,
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
         "garbled": false,
         "duplicateIds": []
       },
@@ -1273,22 +1462,17 @@
         },
         {
           "index": 1,
-          "label": "Déverser dans Sage X3",
+          "label": "Générer un lot V65",
           "result": "changed"
         },
         {
           "index": 2,
-          "label": "À contrôler",
+          "label": "Actualiser",
           "result": "changed"
         },
         {
           "index": 3,
-          "label": "Prêtes",
-          "result": "changed"
-        },
-        {
-          "index": 4,
-          "label": "Déversées",
+          "label": "•••",
           "result": "changed"
         }
       ],
@@ -1302,6 +1486,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1337,12 +1523,14 @@
     },
     {
       "id": "notifications",
-      "title": "Notifications",
-      "textLength": 556,
-      "buttonCount": 8,
+      "title": "Centre de notifications",
+      "textLength": 1368,
+      "buttonCount": 7,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1350,40 +1538,37 @@
       "actions": [
         {
           "index": 0,
-          "label": "Comprendre cette page",
-          "result": "changed"
-        },
-        {
-          "index": 1,
           "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 2,
-          "label": "＋ Nouvelle opération",
-          "result": "no-visible-effect"
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
         },
         {
-          "index": 3,
+          "index": 2,
           "label": "Actualiser",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "NOT-0841",
-          "result": "no-visible-effect"
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "roles",
-      "title": "Rôles & permissions",
-      "textLength": 590,
+      "title": "Rôles, droits & séparation des tâches",
+      "textLength": 1503,
       "buttonCount": 8,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1391,40 +1576,37 @@
       "actions": [
         {
           "index": 0,
-          "label": "Comprendre cette page",
-          "result": "changed"
-        },
-        {
-          "index": 1,
           "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 2,
-          "label": "＋ Nouvelle opération",
-          "result": "no-visible-effect"
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
         },
         {
-          "index": 3,
+          "index": 2,
           "label": "Actualiser",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "Administrateur",
-          "result": "no-visible-effect"
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
         }
       ],
       "errors": []
     },
     {
       "id": "controller",
-      "title": "Application contrôleur",
-      "textLength": 531,
-      "buttonCount": 6,
+      "title": "Console contrôleur terrain",
+      "textLength": 1035,
+      "buttonCount": 9,
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1432,28 +1614,28 @@
       "actions": [
         {
           "index": 0,
-          "label": "Comprendre cette page",
-          "result": "changed"
-        },
-        {
-          "index": 1,
           "label": "Exporter",
           "result": "changed"
         },
         {
-          "index": 2,
-          "label": "＋ Nouvelle opération",
-          "result": "no-visible-effect"
+          "index": 1,
+          "label": "Clôturer la mission",
+          "result": "changed"
         },
         {
-          "index": 3,
+          "index": 2,
           "label": "Actualiser",
           "result": "changed"
         },
         {
-          "index": 4,
-          "label": "MISSION-620",
-          "result": "no-visible-effect"
+          "index": 3,
+          "label": "•••",
+          "result": "changed"
+        },
+        {
+          "index": 7,
+          "label": "Simuler un scan",
+          "result": "changed"
         }
       ],
       "errors": []
@@ -1466,6 +1648,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1507,6 +1691,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1563,6 +1749,14 @@
             "text": "03 · ARCHITECTURE TECHNIQUE CIBLEUne architecture modulaire, portable et exploit"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "bp-page",
+            "text": "SETRAG × TRANSMVETProposition financière & architecture EnterpriseBudgetFinancem"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1604,6 +1798,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1632,7 +1828,7 @@
         {
           "index": 4,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -1645,6 +1841,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1686,6 +1884,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1727,6 +1927,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1745,7 +1947,7 @@
         {
           "index": 2,
           "label": "•••",
-          "result": "no-visible-effect"
+          "result": "changed"
         }
       ],
       "errors": []
@@ -1758,6 +1960,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1771,7 +1975,7 @@
         {
           "index": 1,
           "label": "＋ Créer un compte",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 2,
@@ -1840,6 +2044,14 @@
             "text": "03 · MATRICE DE CONFORMITÉTraçabilité complète entre le cahier des charges et la"
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "to-page",
+            "text": "OFFRE TECHNIQUE ENTERPRISESystème central de billettique & écosystème voyageursC"
+          }
+        ],
+        "documentOverflow": 4,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []
@@ -1884,7 +2096,7 @@
           {
             "tag": "DIV",
             "cls": "stb-panel",
-            "text": "ARRIVÉES · OWENDO03:13\n    HeureTrainEn provenance deVoieStatut\n    \n  02:35\n  E"
+            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
           },
           {
             "tag": "DIV",
@@ -1894,7 +2106,7 @@
           {
             "tag": "DIV",
             "cls": "stb-monitor",
-            "text": "ARRIVÉES · OWENDO03:13\n    HeureTrainEn provenance deVoieStatut\n    \n  02:35\n  E"
+            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
           },
           {
             "tag": "DIV",
@@ -1922,6 +2134,24 @@
             "text": ""
           }
         ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "stb-panel",
+            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+          },
+          {
+            "tag": "DIV",
+            "cls": "stb-mount",
+            "text": ""
+          },
+          {
+            "tag": "DIV",
+            "cls": "stb-monitor",
+            "text": "ARRIVÉES · OWENDO03:37\n    HeureTrainEn provenance deVoieStatut\n    \n  02:59\n  E"
+          }
+        ],
+        "documentOverflow": 6,
         "tinyText": 42,
         "garbled": false,
         "duplicateIds": []
@@ -1940,7 +2170,7 @@
         {
           "index": 2,
           "label": "Owendo",
-          "result": "no-visible-effect"
+          "result": "changed"
         },
         {
           "index": 3,
@@ -1963,6 +2193,8 @@
       "empty": false,
       "visual": {
         "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
         "tinyText": 0,
         "garbled": false,
         "duplicateIds": []

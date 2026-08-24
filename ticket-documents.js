@@ -5,7 +5,66 @@ const qr=(value)=>`<div class="doc-qr"><img src="https://api.qrserver.com/v1/cre
 const meta=(items)=>`<div class="doc-meta">${items.map(x=>`<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join('')}</div>`;
 const brand=(type,ref,status='VALIDE')=>`<header class="doc-brand"><div class="doc-logo"><span>⚡</span><b>SETRAG</b><small>Le Transgabonais</small></div><div><small>${type}</small><strong>${ref}</strong></div><em>${status}</em></header>`;
 const route=()=>`<div class="doc-route"><div><small>DÉPART</small><b>${dossier.from}</b><span>07:30 · Voie 1</span></div><i>→<small>648 KM</small></i><div><small>ARRIVÉE</small><b>${dossier.to}</b><span>16:20 · Voie 2</span></div></div>`;
-function ticket(){return `<article class="setrag-document ticket-doc"><div class="doc-watermark">TRANSGABONAIS</div>${brand('BILLET VOYAGEUR ÉLECTRONIQUE',dossier.sale)}${route()}<div class="doc-passenger"><div><small>VOYAGEUR · SEXE F</small><h2>${dossier.passenger}</h2><span>${dossier.customer} · Client comptant · ${dossier.phone}</span></div><div class="doc-seat"><small>${dossier.class}</small><b>${dossier.car} / ${dossier.seat}</b></div></div>${meta([['Train / service',`${dossier.train} · ${dossier.service}`],['Départ',dossier.departure],['Arrivée',dossier.arrival],['Réservation',dossier.reservation],['Gares / distance','OWE → FVE · '+dossier.distance],['Tarif',`${dossier.fare} · réduction 0 %`],['Type / prestation','VENTE · Billet voyageur'],['Validité','Trajet et date indiqués'],['Contact d’urgence',dossier.emergency],['Appareil émetteur',dossier.device],['Montant perçu',dossier.total],['Montant à payer','0 FCFA']])}<div class="doc-finance"><span>Prix unitaire HT <b>${dossier.ht}</b></span><span>TVA <b>${dossier.vat}</b></span><span>CSS <b>${dossier.css}</b></span><strong>TTC ${dossier.total}</strong></div><footer>${qr(dossier.sale)}<div><b>Contrôle online/offline · identifiant unique</b><span>Paiement ${dossier.payment} · ${dossier.paymentRef}</span><span>Vente et réservation : ${dossier.issued} · ${dossier.pos}</span><small>Document nominatif · duplicata contrôlé · journal AUD-260812-9942</small></div></footer></article>`}
+const tkIcon={
+ user:'<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M4 21c1.6-4 4.8-6 8-6s6.4 2 8 6"/>',
+ tag:'<path d="M12 3.6 20.4 12 12 20.4 3.6 12V3.6H12Z"/><circle cx="7.8" cy="7.8" r="1.3"/>',
+ store:'<path d="M4 9.5 5 4h14l1 5.5"/><path d="M4 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5V15h4v4.5"/>',
+ calendar:'<rect x="3.5" y="5" width="17" height="16" rx="2.4"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+ train:'<rect x="5" y="4" width="14" height="13" rx="4"/><path d="M5 12h14M9 4v13M8 20.5 6 17M16 20.5l2-3.5"/><circle cx="8.6" cy="14.4" r=".9"/><circle cx="15.4" cy="14.4" r=".9"/>',
+ seat:'<path d="M6 4v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4"/><path d="M6 20v-3h12v3"/><path d="M4 20h16"/>',
+ track:'<path d="M4 20 9 4h6l5 16"/><path d="M6.4 13h11.2M7.6 9h8.8M5.2 17h13.6"/>',
+ clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.2 2"/>',
+ shield:'<path d="M12 3.2 19 6v6c0 5-3 8.4-7 9.8-4-1.4-7-4.8-7-9.8V6l7-2.8Z"/><path d="M9 12.2l2 2 4-4.4"/>',
+ offline:'<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.3 19.2h3.4"/><path d="M4 4l16 16"/>',
+ refresh:'<path d="M4.5 12a7.5 7.5 0 0 1 12.6-5.5L19 8"/><path d="M19.5 12a7.5 7.5 0 0 1-12.6 5.5L5 16"/><path d="M19 4.5V8h-3.5M5 19.5V16h3.5"/>',
+ leaf:'<path d="M5 19c9 1 14-4 14-13-9 0-14 4-14 13Z"/><path d="M5 19c3-5 6-8 12-11"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+ check:'<path d="M5 12.5 10 17l9-10"/>',
+ arrow:'<path d="M4 12h15M13 6l6 6-6 6"/>',
+};
+const ti=(name,cls='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${cls}">${tkIcon[name]}</svg>`;
+const tkLogo=`<svg viewBox="0 0 32 32" fill="none"><path d="M3 20.5 27 9.5l-3.6 6.4L27 22 3 20.5Z" fill="#4f6ef7"/><path d="M3 25 21 17.5l-2.4 4.2L21 26 3 25Z" fill="#8ea1fb"/></svg>`;
+function ticket(){
+ const [depDate,depTime]=dossier.departure.split(' · ');
+ const [,arrTime]=dossier.arrival.split(' · ');
+ return `<div class="tkt-page"><div class="tkt-top"><h1>Billet voyageur</h1><span class="tkt-badge ok">${ti('check')}Validé</span></div><p class="tkt-sub">Merci de vous présenter 30 minutes avant le départ.</p>
+ <article class="setrag-document ticket-doc tkt-card">
+  <header class="tkt-head"><div class="tkt-logo">${tkLogo}<div><b>SETRAG</b><small>PILOTAGE</small></div></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
+  <div class="tkt-body">
+   <div class="tkt-col-left">
+    <div class="tkt-field"><i class="tkt-ic">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>
+    <div class="tkt-field"><i class="tkt-ic">${ti('tag')}</i><div><small>Référence</small><b>${dossier.sale}</b></div></div>
+    <div class="tkt-field"><i class="tkt-ic">${ti('store')}</i><div><small>Canal d’achat</small><b>Application SETRAG</b></div></div>
+    <div class="tkt-field"><i class="tkt-ic">${ti('calendar')}</i><div><small>Émis le</small><b>${dossier.issued}</b></div></div>
+   </div>
+   <div class="tkt-col-mid">
+    <div class="tkt-route"><b>${dossier.from}</b><i>${ti('arrow')}</i><b>${dossier.to}</b></div>
+    <div class="tkt-grid">
+     <div><i class="tkt-ic">${ti('train')}</i><small>Train</small><b>${dossier.train}</b></div>
+     <div class="tkt-dep"><span class="tkt-dot"></span><small>Départ</small><b>${depTime}</b><em>${dossier.from}</em></div>
+     <div><i class="tkt-ic">${ti('seat')}</i><small>Classe</small><b>${dossier.class}</b></div>
+     <div><i class="tkt-ic">${ti('calendar')}</i><small>Date</small><b>${depDate}</b></div>
+     <div class="tkt-arr"><span class="tkt-dot end"></span><small>Arrivée</small><b>${arrTime}</b><em>${dossier.to}</em></div>
+     <div><i class="tkt-ic">${ti('seat')}</i><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
+    </div>
+   </div>
+   <div class="tkt-col-right">${qr(dossier.sale).replace('doc-qr','doc-qr tkt-qr')}<small>Code billet</small><b>${dossier.sale}</b></div>
+  </div>
+  <div class="tkt-strip">
+   <div><i class="tkt-ic">${ti('track')}</i><div><small>Voie / quai</small><b>Voie 1</b></div></div>
+   <div><i class="tkt-ic">${ti('clock')}</i><div><small>Durée du trajet</small><b>8h50</b></div></div>
+   <div><i class="tkt-ic">${ti('tag')}</i><div><small>Type de billet</small><b>Plein tarif</b></div></div>
+  </div>
+ </article>
+ <div class="tkt-trust">
+  <div><i class="tkt-ic">${ti('shield')}</i><div><b>Billet 100% sécurisé</b><span>QR code unique et infalsifiable</span></div></div>
+  <div><i class="tkt-ic">${ti('offline')}</i><div><b>Accessible hors ligne</b><span>Disponible à tout moment</span></div></div>
+  <div><i class="tkt-ic">${ti('refresh')}</i><div><b>Échanges & remboursements</b><span>Selon conditions tarifaires</span></div></div>
+  <div><i class="tkt-ic">${ti('leaf')}</i><div><b>Voyage responsable</b><span>Merci de voyager vert</span></div></div>
+ </div>
+ <p class="tkt-legal">${ti('lock')}Ce billet est personnel et non cessible. Présentez-le au personnel de bord à chaque contrôle.</p>
+</div>`;
+}
 const barcode=v=>`<div class="premium-barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><small>${v}</small></div>`;
 const serviceRoute=(codeA,codeB,extra)=>`<div class="premium-service-route"><section><small>ORIGINE</small><strong>${codeA}</strong><b>${dossier.from}</b></section><div><span>TRANSGABONAIS</span><i>→</i><small>${extra}</small></div><section><small>DESTINATION</small><strong>${codeB}</strong><b>${dossier.to}</b></section></div>`;
 function bag(){return `<article class="setrag-document premium-service bag-doc"><div class="doc-watermark">SETRAG BAGAGES</div>${brand('ÉTIQUETTE BAGAGE SÉCURISÉE',dossier.bag,'ENREGISTRÉ')}${serviceRoute('OWE','FVE','EXP-620 · 12 AOÛT 2026')}<div class="premium-identity"><div><small>VOYAGEUR PROPRIÉTAIRE</small><h2>${dossier.passenger}</h2><span>${dossier.sale} · ${dossier.phone}</span></div><strong><small>POIDS CONTRÔLÉ</small>24 KG</strong></div><div class="premium-keyline"><span><small>AFFECTATION</small><b>SOUTE V4 · ZONE B</b></span><span><small>FRANCHISE</small><b>20 KG + 4 KG</b></span><span><small>TRAIN / SERVICE</small><b>${dossier.train} · ${dossier.service}</b></span><span><small>STATUT</small><b>SCAN DÉPART VALIDÉ</b></span></div>${meta([['N° étiquette',dossier.bag],['Billet associé',dossier.sale],['Date de départ','12 août 2026 · 07:30'],['Arrivée prévue','12 août 2026 · 16:20'],['Code tarifaire','BAG-Z4'],['Prix HT','490 FCFA'],['TVA / CSS','25 / 5 FCFA'],['Montant TTC','520 FCFA'],['Émetteur',dossier.pos],['Terminal',dossier.device],['Agent',dossier.seller],['Dernier scan','Owendo · 09:44:08']])}<div class="premium-control"><div>${barcode(dossier.bag)}<b>TALON DE CONTRÔLE BAGAGE</b><span>À conserver jusqu’à la restitution</span></div>${qr(dossier.bag)}<aside><small>IDENTIFIANT UNIQUE</small><b>${dossier.bag}</b><span>Sceller sur la poignée · rapprochement obligatoire avec le billet voyageur.</span><em>✓ Billet lié · ✓ poids contrôlé · ✓ piste d’audit</em></aside></div></article>`}

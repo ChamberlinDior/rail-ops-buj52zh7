@@ -34,6 +34,9 @@ const mime = {'.html':'text/html; charset=utf-8','.js':'application/javascript; 
  if(!await page.locator('.oi-dialog').count())throw new Error('Prévisualisation multicanale absente');
  await page.locator('[data-oi-close]').first().click();
  for(const tab of ['assets','capacity','governance']){await page.locator(`[data-oi-tab="${tab}"]`).click();if((await page.locator('#oiPanel').innerText()).length<500)throw new Error(`Onglet ${tab} incomplet`)}
- console.log(JSON.stringify({tabs,simulation:true,humanValidation:true,crisis:true,offline:true,multichannel:true,errors},null,2));
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>navigate('intelligence'));await page.waitForTimeout(120);
+ const mobileOverflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+ if(mobileOverflow>2)throw new Error(`Débordement mobile du cockpit : ${mobileOverflow}px`);
+ console.log(JSON.stringify({tabs,simulation:true,humanValidation:true,crisis:true,offline:true,multichannel:true,mobileOverflow,errors},null,2));
  await browser.close();server.close();if(errors.length)process.exitCode=1;
 })().catch(error=>{console.error(error);process.exit(1)});

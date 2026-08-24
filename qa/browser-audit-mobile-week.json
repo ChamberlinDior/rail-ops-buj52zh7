@@ -1,0 +1,2266 @@
+{
+  "base": "http://127.0.0.1:4173/",
+  "generatedAt": "2026-08-24T07:20:58.148Z",
+  "pageCount": 45,
+  "runtimeErrors": [],
+  "pages": [
+    {
+      "id": "dashboard",
+      "title": "Vue d’ensemble",
+      "textLength": 1253,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "sales",
+      "title": "Ventes & prestations",
+      "textLength": 4421,
+      "buttonCount": 29,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "sales-table-pro",
+            "text": "Données de démonstration SETRAGOpérationClient / liaisonTrajet et circulationAff"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "🎟Billet voyageurSET-260812-5012Nadia Raponda+241 06 45 22 19Lié · RES-260812-78"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "🎟Billet voyageurSET-260812-5012Nadia Raponda+241 06 45 22 19Lié · RES-260812-78"
+          },
+          {
+            "tag": "TD",
+            "cls": "",
+            "text": "🎟Billet voyageurSET-260812-5012"
+          },
+          {
+            "tag": "DIV",
+            "cls": "sale-operation",
+            "text": "🎟Billet voyageurSET-260812-5012"
+          },
+          {
+            "tag": "TD",
+            "cls": "",
+            "text": "Nadia Raponda+241 06 45 22 19Lié · RES-260812-78421Billet nominatif · documents "
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "Nadia Raponda"
+          },
+          {
+            "tag": "SMALL",
+            "cls": "",
+            "text": "+241 06 45 22 19"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 8,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "trains",
+      "title": "Trains & circulations",
+      "textLength": 2688,
+      "buttonCount": 14,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "trn-table",
+            "text": "Données de démonstration SETRAG\n  TrainTypeCompositionTrajetPositionStatutCharge"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "TrainTypeCompositionTrajetPositionStatutChargeÉcartActions"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "TrainTypeCompositionTrajetPositionStatutChargeÉcartActions"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Composition"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Trajet"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Position"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Charge"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 26,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "capacity",
+      "title": "Voitures & places",
+      "textLength": 1950,
+      "buttonCount": 66,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "capx-car ",
+            "text": "V31re classe38/48 vendues · 0 deboutCAR-2049 · 12×4"
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "V3"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "1re classe"
+          },
+          {
+            "tag": "SMALL",
+            "cls": "",
+            "text": "38/48 vendues · 0 debout"
+          },
+          {
+            "tag": "EM",
+            "cls": "",
+            "text": "CAR-2049 · 12×4"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "capx-car ",
+            "text": "V42e classe58/72 vendues · 10 deboutCAR-2050 · 18×4"
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "V4"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "2e classe"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 12,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "pricing",
+      "title": "Tarification & Yield Management",
+      "textLength": 3804,
+      "buttonCount": 45,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "pyx-table",
+            "text": "Données de démonstration SETRAGCodeProduitTypePérimètreRègleVersionStatutActions"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CodeProduitTypePérimètreRègleVersionStatutActions"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CodeProduitTypePérimètreRègleVersionStatutActions"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Périmètre"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Règle"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Version"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Actions"
+          }
+        ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "pyx-card",
+            "text": "Barème kilométrique et règles d’arrondiOMNIBUS · 0–99 km1re 46,93 · 2e 37,54OMNI"
+          },
+          {
+            "tag": "H2",
+            "cls": "",
+            "text": "Barème kilométrique et règles d’arrondi"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-rules",
+            "text": "OMNIBUS · 0–99 km1re 46,93 · 2e 37,54OMNIBUS · ≥100 km1re 42,89 · 2e 34,31EXPRES"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-rule",
+            "text": "OMNIBUS · ≥100 km1re 42,89 · 2e 34,31"
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "OMNIBUS · ≥100 km"
+          },
+          {
+            "tag": "DIV",
+            "cls": "pyx-rule",
+            "text": "EXPRESS · 0–99 kmVIP 72,38 · 1re 60,10 · 2e 47,51"
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "EXPRESS · 0–99 km"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "VIP 72,38 · 1re 60,10 · 2e 47,51"
+          }
+        ],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "customers",
+      "title": "Voyageurs",
+      "textLength": 2921,
+      "buttonCount": 35,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "aq-table",
+            "text": "Données de démonstration SETRAG\n   VoyageurContactUrgenceBilletsBagages / ColisD"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "VoyageurContactUrgenceBilletsBagages / ColisDépensesDernier contrôleAction"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "VoyageurContactUrgenceBilletsBagages / ColisDépensesDernier contrôleAction"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Urgence"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Billets"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Bagages / Colis"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Dépenses"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Dernier contrôle"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "rfid",
+      "title": "Cartes RFID / NFC",
+      "textLength": 1131,
+      "buttonCount": 15,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "À remplacer"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGCarteTitulaireProduitClasseSoldeValiditéDernière "
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CarteTitulaireProduitClasseSoldeValiditéDernière utilisationStatutAction"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CarteTitulaireProduitClasseSoldeValiditéDernière utilisationStatutAction"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Produit"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Classe"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Solde"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Validité"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "payments",
+      "title": "Paiements",
+      "textLength": 1399,
+      "buttonCount": 19,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Click&Pay"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Visa / Mastercard"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Échecs"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Remboursements"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGRéférenceVenteCanalOpérateurMontantRéférence exte"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "RéférenceVenteCanalOpérateurMontantRéférence externeDateRapprochementStatutActio"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "RéférenceVenteCanalOpérateurMontantRéférence externeDateRapprochementStatutActio"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Montant"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "cash",
+      "title": "Caisses & rapprochement",
+      "textLength": 1506,
+      "buttonCount": 13,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGCaisseGareAgentOuvertureVentesAnnulationsRembours"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CaisseGareAgentOuvertureVentesAnnulationsRemboursementsThéoriqueDéclaréÉcartÉtat"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CaisseGareAgentOuvertureVentesAnnulationsRemboursementsThéoriqueDéclaréÉcartÉtat"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Ouverture"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Ventes"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Annulations"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Remboursements"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Théorique"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "control",
+      "title": "Contrôles & fraude",
+      "textLength": 2738,
+      "buttonCount": 33,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Annulés"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Déjà utilisés"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "PV / amendes"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGHeureBillet / cartePassagerTrainContrôleurTermina"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "HeureBillet / cartePassagerTrainContrôleurTerminalRésultatPV / amendePositionAct"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "HeureBillet / cartePassagerTrainContrôleurTerminalRésultatPV / amendePositionAct"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Contrôleur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Terminal"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 25,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "reports",
+      "title": "Rapports & KPI",
+      "textLength": 1399,
+      "buttonCount": 13,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "users",
+      "title": "Utilisateurs & rôles",
+      "textLength": 914,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGUtilisateurRôleSiteDernière connexionMFAStatutAct"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "UtilisateurRôleSiteDernière connexionMFAStatutAction"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "UtilisateurRôleSiteDernière connexionMFAStatutAction"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Site"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Dernière connexion"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "MFA"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Action"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "audit",
+      "title": "Journal d’audit",
+      "textLength": 648,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGHorodatageUtilisateurActionObjetAvant / AprèsIP /"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "HorodatageUtilisateurActionObjetAvant / AprèsIP / TerminalRésultat"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "HorodatageUtilisateurActionObjetAvant / AprèsIP / TerminalRésultat"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Action"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Objet"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Avant / Après"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "IP / Terminal"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Résultat"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "settings",
+      "title": "Paramètres",
+      "textLength": 461,
+      "buttonCount": 1,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "tracking",
+      "title": "Centre des opérations",
+      "textLength": 2992,
+      "buttonCount": 29,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "text": "SENS FRANCEVILLE\n  SENS OWENDO\n  DÉPÔT OWENDO\n  TERMINAL FRANCEVILLE\n  \n  \n   \n "
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "g",
+            "cls": "[object SVGAnimatedString]",
+            "text": "TERMINAL FRANCEVILLE"
+          },
+          {
+            "tag": "rect",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "text",
+            "cls": "[object SVGAnimatedString]",
+            "text": "TERMINAL FRANCEVILLE"
+          },
+          {
+            "tag": "g",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "circle",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 53,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "devices",
+      "title": "Terminaux & batteries",
+      "textLength": 1164,
+      "buttonCount": 15,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Maintenance"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGTerminalAgentMission / trainGare / positionBatter"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "TerminalAgentMission / trainGare / positionBatterieAutonomieConnectivitéFile off"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "TerminalAgentMission / trainGare / positionBatterieAutonomieConnectivitéFile off"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Gare / position"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Batterie"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Autonomie"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Connectivité"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "analytics",
+      "title": "Analytique opérationnelle locale",
+      "textLength": 702,
+      "buttonCount": 2,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "frontoffice",
+      "title": "Votre billet de train,en moins de 2 minutes.",
+      "textLength": 4244,
+      "buttonCount": 29,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "fos-nav-cta",
+            "text": "Tous les services Profil0 Réserver"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "gold",
+            "text": "Réserver"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 35,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "bags",
+      "title": "Bagages voyageurs",
+      "textLength": 1170,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "parcels",
+      "title": "Colis express & COLIRAIL",
+      "textLength": 1180,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "taa",
+      "title": "Transport Auto Accompagné · TAA",
+      "textLength": 1212,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "funeral",
+      "title": "Transport funéraire",
+      "textLength": 1178,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "stations",
+      "title": "Gares",
+      "textLength": 563,
+      "buttonCount": 10,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGCodeGareActivitéIndicateurStatutOWEOwendo6 trains"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CodeGareActivitéIndicateurStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CodeGareActivitéIndicateurStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Activité"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Indicateur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "OWEOwendo6 trains · 4 quais84 ventesOpérationnelle••• Voir la fiche Modifier Imp"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "OWEOwendo6 trains · 4 quais84 ventesOpérationnelle••• Voir la fiche Modifier Imp"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "agencies",
+      "title": "Points de vente & agences",
+      "textLength": 3048,
+      "buttonCount": 49,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "aq-table",
+            "text": "Données de démonstration SETRAG\n   AgenceTypeTrain / départTrajet / segmentClass"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "AgenceTypeTrain / départTrajet / segmentClasseQuotaVenduRestantStatutActions"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "AgenceTypeTrain / départTrajet / segmentClasseQuotaVenduRestantStatutActions"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Train / départ"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Trajet / segment"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Classe"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Quota"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Vendu"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "pos",
+      "title": "Points de vente",
+      "textLength": 543,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGCodeSiteAgentÉquipementsStatutPOS-OW-01Gare Owend"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CodeSiteAgentÉquipementsStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CodeSiteAgentÉquipementsStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Agent"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Équipements"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "POS-OW-01Gare OwendoGrâce MavoungouCaisse 01 · CTRL-04521Ouvert••• Voir la fiche"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "POS-OW-01Gare OwendoGrâce MavoungouCaisse 01 · CTRL-04521Ouvert••• Voir la fiche"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "schedules",
+      "title": "Livrets horaires & itinéraires",
+      "textLength": 2139,
+      "buttonCount": 27,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "",
+            "text": "Livrets et itinérairesTousBrouillonÀ validerActifPlanifiéExpiréTous les typesEXP"
+          },
+          {
+            "tag": "SECTION",
+            "cls": "shx-card",
+            "text": "Livrets et itinérairesTousBrouillonÀ validerActifPlanifiéExpiréTous les typesEXP"
+          },
+          {
+            "tag": "H3",
+            "cls": "",
+            "text": "Livrets et itinéraires"
+          },
+          {
+            "tag": "DIV",
+            "cls": "shx-tabs",
+            "text": "TousBrouillonÀ validerActifPlanifiéExpiré"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Planifié"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Expiré"
+          },
+          {
+            "tag": "DIV",
+            "cls": "shx-toolbar",
+            "text": "Tous les typesEXPRESSOMNIBUSSPECIALFiltres avancés"
+          },
+          {
+            "tag": "INPUT",
+            "cls": "fx-focus",
+            "text": ""
+          }
+        ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "",
+            "text": "Livrets et itinérairesTousBrouillonÀ validerActifPlanifiéExpiréTous les typesEXP"
+          },
+          {
+            "tag": "SECTION",
+            "cls": "shx-card",
+            "text": "Livrets et itinérairesTousBrouillonÀ validerActifPlanifiéExpiréTous les typesEXP"
+          },
+          {
+            "tag": "H3",
+            "cls": "",
+            "text": "Livrets et itinéraires"
+          },
+          {
+            "tag": "DIV",
+            "cls": "shx-tabs",
+            "text": "TousBrouillonÀ validerActifPlanifiéExpiré"
+          },
+          {
+            "tag": "DIV",
+            "cls": "shx-toolbar",
+            "text": "Tous les typesEXPRESSOMNIBUSSPECIALFiltres avancés"
+          },
+          {
+            "tag": "INPUT",
+            "cls": "fx-focus",
+            "text": ""
+          },
+          {
+            "tag": "SELECT",
+            "cls": "fx-focus",
+            "text": "Tous les typesEXPRESSOMNIBUSSPECIAL"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "btn ghost fx-glow-btn",
+            "text": "Filtres avancés"
+          }
+        ],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "cancellations",
+      "title": "Annulations & réimpressions contrôlées",
+      "textLength": 782,
+      "buttonCount": 2,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "refunds",
+      "title": "Remboursements",
+      "textLength": 695,
+      "buttonCount": 2,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGRemboursementVente sourceClientMontantPénalitéCan"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "RemboursementVente sourceClientMontantPénalitéCanalValidateurStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "RemboursementVente sourceClientMontantPénalitéCanalValidateurStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Montant"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Pénalité"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Canal"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Validateur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          }
+        ],
+        "uncontainedOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGRemboursementVente sourceClientMontantPénalitéCan"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "RemboursementVente sourceClientMontantPénalitéCanalValidateurStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "RemboursementVente sourceClientMontantPénalitéCanalValidateurStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Montant"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Pénalité"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Canal"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Validateur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          }
+        ],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "accounting",
+      "title": "Comptabilité · Sage X3",
+      "textLength": 1453,
+      "buttonCount": 21,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Rejouées"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGJournalN° pièceDateSite financierPoint de venteCo"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "JournalN° pièceDateSite financierPoint de venteCompte analytiqueAxe / centreHTTV"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "JournalN° pièceDateSite financierPoint de venteCompte analytiqueAxe / centreHTTV"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Point de vente"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Compte analytique"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Axe / centre"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "HT"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "sage",
+      "title": "Comptabilité · Sage X3",
+      "textLength": 1453,
+      "buttonCount": 21,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Rejouées"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGJournalN° pièceDateSite financierPoint de venteCo"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "JournalN° pièceDateSite financierPoint de venteCompte analytiqueAxe / centreHTTV"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "JournalN° pièceDateSite financierPoint de venteCompte analytiqueAxe / centreHTTV"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Point de vente"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Compte analytique"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Axe / centre"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "HT"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring technique",
+      "textLength": 1209,
+      "buttonCount": 16,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGServiceComposantDisponibilitéTemps réponseErreurs"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "ServiceComposantDisponibilitéTemps réponseErreursDernier contrôleSeuilAlerte e-m"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "ServiceComposantDisponibilitéTemps réponseErreursDernier contrôleSeuilAlerte e-m"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Temps réponse"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Erreurs"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Dernier contrôle"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Seuil"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Alerte e-mail"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "textLength": 556,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGRéférenceAlerteObjetDateStatutNOT-0841Batterie TP"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "RéférenceAlerteObjetDateStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "RéférenceAlerteObjetDateStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Objet"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Date"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "NOT-0841Batterie TPE sous 20 %CTRL-04521Aujourd’hui · 09:42À traiter••• Voir la "
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "NOT-0841Batterie TPE sous 20 %CTRL-04521Aujourd’hui · 09:42À traiter••• Voir la "
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "roles",
+      "title": "Rôles & permissions",
+      "textLength": 590,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGProfilPérimètreDroits principauxUtilisateursStatu"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "ProfilPérimètreDroits principauxUtilisateursStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "ProfilPérimètreDroits principauxUtilisateursStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Droits principaux"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Utilisateurs"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "AdministrateurTous les modulesCréation · publication · audit12 utilisateursActif"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "AdministrateurTous les modulesCréation · publication · audit12 utilisateursActif"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "controller",
+      "title": "Application contrôleur",
+      "textLength": 531,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGMissionCirculationContrôleurActivitéStatutMISSION"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "MissionCirculationContrôleurActivitéStatut"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "MissionCirculationContrôleurActivitéStatut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Circulation"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Contrôleur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Activité"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "MISSION-620EXP-620 · Owendo → FrancevilleJ-N. Lekogo86 contrôles · 2 anomaliesEn"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "jury",
+      "title": "SETRAG × TRANSMVET",
+      "textLength": 851,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture cible & cybersécurité",
+      "textLength": 1243,
+      "buttonCount": 0,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "business",
+      "title": "Proposition financière& architecture Enterprise",
+      "textLength": 28085,
+      "buttonCount": 17,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGFacteurCe que le projet doit réellement couvrirPo"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "FacteurCe que le projet doit réellement couvrirPourquoi cela crée de la valeur /"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "FacteurCe que le projet doit réellement couvrirPourquoi cela crée de la valeur /"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Ce que le projet doit réellement couvrir"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Pourquoi cela crée de la valeur / du coût"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "Complexité métierBilletterie, trains, voitures, places, segments, tarifs, bagage"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "Complexité métierBilletterie, trains, voitures, places, segments, tarifs, bagage"
+          },
+          {
+            "tag": "TD",
+            "cls": "",
+            "text": "Billetterie, trains, voitures, places, segments, tarifs, bagages, colis, TAA, fu"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "manual",
+      "title": "Mode dégradé",
+      "textLength": 1329,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGOpérationTitre manuelTerminalHorodatageTypeTentat"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "OpérationTitre manuelTerminalHorodatageTypeTentativesConflitÉtat"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "OpérationTitre manuelTerminalHorodatageTypeTentativesConflitÉtat"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Horodatage"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Type"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Tentatives"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Conflit"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "État"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "network",
+      "title": "Points de vente & agences",
+      "textLength": 1446,
+      "buttonCount": 17,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Agences Premium"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "text": "Guichets"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGCodePoint de venteTypeSuperviseurGuichetsCapacité"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "CodePoint de venteTypeSuperviseurGuichetsCapacitéTrain / dateQuotaVenduStatutAct"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "CodePoint de venteTypeSuperviseurGuichetsCapacitéTrain / dateQuotaVenduStatutAct"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Superviseur"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Guichets"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Capacité"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "admin",
+      "title": "Administration",
+      "textLength": 1581,
+      "buttonCount": 22,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGUtilisateurRôleSiteConsultationModificationValida"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "UtilisateurRôleSiteConsultationModificationValidationSuppressionMFAÉtatAction"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "UtilisateurRôleSiteConsultationModificationValidationSuppressionMFAÉtatAction"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Site"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Consultation"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Modification"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Validation"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Suppression"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "security",
+      "title": "Cybersécurité & conformité",
+      "textLength": 1627,
+      "buttonCount": 5,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "cdc-table",
+            "text": "Données de démonstration SETRAGHeureUtilisateurÉvénementIP / terminalRisqueDécis"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "HeureUtilisateurÉvénementIP / terminalRisqueDécisionPreuve"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "HeureUtilisateurÉvénementIP / terminalRisqueDécisionPreuve"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Événement"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "IP / terminal"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Risque"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Décision"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Preuve"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "administration",
+      "title": "Administration, sécurité & continuité",
+      "textLength": 6239,
+      "buttonCount": 9,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "siem-table",
+            "text": "Données de démonstration SETRAG\n  HorodatageComptePoste / IP sourceRègle déclenc"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "HorodatageComptePoste / IP sourceRègle déclenchéeSévéritéStatutAction automatiqu"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "HorodatageComptePoste / IP sourceRègle déclenchéeSévéritéStatutAction automatiqu"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Poste / IP source"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Règle déclenchée"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Sévérité"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Statut"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Action automatique"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "techoffer",
+      "title": "Offre technique EnterpriseBillettique & écosystème voyageurs",
+      "textLength": 23143,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "to-page",
+            "text": "OFFRE TECHNIQUE ENTERPRISESystème central de billettique & écosystème voyageursC"
+          },
+          {
+            "tag": "NAV",
+            "cls": "bp-nav",
+            "text": "OFFRE TECHNIQUE ENTERPRISESystème central de billettique & écosystème voyageursC"
+          },
+          {
+            "tag": "SECTION",
+            "cls": "bp-hero",
+            "text": "RÉPONSE TECHNIQUE AU CAHIER DES CHARGES SETRAG · VERSION 1.2 DU 02/07/2025Offre "
+          },
+          {
+            "tag": "DIV",
+            "cls": "bp-photo",
+            "text": ""
+          },
+          {
+            "tag": "DIV",
+            "cls": "bp-grid",
+            "text": ""
+          },
+          {
+            "tag": "SECTION",
+            "cls": "bp-section ",
+            "text": "01 · SYNTHÈSE EXÉCUTIVEUne réponse conçue comme un système ferroviaire critiqueL"
+          },
+          {
+            "tag": "SECTION",
+            "cls": "bp-section dark",
+            "text": "02 · COMPRÉHENSION DU BESOINTransformer les faiblesses actuelles en contrôles ap"
+          },
+          {
+            "tag": "TABLE",
+            "cls": "",
+            "text": "Données de démonstration SETRAGRisque / limitation du CDCRéponse proposéeBillets"
+          }
+        ],
+        "uncontainedOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "to-page",
+            "text": "OFFRE TECHNIQUE ENTERPRISESystème central de billettique & écosystème voyageursC"
+          }
+        ],
+        "documentOverflow": 2,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "boards",
+      "title": "Écrans de gare",
+      "textLength": 4023,
+      "buttonCount": 10,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "stb-ticker-track",
+            "text": "Prochain départ : EXPRESS 773-842 à destination de N’Toum — voie 4 — dans 16 min"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "Prochain départ : EXPRESS 773-842 à destination de N’Toum — voie 4 — dans 16 min"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "Le train 624-906 à destination de Lopé est retardé de 12 minutes. Nous vous prio"
+          },
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "Rappel : bagage inclus 0 à 30 kg par voyageur, étiquette obligatoire à retirer a"
+          },
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 30,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "intelligence",
+      "title": "Décider avant que le réseau ne subisse.",
+      "textLength": 2286,
+      "buttonCount": 16,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "oi-tab ",
+            "text": "Actifs & risques"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "oi-tab ",
+            "text": "Capacité & partenaires"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "oi-tab ",
+            "text": "Valeur & confiance"
+          },
+          {
+            "tag": "DIV",
+            "cls": "oi-card fx-glass fx-ring fx-enter",
+            "text": "Simulateur « Et si ? »Projection déterministe sur 24 heuresRecalculerÉvénementRu"
+          },
+          {
+            "tag": "DIV",
+            "cls": "oi-card-head",
+            "text": "Simulateur « Et si ? »Projection déterministe sur 24 heuresRecalculer"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "oi-btn primary fx-glow-btn",
+            "text": "Recalculer"
+          },
+          {
+            "tag": "DIV",
+            "cls": "oi-form",
+            "text": "ÉvénementRupture de railGlissement de terrainTrain supplémentaireLimitation de v"
+          },
+          {
+            "tag": "DIV",
+            "cls": "oi-field",
+            "text": "ÉvénementRupture de railGlissement de terrainTrain supplémentaireLimitation de v"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 8,
+        "tinyText": 8,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [],
+      "errors": []
+    }
+  ]
+}

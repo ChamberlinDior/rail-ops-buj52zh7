@@ -1,0 +1,9 @@
+/* Final responsive guardrails loaded after every feature stylesheet. */
+#content{min-width:0}
+#content>*,#content>*>*{min-width:0}
+@media(max-width:700px){
+ html,body{max-width:100%;overflow-x:hidden}
+ .oi{width:100%;max-width:100%;overflow-x:clip}
+ .oi-tabs{max-width:100%;scrollbar-width:thin}
+ .oi-card,.oi-kpi{max-width:100%}
+}

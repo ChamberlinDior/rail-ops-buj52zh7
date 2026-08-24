@@ -22,7 +22,7 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
   });
   await new Promise(resolve => localServer.listen(4173, '127.0.0.1', resolve));
   const browser = await chromium.launch({ executablePath: edge, headless: true });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const page = await browser.newPage({ viewport: { width: Number(process.env.VIEWPORT_WIDTH || 1440), height: Number(process.env.VIEWPORT_HEIGHT || 1000) } });
   const runtimeErrors = [];
   page.on('pageerror', error => runtimeErrors.push({ type: 'pageerror', text: error.message }));
   page.on('console', message => {
@@ -56,11 +56,17 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
         const box = node.getBoundingClientRect();
         return box.right > innerWidth + 2 || box.left < -2;
       }).slice(0, 8).map(node => ({ tag:node.tagName, cls:String(node.className).slice(0,80), text:(node.textContent||'').trim().slice(0,80) }));
+      const uncontainedOverflow = visible.filter(node => {
+        const box=node.getBoundingClientRect();if(box.right<=innerWidth+2&&box.left>=-2)return false;
+        let parent=node.parentElement;
+        while(parent&&parent!==root){const overflow=getComputedStyle(parent).overflowX;if(['auto','scroll','hidden','clip'].includes(overflow))return false;parent=parent.parentElement}
+        return true;
+      }).slice(0,8).map(node=>({tag:node.tagName,cls:String(node.className).slice(0,80),text:(node.textContent||'').trim().slice(0,80)}));
       const tinyText = visible.filter(node => parseFloat(getComputedStyle(node).fontSize) < 9).length;
       const text = root.innerText;
       const garbled = /Ã.|â€|Â·|�/.test(text);
       const duplicateIds = [...root.querySelectorAll('[id]')].map(node => node.id).filter((id,index,list) => list.indexOf(id) !== index);
-      return { viewportOverflow, tinyText, garbled, duplicateIds:[...new Set(duplicateIds)] };
+      return { viewportOverflow, uncontainedOverflow, documentOverflow:document.documentElement.scrollWidth-document.documentElement.clientWidth, tinyText, garbled, duplicateIds:[...new Set(duplicateIds)] };
     });
     const buttons = page.locator('#content button:visible');
     const count = await buttons.count();

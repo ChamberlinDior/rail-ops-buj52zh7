@@ -1,0 +1,91 @@
+/* ticket-uxref.css — pixel-reference redesign of the passenger ticket (billet voyageur).
+   Entirely new tkt-* namespace: zero collision with .doc-*/.setrag-document rules used
+   by the other document types (bag/parcel/taa/funeral/receipt), which keep their own
+   look untouched. Loads last, safe to remove via one <link> tag. */
+
+.tkt-page{
+  --tkt-blue:#4f6ef7;--tkt-blue-soft:#eef1fe;--tkt-ink:#14162b;--tkt-muted:#8a8fa3;
+  --tkt-line:#edeff5;--tkt-green:#1e9e5a;--tkt-green-soft:#e6f6ec;--tkt-bg:#f5f6fb;
+  width:min(920px,100%);margin:0 auto;padding:26px 6px 6px;color:var(--tkt-ink);
+  font-family:'Manrope',Inter,system-ui,-apple-system,sans-serif;
+}
+.tkt-page *{box-sizing:border-box}
+.tkt-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tkt-top h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.02em}
+.tkt-sub{margin:8px 0 22px;color:var(--tkt-muted);font-size:13px}
+.tkt-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;font-size:12px;font-weight:800}
+.tkt-badge.ok{background:var(--tkt-green-soft);color:var(--tkt-green);border:1px solid #cfeeda}
+.tkt-badge svg{width:14px;height:14px}
+
+.tkt-card{width:100%!important;max-width:100%;border-radius:20px!important;border:1px solid var(--tkt-line)!important;
+  box-shadow:0 24px 60px rgba(20,22,60,.08)!important;background:#fff;overflow:hidden}
+.tkt-head{display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-bottom:1px solid var(--tkt-line)}
+.tkt-logo{display:flex;align-items:center;gap:10px}
+.tkt-logo svg{width:30px;height:30px;flex:none}
+.tkt-logo b{display:block;font-size:19px;font-weight:800;color:var(--tkt-blue);letter-spacing:-.01em}
+.tkt-logo small{display:block;font-size:9px;font-weight:800;letter-spacing:.16em;color:var(--tkt-muted)}
+
+.tkt-body{display:grid;grid-template-columns:1fr 1.55fr auto;gap:0;padding:24px 26px}
+.tkt-col-left{display:grid;align-content:start;gap:16px;padding-right:22px;border-right:1px solid var(--tkt-line)}
+.tkt-field{display:flex;align-items:flex-start;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--tkt-line)}
+.tkt-field:last-child{border-bottom:0;padding-bottom:0}
+.tkt-ic{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--tkt-blue-soft);color:var(--tkt-blue);flex:none}
+.tkt-ic svg{width:15px;height:15px}
+.tkt-field small,.tkt-grid small{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--tkt-muted);text-transform:uppercase}
+.tkt-field b{display:block;margin-top:3px;font-size:14px;font-weight:800}
+
+.tkt-col-mid{padding:0 26px;display:grid;align-content:start;gap:22px}
+.tkt-route{display:flex;align-items:center;gap:16px}
+.tkt-route b{font-size:27px;font-weight:800;letter-spacing:-.02em}
+.tkt-route i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--tkt-blue-soft);color:var(--tkt-blue);flex:none}
+.tkt-route i svg{width:17px;height:17px}
+
+.tkt-grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);row-gap:20px;column-gap:14px}
+.tkt-grid>div{display:grid;gap:6px}
+.tkt-grid .tkt-ic{margin-bottom:2px}
+.tkt-grid b{font-size:14px;font-weight:800}
+.tkt-dep,.tkt-arr{position:relative;padding-left:18px}
+.tkt-dep b,.tkt-arr b{font-size:19px}
+.tkt-dep em,.tkt-arr em{font-style:normal;color:var(--tkt-muted);font-size:11px}
+.tkt-dot{position:absolute;left:0;top:2px;width:11px;height:11px;border-radius:50%;background:#fff;border:3px solid var(--tkt-blue)}
+.tkt-dot.end{background:var(--tkt-blue)}
+.tkt-dep:before{content:"";position:absolute;left:5px;top:15px;width:2px;height:56px;background:var(--tkt-blue);opacity:.35}
+
+.tkt-col-right{display:grid;justify-items:center;align-content:start;gap:10px;padding-left:22px;border-left:1px solid var(--tkt-line);text-align:center}
+.tkt-qr{display:block!important;width:auto!important;height:auto!important;padding:10px!important;border-radius:14px;border:1px solid var(--tkt-line);background:#fff!important}
+.tkt-qr img{display:block!important;width:150px!important;height:150px!important}
+.tkt-qr small{display:none!important}
+.tkt-col-right small{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--tkt-muted)}
+.tkt-col-right b{font-family:ui-monospace,'Space Mono',monospace;font-size:12px;letter-spacing:.03em}
+
+.tkt-strip{display:grid;grid-template-columns:repeat(3,1fr);background:var(--tkt-bg);border-top:1px solid var(--tkt-line)}
+.tkt-strip>div{display:flex;align-items:center;gap:10px;padding:18px 26px;border-right:1px solid var(--tkt-line)}
+.tkt-strip>div:last-child{border-right:0}
+.tkt-strip small{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--tkt-muted);text-transform:uppercase}
+.tkt-strip b{display:block;margin-top:2px;font-size:13px;font-weight:800}
+.tkt-strip .tkt-ic{background:#fff}
+
+.tkt-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.tkt-trust>div{display:flex;align-items:flex-start;gap:10px}
+.tkt-trust .tkt-ic{width:34px;height:34px;border-radius:50%}
+.tkt-trust .tkt-ic svg{width:16px;height:16px}
+.tkt-trust b{display:block;font-size:12px;font-weight:800}
+.tkt-trust span{display:block;margin-top:2px;font-size:11px;color:var(--tkt-muted);line-height:1.4}
+
+.tkt-legal{display:flex;align-items:center;justify-content:center;gap:8px;margin:24px 0 6px;color:var(--tkt-muted);font-size:11px;text-align:center}
+.tkt-legal svg{width:13px;height:13px;flex:none}
+
+@media(max-width:860px){
+  .tkt-body{grid-template-columns:1fr;gap:20px}
+  .tkt-col-left{border-right:0;border-bottom:1px solid var(--tkt-line);padding-right:0;padding-bottom:18px}
+  .tkt-col-mid{padding:0}
+  .tkt-col-right{border-left:0;border-top:1px solid var(--tkt-line);padding-left:0;padding-top:18px}
+  .tkt-strip{grid-template-columns:1fr}
+  .tkt-strip>div{border-right:0;border-bottom:1px solid var(--tkt-line)}
+  .tkt-strip>div:last-child{border-bottom:0}
+  .tkt-trust{grid-template-columns:1fr 1fr}
+}
+@media print{
+  .tkt-page{width:100%;padding:0}
+  .tkt-card{box-shadow:none!important}
+}
