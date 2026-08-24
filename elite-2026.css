@@ -1,0 +1,88 @@
+/* elite-2026.css — global "2026" premium effects layer for SETRAG PILOTAGE.
+   Everything lives under brand-new fx-* classes (JS-applied, see elite-2026.js) or
+   ::-webkit-scrollbar / #nav button.active, none of which exist anywhere else in the
+   100+ file cascade — so this file cannot collide with or override any existing
+   page-specific polish. Fully additive, safe to remove via one <link> tag. */
+
+@property --fx-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+/* ===== Effect 1 — Ambient aurora backdrop (injected div, see JS) ===== */
+.fx-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.fx-aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.16;animation:fx-drift 22s ease-in-out infinite alternate}
+.fx-aurora i:nth-child(1){top:-10%;left:-8%;width:38vw;height:38vw;background:#0b8a56}
+.fx-aurora i:nth-child(2){top:35%;right:-12%;width:34vw;height:34vw;background:#3fc4ff;animation-delay:-7s}
+.fx-aurora i:nth-child(3){bottom:-15%;left:20%;width:36vw;height:36vw;background:#f0ae28;animation-delay:-14s}
+#app{position:relative;z-index:1}
+@keyframes fx-drift{to{transform:translate(4%,-5%) scale(1.12)}}
+
+/* ===== Effect 2 — Glass elevation for cards/panels/tiles ===== */
+.fx-glass{transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s!important}
+.fx-glass:hover{transform:translateY(-4px);box-shadow:0 22px 48px rgba(6,26,46,.16),0 2px 8px rgba(6,26,46,.08)!important}
+
+/* ===== Effect 3 — Mouse-tracked spotlight + rotating gradient ring ===== */
+.fx-ring{position:relative;isolation:isolate}
+.fx-ring:before{
+  content:"";position:absolute;inset:0;z-index:0;opacity:0;pointer-events:none;transition:opacity .35s;
+  background:radial-gradient(260px circle at var(--fx-mx,50%) var(--fx-my,50%),rgba(63,196,255,.16),transparent 70%);
+  mix-blend-mode:multiply;
+}
+.fx-ring:after{
+  content:"";position:absolute;inset:0;z-index:0;padding:1px;border-radius:inherit;opacity:0;pointer-events:none;
+  transition:opacity .35s;animation:fx-spin 4s linear infinite;animation-play-state:paused;
+  background:conic-gradient(from var(--fx-angle,0deg),transparent 0 55%,#0b8a56,#3fc4ff 62%,transparent 74%);
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+}
+.fx-ring:hover:before,.fx-ring:hover:after{opacity:1}
+.fx-ring:hover:after{animation-play-state:running}
+.fx-ring > *{position:relative;z-index:1}
+@keyframes fx-spin{to{--fx-angle:360deg}}
+
+/* ===== Effect 4 — Gradient shimmer on KPI numbers ===== */
+.fx-shimmer-text{
+  background:linear-gradient(100deg,#0b8a56 0%,#3fc4ff 35%,#0b8a56 70%);
+  background-size:220% auto;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;animation:fx-shimmer 5s linear infinite;
+}
+@keyframes fx-shimmer{to{background-position:-220% 0}}
+
+/* ===== Effect 5 — Magnetic glow buttons ===== */
+.fx-glow-btn{transition:transform .2s,box-shadow .2s,filter .2s!important}
+.fx-glow-btn:hover{transform:translateY(-2px);filter:saturate(1.08)}
+.fx-glow-btn.btn.primary:hover,.fx-glow-btn.oi-btn.primary:hover{box-shadow:0 14px 30px rgba(11,138,86,.32)!important}
+.fx-glow-btn.icon-btn:hover{box-shadow:0 10px 24px rgba(63,196,255,.28)!important;border-color:#3fc4ff!important}
+.fx-glow-btn:not(.primary):hover{box-shadow:0 10px 24px rgba(6,26,46,.18)}
+.fx-glow-btn:active{transform:translateY(0) scale(.98)}
+
+/* ===== Effect 6 — Unified radar-ping live indicators ===== */
+.fx-radar{position:relative}
+.fx-radar:before,.fx-radar:after{
+  content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  border:1.5px solid currentColor;opacity:0;animation:fx-radar-ping 2.4s ease-out infinite;
+}
+.fx-radar:after{animation-delay:1.2s}
+@keyframes fx-radar-ping{0%{opacity:.65;transform:scale(1)}100%{opacity:0;transform:scale(4.2)}}
+
+/* ===== Effect 7 — Staggered entrance choreography ===== */
+.fx-enter{animation:fx-rise .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fx-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ===== Effect 8 — Premium focus rings + slim gradient scrollbar ===== */
+.fx-focus:focus{outline:none!important;border-color:#3fc4ff!important;box-shadow:0 0 0 3px rgba(63,196,255,.22)!important}
+html{scrollbar-color:#3fc4ff #eef3f6;scrollbar-width:thin}
+html::-webkit-scrollbar{width:11px;height:11px}
+html::-webkit-scrollbar-track{background:#eef3f6}
+html::-webkit-scrollbar-thumb{border:2px solid #eef3f6;border-radius:99px;background:linear-gradient(180deg,#0b8a56,#3fc4ff)}
+html::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#0a7449,#2fa9dd)}
+
+/* ===== Bonus — glowing active nav pill (no new pseudo, property-only) ===== */
+#nav button.active{
+  background:linear-gradient(135deg,rgba(11,138,86,.14),rgba(63,196,255,.1))!important;
+  box-shadow:inset 0 0 0 1px rgba(11,138,86,.35),0 6px 16px rgba(11,138,86,.16)!important;
+  color:#0b8a56!important;
+}
+
+@media(max-width:900px){.fx-aurora{display:none}}
+@media(prefers-reduced-motion:reduce){
+  .fx-aurora i,.fx-ring:after,.fx-shimmer-text,.fx-radar:before,.fx-radar:after,.fx-enter{animation:none!important}
+}

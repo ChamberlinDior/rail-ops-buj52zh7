@@ -1,0 +1,2904 @@
+{
+  "base": "http://127.0.0.1:4173/",
+  "generatedAt": "2026-08-24T07:02:59.036Z",
+  "pageCount": 45,
+  "runtimeErrors": [],
+  "pages": [
+    {
+      "id": "dashboard",
+      "title": "Vue d’ensemble",
+      "textLength": 1253,
+      "buttonCount": 8,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Rapport Direction",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle vente",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Vente SET-5012 créée",
+          "result": "changed"
+        },
+        {
+          "index": 3,
+          "label": "Place V2/P18 réservée",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Voyageur Liste EXP-620",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Paiement Moov confirmé",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Contrôle QR disponible",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Finance V65 prêt",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "sales",
+      "title": "Ventes & prestations",
+      "textLength": 5004,
+      "buttonCount": 30,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Centre documentaire",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Réinitialiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Voir le billet",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Voir étiquette",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Voir bordereau",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Voir dossier TAA",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Voir bordereau",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Détails",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "trains",
+      "title": "Trains & circulations",
+      "textLength": 2715,
+      "buttonCount": 14,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Nouveau train",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Localiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "capacity",
+      "title": "Voitures & places",
+      "textLength": 1950,
+      "buttonCount": 66,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer un plan",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer une voiture",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Enregistrer la composition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Modifier V2",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "V1 VIP 29/36 vendues · 0 debout CAR-2047 · 9×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "V2 1re classe 38/48 vendues · 0 debout CAR-2048 · 12×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "V3 1re classe 38/48 vendues · 0 debout CAR-2049 · 12×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "V4 2e classe 58/72 vendues · 10 debout CAR-2050 · 18×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "V5 2e classe 58/72 vendues · 10 debout CAR-2051 · 18×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "V6 2e classe 58/72 vendues · 10 debout CAR-2052 · 18×4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Bloquer / débloquer",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "1",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "2",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "3",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "4",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "pricing",
+      "title": "Tarification & Yield Management",
+      "textLength": 3804,
+      "buttonCount": 45,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Nouveau tarif",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Import en masse",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Général",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Réduit",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Abonnements",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Bagages",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Colis",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Promotions",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "customers",
+      "title": "Voyageurs",
+      "textLength": 2921,
+      "buttonCount": 35,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Nouveau voyageur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Voyages à venir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Assistance",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Consentement à renouveler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Fidélité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Fiche",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Fiche",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Fiche",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Fiche",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "rfid",
+      "title": "Cartes RFID / NFC",
+      "textLength": 1131,
+      "buttonCount": 15,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Émettre une carte",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Toutes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actives",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "À activer",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Bloquées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "À remplacer",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "payments",
+      "title": "Paiements",
+      "textLength": 1399,
+      "buttonCount": 19,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Rapprocher maintenant",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Toutes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Espèces",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Airtel Money",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Moov Money",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Click&Pay",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Visa / Mastercard",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Échecs",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Remboursements",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 18,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "cash",
+      "title": "Caisses & rapprochement",
+      "textLength": 1506,
+      "buttonCount": 13,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "État de caisse",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Ouvrir une caisse",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Justifier les écarts",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Valider la clôture",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Générer le journal V65",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "control",
+      "title": "Contrôles & fraude",
+      "textLength": 2738,
+      "buttonCount": 33,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Affecter une mission",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Valides",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Invalides",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Doublons",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Annulés",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Déjà utilisés",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "PV / amendes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "Mission S’authentifier",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Scanner QR / NFC",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 17,
+          "label": "Décider Valide / invalide",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 18,
+          "label": "Régulariser Vendre / amende",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "reports",
+      "title": "Rapports & KPI",
+      "textLength": 1399,
+      "buttonCount": 13,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Planifier un envoi",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Créer un rapport",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Ventes & recettes Ventes · HT/TTC · gares · périodes PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Trains & occupation Trains · classes · places · segments PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Voyageurs Listes · contacts · nationalités PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Remboursements Annulations · pénalités · preuves PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Prestations Bagages · colis · TAA · funéraire PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Paiements Canaux · statuts · écarts PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Contrôle & fraude Scans · PV · amendes · anomalies PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Terminaux Batteries · offline · synchronisations PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Performance Yield Remplissage · recette/siège · demande PDF · XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Aperçu",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Générer et télécharger",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "users",
+      "title": "Utilisateurs & rôles",
+      "textLength": 914,
+      "buttonCount": 7,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Matrice des rôles",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer un compte",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "audit",
+      "title": "Journal d’audit",
+      "textLength": 648,
+      "buttonCount": 6,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Filtres avancés",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter la preuve",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "settings",
+      "title": "Paramètres",
+      "textLength": 461,
+      "buttonCount": 1,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Enregistrer les modifications",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "tracking",
+      "title": "Centre des opérations",
+      "textLength": 3059,
+      "buttonCount": 29,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Déclarer un incident",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Exporter le flux",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Owendo PK 0 5 ATTENTE 54 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "N’Toum PK 35 19 ATTENTE 71 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Ndjolé PK 158 9 ATTENTE 22 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Lopé PK 260 17 ATTENTE 9 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Booué PK 357 35 ATTENTE 23 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Lastourville PK 460 14 ATTENTE 22 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Moanda PK 560 17 ATTENTE 26 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Franceville PK 648 45 ATTENTE 0 EMBARQ.",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Voyageurs",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Fret",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Maintenance",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "devices",
+      "title": "Terminaux & batteries",
+      "textLength": 1164,
+      "buttonCount": 15,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Enrôler un terminal",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "En mission",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "En charge",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Hors ligne",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Maintenance",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "analytics",
+      "title": "Analytique opérationnelle locale",
+      "textLength": 702,
+      "buttonCount": 2,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Rapport Direction",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle analyse",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "frontoffice",
+      "title": "Votre billet de train,en moins de 2 minutes.",
+      "textLength": 4283,
+      "buttonCount": 34,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Réserver",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Services",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Application",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Paiement",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Tous les services",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Profil",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Réserver",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Rechercher",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Bagages",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Colis express",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Transport Auto Accompagné",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Transport funéraire",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Messagerie voyageurs",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Réserver un billet",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "bags",
+      "title": "Bagages voyageurs",
+      "textLength": 1170,
+      "buttonCount": 3,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Enregistrer un bagage",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Valider, encaisser et générer les documents",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "parcels",
+      "title": "Colis express & COLIRAIL",
+      "textLength": 1180,
+      "buttonCount": 3,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer une expédition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Valider, encaisser et générer les documents",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "taa",
+      "title": "Transport Auto Accompagné · TAA",
+      "textLength": 1212,
+      "buttonCount": 3,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer un dossier TAA",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Valider, encaisser et générer les documents",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "funeral",
+      "title": "Transport funéraire",
+      "textLength": 1178,
+      "buttonCount": 3,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer un dossier funéraire",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Valider, encaisser et générer les documents",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "stations",
+      "title": "Gares",
+      "textLength": 563,
+      "buttonCount": 10,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comprendre cette page",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "OWE",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "BOU",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "MDA",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "agencies",
+      "title": "Points de vente & agences",
+      "textLength": 3048,
+      "buttonCount": 49,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer les guichets",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Affecter un quota",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Toutes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actives",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Sous-utilisées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Épuisées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Annulées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Modifier",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Annuler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Modifier",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Annuler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Action",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "pos",
+      "title": "Points de vente",
+      "textLength": 543,
+      "buttonCount": 8,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comprendre cette page",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "POS-OW-01",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "POS-BOU-01",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "schedules",
+      "title": "Livrets horaires & itinéraires",
+      "textLength": 2139,
+      "buttonCount": 27,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer XLSX",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouveau livret",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Brouillon Création",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Contrôle Cohérence",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Validation Approbation",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Publication Vente",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Activation Date début",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Expiration Archivage",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Brouillon",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "À valider",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Actif",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Planifié",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Expiré",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "cancellations",
+      "title": "Annulations & réimpressions contrôlées",
+      "textLength": 782,
+      "buttonCount": 2,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "＋ Nouvelle demande",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Valider l’annulation",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "refunds",
+      "title": "Remboursements",
+      "textLength": 695,
+      "buttonCount": 2,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "＋ Nouveau remboursement",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "accounting",
+      "title": "Comptabilité · Sage X3",
+      "textLength": 1453,
+      "buttonCount": 21,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Déverser dans Sage X3",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "À contrôler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Prêtes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Déversées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Rejetées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Rejouées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Clôture Caisses",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Génération V65",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Contrôle Équilibre",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "Déversement Sage X3",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Accusé Accepté / rejeté",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 17,
+          "label": "Rejouage Correction tracée",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "sage",
+      "title": "Comptabilité · Sage X3",
+      "textLength": 1453,
+      "buttonCount": 21,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Déverser dans Sage X3",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "À contrôler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Prêtes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Déversées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Rejetées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Rejouées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Clôture Caisses",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Génération V65",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Contrôle Équilibre",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "Déversement Sage X3",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Accusé Accepté / rejeté",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 17,
+          "label": "Rejouage Correction tracée",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring technique",
+      "textLength": 1209,
+      "buttonCount": 16,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Créer une règle d’alerte",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Temps réel",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Incidents",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Historique",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Seuils",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "textLength": 556,
+      "buttonCount": 8,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comprendre cette page",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "NOT-0841",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "roles",
+      "title": "Rôles & permissions",
+      "textLength": 590,
+      "buttonCount": 8,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comprendre cette page",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Administrateur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Contrôleur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "controller",
+      "title": "Application contrôleur",
+      "textLength": 531,
+      "buttonCount": 6,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comprendre cette page",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "＋ Nouvelle opération",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actualiser",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "MISSION-620",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "jury",
+      "title": "SETRAG × TRANSMVET",
+      "textLength": 851,
+      "buttonCount": 7,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Lancer le parcours guidé",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "1 · Piloter Recettes, réseau, alertes",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "2 · Publier Train, horaire, tarif",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "3 · Distribuer Gares, agences, quotas",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "4 · Vendre Titre, paiement, QR",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "5 · Contrôler Scan, fraude, PV",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "6 · Comptabiliser V65, Sage, audit",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture cible & cybersécurité",
+      "textLength": 1243,
+      "buttonCount": 0,
+      "empty": false,
+      "actions": [],
+      "errors": []
+    },
+    {
+      "id": "business",
+      "title": "Proposition financière& architecture Enterprise",
+      "textLength": 28162,
+      "buttonCount": 20,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Budget",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Financement",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Planning",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Présenter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Comprendre la proposition",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Budget détaillé",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Modèle de financement",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "01 Gouvernance, cadrage & AMOA 6 000 000 FCFA · 6.7 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "02 UX/UI & design system 4 000 000 FCFA · 4.4 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "03 Architecture & socle plateforme 8 000 000 FCFA · 8.9 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "04 Backend Spring Boot & moteurs métier 14 000 000 FCFA · 15.6 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "05 Back Office & pilotage 10 000 000 FCFA · 11.1 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "06 Front Office & mobilité terrain 8 000 000 FCFA · 8.9 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "07 Data, stockage, migration, sauvegarde & PRA 8 000 000 FCFA · 8.9 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "08 API, paiements & intégrations SI 9 000 000 FCFA · 10 %",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "manual",
+      "title": "Mode dégradé",
+      "textLength": 1329,
+      "buttonCount": 7,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Historique des reprises",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Intégrer une vente manuelle",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Contrôler",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Intégrer sans réémission",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "network",
+      "title": "Points de vente & agences",
+      "textLength": 1446,
+      "buttonCount": 17,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Créer un point de vente",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Tous",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Gares",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Agences accréditées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Agences Premium",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Guichets",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Filtres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Vérifier la disponibilité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Affecter et notifier",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Ouvrir",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "admin",
+      "title": "Administration",
+      "textLength": 1581,
+      "buttonCount": 22,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer depuis AD",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Créer un utilisateur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Utilisateurs",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Profils",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Droits",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Workflows",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "Points de vente Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 11,
+          "label": "Produits Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 12,
+          "label": "Modes de paiement Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 13,
+          "label": "Classes Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Types de trains Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "TVA & CSS Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 16,
+          "label": "Délais réservation Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 17,
+          "label": "Pénalités Configurer →",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "security",
+      "title": "Cybersécurité & conformité",
+      "textLength": 1627,
+      "buttonCount": 5,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter les preuves",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Lancer une revue",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "administration",
+      "title": "Administration, sécurité & continuité",
+      "textLength": 6239,
+      "buttonCount": 9,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter le dossier de conformité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer un compte",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Voir la démonstration · Utilisateurs & rôles",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Voir la démonstration · Paramètres",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Voir la démonstration · Journal d’audit",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Voir la démonstration · Monitoring",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Voir la démonstration · Architecture & sécurité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Voir la démonstration · Livrables & réversibilité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Simuler 10 tentatives de connexion échouées",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "techoffer",
+      "title": "Offre technique EnterpriseBillettique & écosystème voyageurs",
+      "textLength": 23244,
+      "buttonCount": 7,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Conformité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Architecture",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Planning",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Démonstrateur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Découvrir l’offre",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Matrice de conformité",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Revoir l’offre technique",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "boards",
+      "title": "Écrans de gare",
+      "textLength": 4100,
+      "buttonCount": 10,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter la grille",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Nouveau départ",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Owendo",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "N’Toum",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Ndjolé",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Lopé",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Booué",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Lastourville",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Moanda",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Franceville",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "intelligence",
+      "title": "Décider avant que le réseau ne subisse.",
+      "textLength": 2339,
+      "buttonCount": 16,
+      "empty": false,
+      "actions": [
+        {
+          "index": 0,
+          "label": "▶ Lancer le scénario final",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 1,
+          "label": "Jumeau numérique",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 2,
+          "label": "Gestion de crise",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 3,
+          "label": "Actifs & risques",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 4,
+          "label": "Capacité & partenaires",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 5,
+          "label": "Valeur & confiance",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 6,
+          "label": "Plein écran",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 7,
+          "label": "Voir les règles",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 8,
+          "label": "Valider la recommandation",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 9,
+          "label": "Recalculer",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 10,
+          "label": "•••",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 14,
+          "label": "Contacter le conducteur",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        },
+        {
+          "index": 15,
+          "label": "Exporter le dossier",
+          "result": "click-error",
+          "error": "locator.click: Timeout 300ms exceeded."
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

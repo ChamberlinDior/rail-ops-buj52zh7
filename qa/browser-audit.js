@@ -46,6 +46,22 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
     await page.waitForTimeout(250);
     const title = await page.locator('#content h1, #content h2').first().textContent().catch(() => '');
     const textLength = await page.locator('#content').innerText().then(text => text.trim().length).catch(() => 0);
+    const visual = await page.locator('#content').evaluate(root => {
+      const visible = [...root.querySelectorAll('*')].filter(node => {
+        const style = getComputedStyle(node);
+        const box = node.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0;
+      });
+      const viewportOverflow = visible.filter(node => {
+        const box = node.getBoundingClientRect();
+        return box.right > innerWidth + 2 || box.left < -2;
+      }).slice(0, 8).map(node => ({ tag:node.tagName, cls:String(node.className).slice(0,80), text:(node.textContent||'').trim().slice(0,80) }));
+      const tinyText = visible.filter(node => parseFloat(getComputedStyle(node).fontSize) < 9).length;
+      const text = root.innerText;
+      const garbled = /Ã.|â€|Â·|�/.test(text);
+      const duplicateIds = [...root.querySelectorAll('[id]')].map(node => node.id).filter((id,index,list) => list.indexOf(id) !== index);
+      return { viewportOverflow, tinyText, garbled, duplicateIds:[...new Set(duplicateIds)] };
+    });
     const buttons = page.locator('#content button:visible');
     const count = await buttons.count();
     const buttonIndexes = await buttons.evaluateAll((nodes, maxActions) => {
@@ -88,7 +104,7 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
         url: location.href
       }));
       let clickError = '';
-      try { await button.click({ timeout: 300 }); } catch (error) { clickError = error.message.split('\n')[0]; }
+      try { await button.evaluate(node => node.click()); } catch (error) { clickError = error.message.split('\n')[0]; }
       await page.waitForTimeout(60);
       const after = await page.evaluate(() => ({
         content: document.querySelector('#content')?.innerHTML,
@@ -106,6 +122,7 @@ const reportPath = process.argv[3] || 'qa/browser-audit-report.json';
       textLength,
       buttonCount: count,
       empty: textLength < 40,
+      visual,
       actions,
       errors: runtimeErrors.slice(beforeErrors)
     });
