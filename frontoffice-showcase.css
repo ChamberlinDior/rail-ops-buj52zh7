@@ -249,19 +249,20 @@
 .fos-screen-qr svg{width:100%;height:100%}
 
 /* ---------- interactive mobile app phone — Neumorphism / Soft UI visual system ---------- */
-.fap-phone{--fap-bg1:#d6d9dd;--fap-bg2:#b9bec4;--fap-surface:#f3f4f6;--fap-surface2:#e3e5e8;--fap-sd:rgba(150,155,163,.65);--fap-sl:rgba(255,255,255,1);--fap-ink:#3a3d42;--fap-muted:#8d9096;--fap-line:#dcdee1;--fap-accent:#5c6672;--fap-accent-soft:rgba(92,102,114,.14);--fap-danger:#c17272;--fap-card:#fbfbfc;--fap-serif:'Playfair Display',Georgia,serif}
+.fap-phone{--fap-bg1:#edf5f1;--fap-bg2:#e2ebee;--fap-surface:rgba(255,255,255,.88);--fap-surface2:#dde9e7;--fap-sd:rgba(35,72,79,.16);--fap-sl:rgba(255,255,255,.96);--fap-ink:#092e4f;--fap-muted:#68818a;--fap-line:#d4e2df;--fap-accent:#087a60;--fap-accent-soft:rgba(0,158,96,.13);--fap-danger:#d93445;--fap-card:#f8fbfa;--fap-serif:'Playfair Display',Georgia,serif}
 .fap-shell{display:flex;justify-content:center;min-height:560px}
 .fap-phone{position:relative;width:286px;border-radius:40px;background:linear-gradient(160deg,#0d2338,#081726);padding:12px;box-shadow:0 40px 80px #00000055;border:1px solid #223142}
 .fap-notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:20px;border-radius:0 0 14px 14px;background:#081726;z-index:3}
-.fap-phone-screen{position:relative;background:linear-gradient(160deg,var(--fap-bg1),var(--fap-bg2));border-radius:30px;overflow:hidden;min-height:536px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff10}
+.fap-phone-screen{position:relative;background:radial-gradient(circle at 8% 4%,rgba(0,158,96,.16),transparent 34%),radial-gradient(circle at 94% 16%,rgba(252,209,22,.18),transparent 30%),radial-gradient(circle at 78% 88%,rgba(58,117,196,.14),transparent 36%),linear-gradient(160deg,var(--fap-bg1),var(--fap-bg2));border-radius:30px;overflow:hidden;min-height:536px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1px #ffffff38}
 .fap-statusbar,.fap-appbar{background:transparent}
 .fap-home-indicator{background:transparent!important}
 .fap-statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 2px;font:800 10.5px Manrope,sans-serif;color:var(--fap-ink)}
 .fap-statusicons{display:flex;align-items:center;gap:5px}
 .fap-statusicons svg{width:13px}
-.fap-appbar{display:flex;align-items:center;gap:10px;padding:10px 18px 14px}
-.fap-appbar span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--fap-surface);box-shadow:4px 4px 9px var(--fap-sd),-4px -4px 9px var(--fap-sl);color:var(--fap-ink);font-weight:900;font-size:11px}
-.fap-appbar b{font:800 13px var(--fap-serif);color:var(--fap-ink);flex:1;letter-spacing:.01em}
+.fap-appbar{display:flex;align-items:center;gap:9px;padding:8px 15px 13px}
+.fap-appbar .fap-logo{display:flex;align-items:center;justify-content:center;width:88px;height:34px;border-radius:8px;background:#fff;box-shadow:0 5px 13px rgba(9,46,79,.12);overflow:hidden;flex:none;padding:2px 5px}
+.fap-appbar .fap-logo img{display:block;width:100%;height:100%;object-fit:contain}
+.fap-app-title{display:flex;flex-direction:column;min-width:0;flex:1}.fap-app-title b{font:800 12px Manrope;color:var(--fap-ink);letter-spacing:.01em}.fap-app-title small{font:700 7.5px Manrope;color:var(--fap-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
 .fap-bell{position:relative;border:0;background:var(--fap-surface);width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--fap-ink);cursor:pointer;flex:none;box-shadow:6px 6px 13px var(--fap-sd),-6px -6px 13px var(--fap-sl)}
 .fap-bell:active{box-shadow:inset 4px 4px 8px var(--fap-sd),inset -4px -4px 8px var(--fap-sl)}
 .fap-bell svg{width:14px}
@@ -270,10 +271,15 @@
 .fap-screen::-webkit-scrollbar{display:none;width:0;height:0}
 .fap-screen-inner{display:flex;flex-direction:column;flex:1;animation:fap-enter .3s cubic-bezier(.2,.8,.3,1)}
 @keyframes fap-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.fap-bottomnav{display:flex;background:transparent;padding:8px 10px 4px}
-.fap-bottomnav button{flex:1;border:0;background:none;padding:8px 4px;margin:0 3px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--fap-muted);cursor:pointer;font:800 8.5px Manrope,sans-serif;transition:.15s}
-.fap-bottomnav button svg{width:17px}
-.fap-bottomnav button.active{color:var(--fap-accent);background:var(--fap-surface);box-shadow:inset 4px 4px 8px var(--fap-sd),inset -4px -4px 8px var(--fap-sl)}
+.fap-bottomnav{position:relative;display:flex;align-items:stretch;margin:0 9px 8px;padding:5px;background:linear-gradient(135deg,#082f50,#064a55);border:1px solid rgba(255,255,255,.13);border-radius:18px;box-shadow:0 12px 26px rgba(3,35,55,.28),inset 0 1px 0 rgba(255,255,255,.12)}
+.fap-bottomnav:before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;background:linear-gradient(90deg,#009e60 0 33%,#fcd116 33% 66%,#3a75c4 66%);border-radius:0 0 4px 4px;opacity:.95}
+.fap-bottomnav button{position:relative;flex:0 0 25%;width:25%;min-width:0;overflow:hidden;border:0;background:transparent;padding:8px 1px 7px;margin:0;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#adc3ca;cursor:pointer;font:800 7.2px Manrope,sans-serif;transition:transform .18s ease,background .18s ease,color .18s ease}
+.fap-bottomnav button svg{width:16px;height:16px;stroke-width:2}
+.fap-bottomnav button small{display:block;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font:inherit}
+.fap-bottomnav button:hover{color:#fff;background:rgba(255,255,255,.07)}
+.fap-bottomnav button.active{color:#073b4f;background:#fff;box-shadow:0 6px 14px rgba(0,20,34,.28);transform:translateY(-2px)}
+.fap-bottomnav button.active:after{content:"";position:absolute;bottom:3px;width:14px;height:2px;border-radius:4px;background:#e13342}
+.fap-bottomnav button:focus-visible{outline:2px solid #fcd116;outline-offset:2px}
 
 /* shared building blocks */
 .fap-cta{width:100%;border:0;border-radius:999px;padding:14px;background:var(--fap-surface);color:var(--fap-ink);font:800 12.5px Manrope;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:9px 9px 18px var(--fap-sd),-9px -9px 18px var(--fap-sl);transition:.15s}

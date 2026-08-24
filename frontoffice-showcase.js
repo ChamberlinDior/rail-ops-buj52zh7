@@ -615,13 +615,13 @@ function appSection(){
    <div class="fap-phone"><div class="fap-notch"><i class="fap-cam"></i></div>
     <div class="fap-phone-screen">
      <div class="fap-statusbar"><span>${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span><span class="fap-statusicons">${I('signal-high')}${I('wifi')}${I('battery-full')}</span></div>
-     <div class="fap-appbar"><span class="fap-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG"></span><b>SETRAG</b><button class="fap-bell" data-fap-bell>${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}</button></div>
+     <div class="fap-appbar"><span class="fap-logo"><img src="public/images/setrag-logo-official.jpg" alt="Logo officiel SETRAG · Société d’Exploitation du Transgabonais"></span><div class="fap-app-title"><b>Voyageur</b><small>Le Transgabonais</small></div><button class="fap-bell" data-fap-bell>${I('bell')}${fap.notifUnread?`<i class="fap-bell-badge">${fap.notifUnread}</i>`:''}</button></div>
      <div class="fap-screen" id="fapScreen"></div>
      <div class="fap-bottomnav">
       <button class="active" data-fap-nav="home">${I('house')}<small>Accueil</small></button>
       <button data-fap-nav="services">${I('grid-2x2')}<small>Services</small></button>
       <button data-fap-nav="tracking">${I('route')}<small>Suivi</small></button>
-      <button data-fap-nav="wallet">${I('wallet')}<small>Portefeuille</small></button>
+      <button data-fap-nav="wallet" aria-label="Portefeuille de billets et documents">${I('wallet')}<small>Billets</small></button>
      </div>
      <div class="fap-home-indicator"></div>
     </div>
