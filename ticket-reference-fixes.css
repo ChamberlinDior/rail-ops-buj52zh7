@@ -1,0 +1,39 @@
+/* ticket-reference-fixes.css — fixes contrast bugs introduced by the red stub
+   in ticket-reference-final.css (icon chips/dots/QR frame were still tinted
+   blue and became invisible on red), and extends the same cream/navy/red
+   reference palette to the baggage coupon so both documents match. Loads
+   after ticket-reference-final.css. */
+
+/* ---------- fix: icon chips, timeline dots and QR frame must read on red ---------- */
+.ticket-doc .tkt-bp-stub .tkt-ic{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.ticket-doc .tkt-bp-stub-stop .dot{border-color:#fff!important;background:rgba(255,255,255,.15)!important}
+.ticket-doc .tkt-bp-stub-stop .dot.end{background:#fff!important}
+.ticket-doc .tkt-bp-stub-route:before{background:#fff!important;opacity:.4}
+.ticket-doc .tkt-bp-stub-stop small,.ticket-doc .tkt-bp-stub-stop span{color:#fff!important;opacity:.75}
+.ticket-doc .tkt-bp-stub-stop b{color:#fff!important}
+.ticket-doc .tkt-qr-frame .c{border-color:#fff!important}
+.ticket-doc .tkt-qr-caption{color:#fff!important;opacity:.92}
+
+/* ---------- extend the same reference palette to the baggage coupon ---------- */
+.bag-doc{--ref-paper:#f5e5d6;--ref-navy:#202d3b;--ref-red:#d24d59;background:var(--ref-paper)!important;border-color:#e5d5c8!important}
+.bag-doc .tkt-bp-main{background:var(--ref-paper)!important}
+.bag-doc .tkt-bp-band{background:transparent!important;padding:14px 22px 14px 22px!important}
+.bag-doc .tkt-bp-band strong{color:var(--ref-navy)!important;font-size:19px}
+.bag-doc .tkt-bp-band span{color:var(--ref-red)!important;font-size:11px;opacity:1!important}
+.bag-doc .tkt-bp-body{background:linear-gradient(180deg,rgba(250,238,227,.97),rgba(245,229,214,.98))!important}
+.bag-doc .tkt-bp-watermark{opacity:.06;filter:grayscale(1)}
+.bag-doc .tkt-bp-barcode{background-image:repeating-linear-gradient(90deg,var(--ref-navy) 0 1.6px,transparent 1.6px 3.3px,var(--ref-navy) 3.3px 4.6px,transparent 4.6px 7px)!important}
+.bag-doc .tkt-bp-hero i{color:var(--ref-red)!important}
+.bag-doc .tkt-bp-foot{border-top-color:#9e9185!important}
+.bag-doc .tkt-bp-foot small{color:var(--ref-navy)!important}
+.bag-doc .tkt-bp-perf{background-color:var(--ref-paper)!important}
+.bag-doc .tkt-bp-stub{background:var(--ref-red)!important;color:#fff}
+.bag-doc .tkt-bp-band.dark{background:transparent!important;justify-content:flex-start!important;flex-wrap:wrap;gap:6px;padding:11px 14px!important}
+.bag-doc .tkt-bp-band.dark b{font-size:11.5px;white-space:nowrap}
+.bag-doc .tkt-bp-band.dark i svg{width:12px;height:12px}
+.bag-doc .tkt-bp-stub .tkt-bp-stub-fields small{color:#fff!important;opacity:.72}
+.bag-doc .tkt-bp-stub .tkt-bp-stub-fields b{color:#fff!important}
+.bag-doc .tkt-bp-stub .tkt-ic{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.bag-doc .tkt-qr-frame .c{border-color:#fff!important}
+.bag-doc .tkt-qr-caption{color:#fff!important;opacity:.92}
+.bag-doc .tkt-bp-qr b{color:#fff!important;opacity:.8}

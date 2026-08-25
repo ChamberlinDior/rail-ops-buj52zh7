@@ -33,7 +33,7 @@ function ticket(){
  return `<div class="tkt-page"><div class="tkt-top"><h1>Billet voyageur</h1><span class="tkt-badge ok">${ti('check')}Validé</span></div><p class="tkt-sub">Merci de vous présenter 30 minutes avant le départ.</p>
  <article class="setrag-document ticket-doc tkt-card">
   <div class="tkt-bp-main">
-   <div class="tkt-bp-band"><strong>CARTE D’EMBARQUEMENT</strong><span>SETRAG PILOTAGE</span></div>
+   <div class="tkt-bp-band"><em class="tkt-ref-tab">${dossier.sale}</em><strong>BILLET VOYAGEUR</strong><span>SETRAG</span></div>
    <div class="tkt-bp-body">
     <div class="tkt-bp-barcode"></div>
     <div class="tkt-bp-watermark">${tkTrainWatermark}</div>
@@ -52,7 +52,7 @@ function ticket(){
   </div>
   <div class="tkt-bp-perf"></div>
   <div class="tkt-bp-stub">
-   <div class="tkt-bp-band dark"><b>${dossier.from.toUpperCase()}</b><i>${ti('train')}</i><b>${dossier.to.toUpperCase()}</b></div>
+   <div class="tkt-bp-band dark"><b>SETRAG</b><span>BILLET VOYAGEUR</span></div>
    <div class="tkt-bp-stub-fields">
     <div class="ic"><i class="tkt-ic sm">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>
     <div class="row"><div class="ic"><i class="tkt-ic sm">${ti('train')}</i><div><small>Train</small><b>${dossier.train}</b></div></div><div class="ic"><i class="tkt-ic sm">${ti('seat')}</i><div><small>Place</small><b>${dossier.car}·${dossier.seat.split(' ')[0]}</b></div></div></div>

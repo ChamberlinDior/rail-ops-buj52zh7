@@ -1,0 +1,54 @@
+/* Final reference geometry: 2.83:1 boarding-pass format on desktop. */
+@media(min-width:821px){
+ .tkt-card{height:auto!important;min-height:0!important;aspect-ratio:2.83/1!important}
+ .tkt-bp-band{min-height:44px;padding:11px 20px!important}
+ .tkt-bp-body{min-height:0!important;padding:12px 20px 12px 42px!important;gap:9px!important}
+ .tkt-bp-fields{gap:8px}
+ .tkt-bp-hero b{font-size:clamp(24px,2.7vw,31px)}
+ .tkt-bp-foot{gap:24px}
+ .tkt-bp-stub{width:190px!important}
+ .bag-bp-stub{width:205px!important}
+ .tkt-bp-stub-fields{padding:8px 14px 5px!important;gap:4px!important}
+ .tkt-bp-stub-fields .row{gap:13px}
+ .tkt-bp-qr{margin-top:auto!important;padding:2px 12px 8px!important;gap:2px!important}
+ .tkt-bp-qr .doc-qr.tkt-qr{display:block!important;width:62px!important;height:62px!important;padding:3px!important;grid-template-columns:none!important;grid-template-rows:none!important;border-radius:5px!important}
+ .tkt-bp-qr .doc-qr.tkt-qr img{display:block!important;width:54px!important;height:54px!important}
+ .tkt-bp-qr b{font-size:7.5px}
+ .bag-bp-card{min-height:0!important;aspect-ratio:2.83/1!important}
+ .bag-bp-foot{gap:9px}
+ .bag-bp-foot b{font-size:12px}
+}
+
+/* Passenger ticket: cream / navy / red reference supplied by the user. */
+.ticket-doc{--ref-paper:#f5e5d6;--ref-navy:#202d3b;--ref-red:#d24d59;background:var(--ref-paper)!important;border-color:#e5d5c8!important}
+.ticket-doc .tkt-bp-main{background:var(--ref-paper)!important}
+.ticket-doc .tkt-bp-band:not(.dark){position:relative;align-items:center;min-height:64px!important;padding:10px 18px 10px 190px!important;background:transparent!important;color:var(--ref-navy)!important}
+.ticket-doc .tkt-bp-band:not(.dark):after{content:"";position:absolute;left:190px;right:20px;bottom:7px;height:2px;background:var(--ref-red)}
+.ticket-doc .tkt-bp-band:not(.dark) strong{font-size:24px;letter-spacing:.01em}
+.ticket-doc .tkt-bp-band:not(.dark)>span{margin-left:auto;color:var(--ref-red);font-size:15px;font-weight:900;letter-spacing:.08em;opacity:1}
+.tkt-ref-tab{position:absolute;inset:0 auto 0 0;display:flex;align-items:center;width:174px;padding-left:22px;border-radius:0 0 58px 0;background:var(--ref-navy);color:#fff;font:500 15px 'Space Mono',monospace;font-style:normal;letter-spacing:.02em}
+.ticket-doc .tkt-bp-body{padding-right:52px!important;background:linear-gradient(180deg,rgba(250,238,227,.97),rgba(245,229,214,.98))!important}
+.ticket-doc .tkt-bp-watermark{opacity:.035;filter:grayscale(1)}
+.ticket-doc .tkt-bp-barcode{left:auto;right:16px;width:22px;background-image:repeating-linear-gradient(90deg,var(--ref-navy) 0 1.6px,transparent 1.6px 3.3px,var(--ref-navy) 3.3px 4.6px,transparent 4.6px 7px)}
+.ticket-doc .tkt-bp-hero{gap:16px}
+.ticket-doc .tkt-bp-hero i{color:var(--ref-red)}
+.ticket-doc .tkt-bp-foot{padding-top:8px;border-top:1px solid #9e9185}
+.ticket-doc .tkt-bp-foot small{color:var(--ref-navy)}
+.ticket-doc .tkt-bp-perf{background-color:var(--ref-paper);background-image:radial-gradient(circle 3.5px,#fff 3.5px,transparent 4px)}
+.ticket-doc .tkt-bp-stub{background:var(--ref-red)!important;color:#fff}
+.ticket-doc .tkt-bp-band.dark{justify-content:flex-start!important;gap:8px;background:transparent!important;color:#fff!important}
+.ticket-doc .tkt-bp-band.dark b{font-size:18px}
+.ticket-doc .tkt-bp-band.dark span{font-size:8px;letter-spacing:.08em;opacity:.85}
+.ticket-doc .tkt-bp-stub-fields small,.ticket-doc .tkt-bp-stub-fields b{color:#fff}
+.ticket-doc .tkt-bp-stub-fields small{opacity:.72}
+.ticket-doc .tkt-bp-stub-fields .row>div{padding-right:9px;border-right:1px solid #ffffff55}
+.ticket-doc .tkt-bp-stub-fields .row>div:last-child{border-right:0}
+.ticket-doc .tkt-bp-qr>b{color:#fff;opacity:.86}
+@media(max-width:820px){
+ .tkt-card,.bag-bp-card{height:auto!important;min-height:0!important;aspect-ratio:auto!important}
+ .tkt-bp-qr .doc-qr.tkt-qr{width:82px!important;height:82px!important;grid-template-columns:none!important;grid-template-rows:none!important}
+ .tkt-bp-qr .doc-qr.tkt-qr img{width:74px!important;height:74px!important}
+}
+@media print and (orientation:landscape){
+ .tkt-card{width:254mm!important;height:89.7mm!important;aspect-ratio:auto!important;break-inside:avoid}
+}
