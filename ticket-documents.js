@@ -153,20 +153,31 @@ const WZ_FIELDS={
  funeral:[['famille','Personne habilitée','text','Famille Raponda'],['autorisation','Autorisation sanitaire (obligatoire)','text','AUT-SAN-260812-118'],['poids','Poids déclaré (kg)','text','118'],['affectation','Affectation','text','Fourgon M1 · TF-01']]
 };
 const WZ_PAYMENTS=['Moov Money','Airtel Money','Click&Pay','Visa','Mastercard','Espèces'];
-let wz={step:1,kind:'',data:{}};
+let wz={step:1,kind:'',data:{},items:[],pay:WZ_PAYMENTS[0]};
 let wzCounter=0;
 function refreshSalesView(){const scroll=document.querySelector('.sales-table-scroll');if(scroll)scroll.outerHTML=salesTable();const count=document.querySelector('[data-sales-count]');if(count)count.textContent=saleRows.length;const todayCount=document.querySelector('.sales-summary-pro>div:first-child b');if(todayCount)todayCount.textContent=(4892+wzCounter).toLocaleString('fr-FR');if(window.lucide)lucide.createIcons()}
+function wzCartTotal(){return wz.items.reduce((s,it)=>s+Number(it.data.amount||0),0)}
+function wzCartLine(it,i){const t=WZ_TYPES.find(x=>x.kind===it.kind);const who=it.data.client||it.data.famille||it.data.sender||it.data.vehicule||dossier.passenger;return `<div class="sw-cart-item"><i>${t.icon}</i><div><b>${t.label}</b><span>${who}</span></div><strong>${Number(it.data.amount||0).toLocaleString('fr-FR')} FCFA</strong><button type="button" class="sw-cart-remove" data-wz-remove="${i}" title="Retirer">×</button></div>`}
+function wzCartBlock(){return wz.items.length?`<div class="sw-cart">${wz.items.map(wzCartLine).join('')}<div class="sw-cart-total"><span>${wz.items.length} prestation(s) au panier</span><b>${wzCartTotal().toLocaleString('fr-FR')} FCFA</b></div></div>`:''}
 function wzStepBody(){
- if(wz.step===1)return `<div class="sw-types">${WZ_TYPES.map(t=>`<button type="button" class="sw-type${wz.kind===t.kind?' active':''}" data-wz-kind="${t.kind}"><i>${t.icon}</i><b>${t.label}</b></button>`).join('')}</div>`;
- if(wz.step===2){const fields=WZ_FIELDS[wz.kind]||[];return `<div class="form-grid">${fields.map(f=>{const[key,label,type,opt]=f;const val=wz.data[key];return type==='select'?`<div class="field"><label>${label}</label><select data-wz-field="${key}">${opt.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join('')}</select></div>`:`<div class="field"><label>${label}</label><input data-wz-field="${key}" value="${val}"></div>`}).join('')}</div>`}
- if(wz.step===3)return `<div class="form-grid"><div class="field"><label>Montant TTC (FCFA)</label><input data-wz-field="amount" value="${wz.data.amount}"></div><div class="field"><label>Moyen de paiement</label><select data-wz-field="pay">${WZ_PAYMENTS.map(p=>`<option ${p===wz.data.pay?'selected':''}>${p}</option>`).join('')}</select></div></div><div class="sw-note">✓ Tarif calculé selon la prestation · ✓ référence unique générée à l’émission · ✓ rapprochement automatique du paiement</div>`;
- const t=WZ_TYPES.find(x=>x.kind===wz.kind);const fields=WZ_FIELDS[wz.kind]||[];
- return `<div class="sw-recap"><div><small>PRESTATION</small><b>${t.icon} ${t.label}</b></div>${fields.map(f=>`<div><small>${f[1].replace(' (obligatoire)','')}</small><b>${wz.data[f[0]]||'—'}</b></div>`).join('')}<div><small>MONTANT TTC</small><b>${Number(wz.data.amount||t.amount).toLocaleString('fr-FR')} FCFA</b></div><div><small>PAIEMENT</small><b>${wz.data.pay}</b></div></div>`;
+ if(wz.step===1)return `${wzCartBlock()}<p class="sw-cart-label">${wz.items.length?'Ajouter une autre prestation au panier :':'Choisissez une prestation :'}</p><div class="sw-types">${WZ_TYPES.map(t=>`<button type="button" class="sw-type${wz.kind===t.kind?' active':''}" data-wz-kind="${t.kind}"><i>${t.icon}</i><b>${t.label}</b></button>`).join('')}</div>`;
+ if(wz.step===2){const fields=WZ_FIELDS[wz.kind]||[];return `<div class="form-grid">${fields.map(f=>{const[key,label,type,opt]=f;const val=wz.data[key];return type==='select'?`<div class="field"><label>${label}</label><select data-wz-field="${key}">${opt.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join('')}</select></div>`:`<div class="field"><label>${label}</label><input data-wz-field="${key}" value="${val}"></div>`}).join('')}<div class="field"><label>Montant TTC (FCFA)</label><input data-wz-field="amount" value="${wz.data.amount}"></div></div>`}
+ if(wz.step===3)return `${wzCartBlock()}<div class="form-grid"><div class="field wide"><label>Moyen de paiement · règlement unique pour tout le panier</label><select data-wz-pay>${WZ_PAYMENTS.map(p=>`<option ${p===wz.pay?'selected':''}>${p}</option>`).join('')}</select></div></div><div class="sw-note">✓ Un seul paiement couvre les ${wz.items.length} prestation(s) · ✓ référence individuelle générée par document · ✓ rapprochement automatique du paiement groupé</div>`;
+ return `${wzCartBlock()}<div class="sw-recap"><div><small>PRESTATIONS</small><b>${wz.items.length}</b></div><div><small>MONTANT TOTAL ENCAISSÉ</small><b>${wzCartTotal().toLocaleString('fr-FR')} FCFA</b></div><div><small>MOYEN DE PAIEMENT</small><b>${wz.pay}</b></div></div>`;
+}
+function wzFooter(){
+ if(wz.step===1){
+  const hasCart=wz.items.length>0;
+  return `<div class="wz-foot-actions">${hasCart?`<button type="button" class="btn primary" data-wz-checkout>Passer au paiement groupé (${wz.items.length}) →</button>`:''}<button type="button" class="btn ${hasCart?'ghost':'primary'}" data-wz-addkind${wz.kind?'':' disabled'}>Ajouter cette prestation</button></div>`;
+ }
+ if(wz.step===2)return `<button type="button" class="btn primary" data-wz-addcart>＋ Ajouter au panier</button>`;
+ if(wz.step===3)return `<button type="button" class="btn primary" data-wz-next>Continuer</button>`;
+ return `<button type="button" class="btn primary" data-wz-submit>Encaisser ${wzCartTotal().toLocaleString('fr-FR')} FCFA et émettre</button>`;
 }
 function wzRender(){
  const root=document.querySelector('#modalRoot');
- const stepsMeta=[['1','Prestation'],['2','Voyage & client'],['3','Tarif & paiement'],['4','Récapitulatif']];
- root.innerHTML=`<div class="modal-backdrop"><div class="modal"><div class="modal-head"><div><span class="subtle">ÉMISSION GUIDÉE · CONTRÔLES AUTOMATIQUES</span><h2>Nouvelle opération</h2></div><button class="icon-btn" data-wz-close>×</button></div><div class="modal-body"><div class="steps">${stepsMeta.map((s,i)=>`<div class="step${wz.step===i+1?' active':''}"><i>${s[0]}</i>${s[1]}</div>`).join('')}</div><form id="swForm">${wzStepBody()}</form></div><div class="modal-foot"><button type="button" class="btn ghost" data-wz-prev${wz.step===1?' disabled':''}>Retour</button><span class="subtle">Étape ${wz.step} sur 4</span>${wz.step<4?'<button type="button" class="btn primary" data-wz-next>Continuer</button>':'<button type="button" class="btn primary" data-wz-submit>Calculer, encaisser et émettre</button>'}</div></div></div>`;
+ const stepsMeta=[['1','Panier'],['2','Détails'],['3','Paiement groupé'],['4','Récapitulatif']];
+ root.innerHTML=`<div class="modal-backdrop"><div class="modal"><div class="modal-head"><div><span class="subtle">ÉMISSION GUIDÉE · PAIEMENT MULTI-PRESTATIONS</span><h2>Nouvelle opération</h2></div><button class="icon-btn" data-wz-close>×</button></div><div class="modal-body"><div class="steps">${stepsMeta.map((s,i)=>`<div class="step${wz.step===i+1?' active':''}"><i>${s[0]}</i>${s[1]}</div>`).join('')}</div><form id="swForm">${wzStepBody()}</form></div><div class="modal-foot"><button type="button" class="btn ghost" data-wz-prev${wz.step===1?' disabled':''}>Retour</button><span class="subtle">Étape ${wz.step} sur 4</span>${wzFooter()}</div></div></div>`;
  if(window.lucide)lucide.createIcons();
  wzWire();
 }
@@ -176,34 +187,65 @@ function wzWire(){
  overlay.addEventListener('click',e=>{e.stopPropagation();if(e.target===overlay)wzClose()});
  overlay.querySelector('[data-wz-close]').onclick=wzClose;
  overlay.querySelectorAll('[data-wz-field]').forEach(el=>{el.oninput=el.onchange=()=>{wz.data[el.dataset.wzField]=el.value}});
+ const payField=overlay.querySelector('[data-wz-pay]');if(payField)payField.onchange=()=>{wz.pay=payField.value};
  overlay.querySelectorAll('[data-wz-kind]').forEach(b=>b.onclick=()=>{
+  overlay.querySelectorAll('[data-wz-kind]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
   wz.kind=b.dataset.wzKind;
   const t=WZ_TYPES.find(x=>x.kind===wz.kind);
-  wz.data={amount:t.amount,pay:WZ_PAYMENTS[0]};
+  wz.data={amount:t.amount};
   (WZ_FIELDS[wz.kind]||[]).forEach(f=>{wz.data[f[0]]=f[2]==='select'?f[3][0]:f[3]});
+  const addBtn=overlay.querySelector('[data-wz-addkind]');if(addBtn)addBtn.disabled=false;
+ });
+ const addKind=overlay.querySelector('[data-wz-addkind]');if(addKind)addKind.onclick=()=>{
+  if(!wz.kind){toast('Sélectionnez une prestation pour continuer');return}
+  wz.step=2;wzRender();
+ };
+ const checkout=overlay.querySelector('[data-wz-checkout]');if(checkout)checkout.onclick=()=>{wz.step=3;wzRender()};
+ const addCart=overlay.querySelector('[data-wz-addcart]');if(addCart)addCart.onclick=()=>{
+  const fields=WZ_FIELDS[wz.kind]||[];
+  const missing=fields.some(f=>!String(wz.data[f[0]]||'').trim());
+  if(missing){toast('Complétez les champs obligatoires avant de continuer');return}
+  wz.items.push({kind:wz.kind,data:{...wz.data}});
+  wz.kind='';wz.data={};wz.step=1;wzRender();
+  toast('Prestation ajoutée au panier');
+ };
+ overlay.querySelectorAll('[data-wz-remove]').forEach(b=>b.onclick=e=>{
+  e.stopPropagation();
+  wz.items.splice(Number(b.dataset.wzRemove),1);
   wzRender();
  });
- const prev=overlay.querySelector('[data-wz-prev]');if(prev)prev.onclick=()=>{if(wz.step>1){wz.step--;wzRender()}};
+ const prev=overlay.querySelector('[data-wz-prev]');if(prev)prev.onclick=()=>{
+  if(wz.step===2){wz.kind='';wz.data={};wz.step=1;wzRender();return}
+  if(wz.step>1){wz.step--;wzRender()}
+ };
  const next=overlay.querySelector('[data-wz-next]');if(next)next.onclick=()=>{
-  if(wz.step===1&&!wz.kind){toast('Sélectionnez une prestation pour continuer');return}
-  if(wz.step===2){const fields=WZ_FIELDS[wz.kind]||[];const missing=fields.some(f=>!String(wz.data[f[0]]||'').trim());if(missing){toast('Complétez les champs obligatoires avant de continuer');return}}
+  if(wz.step===3&&!wz.items.length){toast('Ajoutez au moins une prestation au panier');return}
   wz.step++;wzRender();
  };
  const submit=overlay.querySelector('[data-wz-submit]');if(submit)submit.onclick=wzSubmit;
 }
 function wzClose(){const root=document.querySelector('#modalRoot');root.innerHTML=''}
 function wzSubmit(){
- const t=WZ_TYPES.find(x=>x.kind===wz.kind);
- wzCounter++;
- const ref=`${t.prefix}-260812-${5100+wzCounter}`;
- const row={kind:wz.kind,ref,client:wz.data.client||wz.data.famille||wz.data.sender||dossier.passenger,contact:wz.data.phone||wz.data.linked||wz.data.vehicule||wz.data.autorisation||wz.data.recipient||'—',service:t.label,linked:wz.data.linked||wz.data.contenu||ref,route:'Owendo → Franceville',train:(wz.data.train||'EXP-620').split(' · ')[0],date:'12 août · '+new Date().toTimeString().slice(0,5),assignment:wz.data.place||wz.data.zone||wz.data.emplacement||wz.data.affectation||'—',amount:Number(wz.data.amount||t.amount).toLocaleString('fr-FR'),pay:wz.data.pay||WZ_PAYMENTS[0],payref:t.prefix+'-'+Math.floor(100000+Math.random()*900000),status:'Confirmé',tone:'ok'};
- saleRows.unshift(row);
+ if(!wz.items.length){toast('Le panier est vide');return}
+ const groupRef='GRP-'+new Date().toTimeString().slice(0,5).replace(':','')+'-'+Math.floor(100+Math.random()*900);
+ const payref='PAY-'+Math.floor(100000+Math.random()*900000);
+ const refs=[];
+ wz.items.forEach(it=>{
+  const t=WZ_TYPES.find(x=>x.kind===it.kind);const d=it.data;
+  wzCounter++;
+  const ref=`${t.prefix}-260812-${5100+wzCounter}`;
+  refs.push(ref);
+  const row={kind:it.kind,ref,client:d.client||d.famille||d.sender||dossier.passenger,contact:d.phone||d.linked||d.vehicule||d.autorisation||d.recipient||'—',service:t.label,linked:d.linked||d.contenu||groupRef,route:'Owendo → Franceville',train:(d.train||'EXP-620').split(' · ')[0],date:'12 août · '+new Date().toTimeString().slice(0,5),assignment:d.place||d.zone||d.emplacement||d.affectation||'—',amount:Number(d.amount||t.amount).toLocaleString('fr-FR'),pay:`${wz.pay} · Paiement groupé`,payref,status:'Confirmé',tone:'ok'};
+  saleRows.unshift(row);
+ });
+ const total=wzCartTotal();const count=wz.items.length;const lastKind=wz.items[wz.items.length-1].kind;
  wzClose();
  refreshSalesView();
- toast(`Opération ${ref} émise · ${t.label} · document généré et journalisé`);
- setTimeout(()=>openDocs(wz.kind),350);
+ toast(`Paiement groupé ${payref} · ${count} prestation(s) · ${total.toLocaleString('fr-FR')} FCFA · documents émis et journalisés`);
+ setTimeout(()=>openDocs(lastKind),350);
 }
-function newSaleWizard(){wz={step:1,kind:'',data:{}};wzRender()}
+function newSaleWizard(){wz={step:1,kind:'',data:{},items:[],pay:WZ_PAYMENTS[0]};wzRender()}
 document.addEventListener('click',e=>{if(current!=='sales')return;if(e.target.closest('.sales-export')){e.preventDefault();e.stopImmediatePropagation();exportSales()}else if(e.target.closest('[data-story-sale]')){e.preventDefault();e.stopImmediatePropagation();newSaleWizard()}else{const s=e.target.closest('.sale-status');if(s){const row=s.closest('[data-sale-status]'),select=document.querySelector('[data-sales-status]');if(select){select.value=row.dataset.saleStatus;select.dispatchEvent(new Event('change'));toast('Filtre appliqué · '+s.textContent.trim())}}}},true);
 const previousBind=bind;bind=function(){previousBind();if(current==='sales'){const search=document.querySelector('[data-sales-search]'),service=document.querySelector('[data-sales-service]'),state=document.querySelector('[data-sales-status]');const filter=()=>{let q=(search?.value||'').toLowerCase(),n=0;document.querySelectorAll('[data-sale-kind]').forEach(row=>{let show=(!q||row.textContent.toLowerCase().includes(q))&&(!service||service.value==='all'||row.dataset.saleKind===service.value)&&(!state||state.value==='all'||row.dataset.saleStatus===state.value);row.hidden=!show;if(show)n++});const count=document.querySelector('[data-sales-count]');if(count)count.textContent=n};[search,service,state].forEach(x=>x&&(x.oninput=filter,x.onchange=filter));const clear=document.querySelector('[data-sales-clear]');if(clear)clear.onclick=()=>{search.value='';service.value='all';state.value='all';filter()}}};
 const requestedDoc=new URLSearchParams(location.search).get('document');if(requestedDoc&&docs[requestedDoc])setTimeout(()=>openDocs(requestedDoc),900);
