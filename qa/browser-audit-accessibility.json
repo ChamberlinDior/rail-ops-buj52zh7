@@ -1,0 +1,1391 @@
+{
+  "base": "http://127.0.0.1:4173/",
+  "generatedAt": "2026-08-24T08:10:41.590Z",
+  "pageCount": 45,
+  "runtimeErrors": [],
+  "pages": [
+    {
+      "id": "dashboard",
+      "title": "Vue d’ensemble",
+      "textLength": 1631,
+      "buttonCount": 11,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 9,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Rapport Direction",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle vente",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "sales",
+      "title": "Ventes & prestations",
+      "textLength": 5004,
+      "buttonCount": 30,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 8,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Centre documentaire",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "＋ Nouvelle opération",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "trains",
+      "title": "Trains & circulations",
+      "textLength": 2721,
+      "buttonCount": 14,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 26,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouveau train",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "capacity",
+      "title": "Voitures & places",
+      "textLength": 1950,
+      "buttonCount": 66,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 12,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer un plan",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer une voiture",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "pricing",
+      "title": "Tarification & Yield Management",
+      "textLength": 3804,
+      "buttonCount": 45,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "customers",
+      "title": "Voyageurs",
+      "textLength": 2921,
+      "buttonCount": 35,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouveau voyageur",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "rfid",
+      "title": "Cartes RFID / NFC",
+      "textLength": 1519,
+      "buttonCount": 15,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 9,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Émettre une carte",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "payments",
+      "title": "Paiements",
+      "textLength": 1399,
+      "buttonCount": 19,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Rapprocher maintenant",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "cash",
+      "title": "Caisses & rapprochement",
+      "textLength": 1506,
+      "buttonCount": 13,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "État de caisse",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Ouvrir une caisse",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "control",
+      "title": "Contrôles & fraude",
+      "textLength": 2920,
+      "buttonCount": 37,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 29,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Affecter une mission",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "reports",
+      "title": "Rapports & KPI",
+      "textLength": 1399,
+      "buttonCount": 13,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Planifier un envoi",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un rapport",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "users",
+      "title": "Utilisateurs, identités & accès",
+      "textLength": 1372,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 11,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Lancer une revue",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un compte",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "audit",
+      "title": "Journal d’audit & chaîne de preuve",
+      "textLength": 1705,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 18,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Vérifier l’intégrité",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Exporter la preuve",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "settings",
+      "title": "Paramètres système",
+      "textLength": 1858,
+      "buttonCount": 18,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Comparer les versions",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Enregistrer le brouillon",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "tracking",
+      "title": "Centre des opérations",
+      "textLength": 3092,
+      "buttonCount": 29,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "BUTTON",
+            "cls": "trk-flow-chip",
+            "text": "BoouéPK 357\n   31attente\n   0embarq."
+          },
+          {
+            "tag": "I",
+            "cls": "",
+            "text": ""
+          },
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "circle",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "SPAN",
+            "cls": "trk-flow-chip-id",
+            "text": "BoouéPK 357"
+          },
+          {
+            "tag": "B",
+            "cls": "",
+            "text": "Booué"
+          },
+          {
+            "tag": "SMALL",
+            "cls": "",
+            "text": "PK 357"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 53,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Actualiser",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Déclarer un incident",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "devices",
+      "title": "Terminaux & batteries",
+      "textLength": 1361,
+      "buttonCount": 19,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 4,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Enrôler un terminal",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "analytics",
+      "title": "Analytique opérationnelle souveraine",
+      "textLength": 1292,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 4,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Rapport Direction",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle analyse",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "frontoffice",
+      "title": "Votre billet de train,en moins de 2 minutes.",
+      "textLength": 4283,
+      "buttonCount": 34,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 35,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Réserver",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Services",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "bags",
+      "title": "Bagages & traçabilité",
+      "textLength": 1703,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Enregistrer un bagage",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "parcels",
+      "title": "Colis express & COLIRAIL",
+      "textLength": 1750,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer une expédition",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "taa",
+      "title": "Transport Auto Accompagné",
+      "textLength": 1725,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un dossier TAA",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "funeral",
+      "title": "Transport funéraire & accompagnement",
+      "textLength": 1772,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un dossier funéraire",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "stations",
+      "title": "Gares & escales opérationnelles",
+      "textLength": 1565,
+      "buttonCount": 9,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 8,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "agencies",
+      "title": "Points de vente & agences",
+      "textLength": 3048,
+      "buttonCount": 49,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "TABLE",
+            "cls": "aq-table",
+            "text": "Données de démonstration SETRAG\n   AgenceTypeTrain / départTrajet / segmentClass"
+          },
+          {
+            "tag": "THEAD",
+            "cls": "",
+            "text": "AgenceTypeTrain / départTrajet / segmentClasseQuotaVenduRestantStatutActions"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "AgenceTypeTrain / départTrajet / segmentClasseQuotaVenduRestantStatutActions"
+          },
+          {
+            "tag": "TH",
+            "cls": "",
+            "text": "Actions"
+          },
+          {
+            "tag": "TBODY",
+            "cls": "",
+            "text": "AG-OWE-01Owendo · Gare\n   Premium\n   EXP-620Express voyageurs · 20/08/2026\n   Ow"
+          },
+          {
+            "tag": "TR",
+            "cls": "",
+            "text": "AG-OWE-01Owendo · Gare\n   Premium\n   EXP-620Express voyageurs · 20/08/2026\n   Ow"
+          },
+          {
+            "tag": "TD",
+            "cls": "",
+            "text": "ModifierAnnuler"
+          },
+          {
+            "tag": "DIV",
+            "cls": "aq-row-actions",
+            "text": "ModifierAnnuler"
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer les guichets",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Affecter un quota",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "pos",
+      "title": "Points de vente & sessions",
+      "textLength": 1332,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "schedules",
+      "title": "Livrets horaires & itinéraires",
+      "textLength": 2139,
+      "buttonCount": 27,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer XLSX",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Exporter",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "cancellations",
+      "title": "Annulations & réimpressions contrôlées",
+      "textLength": 1793,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle demande",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "refunds",
+      "title": "Remboursements & restitutions",
+      "textLength": 1756,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouveau remboursement",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "accounting",
+      "title": "Comptabilité & journaux de vente",
+      "textLength": 1665,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un journal",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "sage",
+      "title": "Interface comptable Sage X3 V12",
+      "textLength": 1596,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 10,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Générer un lot V65",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "monitoring",
+      "title": "Monitoring & disponibilité",
+      "textLength": 1424,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 19,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter le SLA",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Déclarer un incident",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "notifications",
+      "title": "Centre de notifications",
+      "textLength": 1368,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "roles",
+      "title": "Rôles, droits & séparation des tâches",
+      "textLength": 1503,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouvelle opération",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "controller",
+      "title": "Console contrôleur terrain",
+      "textLength": 1035,
+      "buttonCount": 9,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Clôturer la mission",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "jury",
+      "title": "SETRAG × TRANSMVET",
+      "textLength": 1107,
+      "buttonCount": 8,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 5,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Lancer le parcours guidé",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "1 · Piloter Recettes, réseau, alertes",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture cible & cybersécurité",
+      "textLength": 1652,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 9,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "ADR-008 · Haute disponibilité VALIDÉ Cluster multi-zone et suppression du point unique de panne DSI RTO 2 h",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "ADR-010 · Mode hors ligne VALIDÉ Journal signé et synchronisation idempotente Métier 42 op. testées",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "business",
+      "title": "Proposition financière& architecture Enterprise",
+      "textLength": 28162,
+      "buttonCount": 20,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Budget",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Financement",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "manual",
+      "title": "Mode dégradé & reprise contrôlée",
+      "textLength": 1257,
+      "buttonCount": 3,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 18,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Historique",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Lancer un exercice",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "network",
+      "title": "Points de vente & agences",
+      "textLength": 1446,
+      "buttonCount": 17,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un point de vente",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "admin",
+      "title": "Administration",
+      "textLength": 1581,
+      "buttonCount": 22,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Importer depuis AD",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Créer un utilisateur",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "security",
+      "title": "Cybersécurité, conformité & résilience",
+      "textLength": 1583,
+      "buttonCount": 6,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 8,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter les preuves",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Lancer une revue",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "administration",
+      "title": "Administration, sécurité & continuité",
+      "textLength": 6239,
+      "buttonCount": 9,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter le dossier de conformité",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "＋ Créer un compte",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "techoffer",
+      "title": "Offre technique EnterpriseBillettique & écosystème voyageurs",
+      "textLength": 23244,
+      "buttonCount": 7,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Conformité",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Architecture",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "boards",
+      "title": "Écrans de gare",
+      "textLength": 4100,
+      "buttonCount": 10,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [
+          {
+            "tag": "DIV",
+            "cls": "stb-ticker-track",
+            "text": "Prochain départ : EXPRESS 773-842 à destination de N’Toum — voie 4 — dans 16 min"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "Le train 624-906 à destination de Lopé est retardé de 12 minutes. Nous vous prio"
+          },
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "text": "Rappel : bagage inclus 0 à 30 kg par voyageur, étiquette obligatoire à retirer a"
+          },
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "circle",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          },
+          {
+            "tag": "circle",
+            "cls": "[object SVGAnimatedString]",
+            "text": ""
+          }
+        ],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 42,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "Exporter la grille",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Nouveau départ",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "intelligence",
+      "title": "Décider avant que le réseau ne subisse.",
+      "textLength": 2339,
+      "buttonCount": 16,
+      "empty": false,
+      "visual": {
+        "viewportOverflow": [],
+        "uncontainedOverflow": [],
+        "documentOverflow": 0,
+        "tinyText": 0,
+        "garbled": false,
+        "duplicateIds": []
+      },
+      "actions": [
+        {
+          "index": 0,
+          "label": "▶ Lancer le scénario final",
+          "result": "changed"
+        },
+        {
+          "index": 1,
+          "label": "Jumeau numérique",
+          "result": "changed"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

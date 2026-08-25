@@ -25,44 +25,40 @@ const tkIcon={
 };
 const ti=(name,cls='')=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${cls}">${tkIcon[name]}</svg>`;
 const tkLogo=`<svg viewBox="0 0 32 32" fill="none"><path d="M3 20.5 27 9.5l-3.6 6.4L27 22 3 20.5Z" fill="#4f6ef7"/><path d="M3 25 21 17.5l-2.4 4.2L21 26 3 25Z" fill="#8ea1fb"/></svg>`;
+const tkTrainWatermark=`<svg viewBox="0 0 240 118" fill="currentColor"><rect x="0" y="98" width="240" height="5" rx="2.5"/><path d="M20 24h150a34 34 0 0 1 34 34v30a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10Z"/><rect x="36" y="38" width="34" height="26" rx="4" fill="#fff"/><rect x="82" y="38" width="34" height="26" rx="4" fill="#fff"/><circle cx="46" cy="98" r="15"/><circle cx="98" cy="98" r="15"/><circle cx="150" cy="98" r="15"/><circle cx="196" cy="98" r="15"/><circle cx="46" cy="98" r="6" fill="#fff"/><circle cx="98" cy="98" r="6" fill="#fff"/><circle cx="150" cy="98" r="6" fill="#fff"/><circle cx="196" cy="98" r="6" fill="#fff"/></svg>`;
 function ticket(){
  const [depDate,depTime]=dossier.departure.split(' · ');
  const [,arrTime]=dossier.arrival.split(' · ');
  return `<div class="tkt-page"><div class="tkt-top"><h1>Billet voyageur</h1><span class="tkt-badge ok">${ti('check')}Validé</span></div><p class="tkt-sub">Merci de vous présenter 30 minutes avant le départ.</p>
  <article class="setrag-document ticket-doc tkt-card">
-  <i class="tkt-notch top"></i><i class="tkt-notch bottom"></i>
-  <div class="tkt-main">
-   <header class="tkt-head"><div class="tkt-logo"><img src="public/images/setrag-logo-official.jpg" alt="SETRAG" class="tkt-logo-img"></div><span class="tkt-badge ok">${ti('check')}Validé</span></header>
-   <div class="tkt-shine"></div>
-   <div class="tkt-body">
-    <div class="tkt-col-left">
-     <div class="tkt-field"><i class="tkt-ic">${ti('user')}</i><div><small>Passager</small><b>${dossier.passenger}</b></div></div>
-     <div class="tkt-field"><i class="tkt-ic">${ti('tag')}</i><div><small>Référence</small><b>${dossier.sale}</b></div></div>
-     <div class="tkt-field"><i class="tkt-ic">${ti('store')}</i><div><small>Canal d’achat</small><b>Application SETRAG</b></div></div>
-     <div class="tkt-field"><i class="tkt-ic">${ti('calendar')}</i><div><small>Émis le</small><b>${dossier.issued}</b></div></div>
+  <div class="tkt-bp-main">
+   <div class="tkt-bp-band"><strong>CARTE D’EMBARQUEMENT</strong><span>SETRAG PILOTAGE</span></div>
+   <div class="tkt-bp-body">
+    <div class="tkt-bp-barcode"></div>
+    <div class="tkt-bp-watermark">${tkTrainWatermark}</div>
+    <div class="tkt-bp-fields">
+     <div><small>Passager</small><b>${dossier.passenger}</b></div>
+     <div><small>Train</small><b>${dossier.train}</b></div>
+     <div><small>Date</small><b>${depDate}</b></div>
+     <div><small>Place</small><b>${dossier.car} · ${dossier.seat.split(' ')[0]}</b></div>
     </div>
-    <div class="tkt-col-mid">
-     <div class="tkt-route"><b>${dossier.from}</b><i>${ti('arrow')}</i><b>${dossier.to}</b></div>
-     <div class="tkt-grid">
-      <div><i class="tkt-ic">${ti('train')}</i><small>Train</small><b>${dossier.train}</b></div>
-      <div class="tkt-dep"><span class="tkt-dot"></span><small>Départ</small><b>${depTime}</b><em>${dossier.from}</em></div>
-      <div><i class="tkt-ic">${ti('seat')}</i><small>Classe</small><b>${dossier.class}</b></div>
-      <div><i class="tkt-ic">${ti('calendar')}</i><small>Date</small><b>${depDate}</b></div>
-      <div class="tkt-arr"><span class="tkt-dot end"></span><small>Arrivée</small><b>${arrTime}</b><em>${dossier.to}</em></div>
-      <div><i class="tkt-ic">${ti('seat')}</i><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
-     </div>
+    <div class="tkt-bp-hero"><b>${dossier.from.toUpperCase()}</b><i>${ti('train')}</i><b>${dossier.to.toUpperCase()}</b></div>
+    <div class="tkt-bp-foot">
+     <div><small>Voie</small><b>1</b></div>
+     <div><small>Heure de départ</small><b>${depTime}</b></div>
     </div>
-   </div>
-   <div class="tkt-strip">
-    <div><i class="tkt-ic">${ti('track')}</i><div><small>Voie / quai</small><b>Voie 1</b></div></div>
-    <div><i class="tkt-ic">${ti('clock')}</i><div><small>Durée du trajet</small><b>8h50</b></div></div>
-    <div><i class="tkt-ic">${ti('tag')}</i><div><small>Type de billet</small><b>Plein tarif</b></div></div>
    </div>
   </div>
-  <div class="tkt-stub">
-   <small class="tkt-stub-label">${ti('train')}TRANSGABONAIS</small>
-   <div class="tkt-stub-qr">${qr(dossier.sale).replace('doc-qr','doc-qr tkt-qr')}<small>Code billet</small><b>${dossier.sale}</b></div>
-   <div class="tkt-stub-seat"><small>Voiture / place</small><b>${dossier.car} / ${dossier.seat}</b></div>
+  <div class="tkt-bp-perf"></div>
+  <div class="tkt-bp-stub">
+   <div class="tkt-bp-band dark"><b>${dossier.from.toUpperCase()}</b><i>${ti('train')}</i><b>${dossier.to.toUpperCase()}</b></div>
+   <div class="tkt-bp-stub-fields">
+    <div><small>Passager</small><b>${dossier.passenger}</b></div>
+    <div class="row"><div><small>Train</small><b>${dossier.train}</b></div><div><small>Place</small><b>${dossier.car}·${dossier.seat.split(' ')[0]}</b></div></div>
+    <div><small>Date</small><b>${depDate}</b></div>
+    <div><small>Voie</small><b>1</b></div>
+   </div>
+   <div class="tkt-bp-qr">${qr(dossier.sale).replace('doc-qr','doc-qr tkt-qr')}<b>${dossier.sale}</b></div>
   </div>
  </article>
  <div class="tkt-trust">
@@ -76,7 +72,7 @@ function ticket(){
 }
 const barcode=v=>`<div class="premium-barcode"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><small>${v}</small></div>`;
 const serviceRoute=(codeA,codeB,extra)=>`<div class="premium-service-route"><section><small>ORIGINE</small><strong>${codeA}</strong><b>${dossier.from}</b></section><div><span>TRANSGABONAIS</span><i>→</i><small>${extra}</small></div><section><small>DESTINATION</small><strong>${codeB}</strong><b>${dossier.to}</b></section></div>`;
-function bag(){return `<article class="setrag-document premium-service bag-doc"><div class="doc-watermark">SETRAG BAGAGES</div>${brand('ÉTIQUETTE BAGAGE SÉCURISÉE',dossier.bag,'ENREGISTRÉ')}${serviceRoute('OWE','FVE','EXP-620 · 12 AOÛT 2026')}<div class="premium-identity"><div><small>VOYAGEUR PROPRIÉTAIRE</small><h2>${dossier.passenger}</h2><span>${dossier.sale} · ${dossier.phone}</span></div><strong><small>POIDS CONTRÔLÉ</small>24 KG</strong></div><div class="premium-keyline"><span><small>AFFECTATION</small><b>SOUTE V4 · ZONE B</b></span><span><small>FRANCHISE</small><b>20 KG + 4 KG</b></span><span><small>TRAIN / SERVICE</small><b>${dossier.train} · ${dossier.service}</b></span><span><small>STATUT</small><b>SCAN DÉPART VALIDÉ</b></span></div>${meta([['N° étiquette',dossier.bag],['Billet associé',dossier.sale],['Date de départ','12 août 2026 · 07:30'],['Arrivée prévue','12 août 2026 · 16:20'],['Code tarifaire','BAG-Z4'],['Prix HT','490 FCFA'],['TVA / CSS','25 / 5 FCFA'],['Montant TTC','520 FCFA'],['Émetteur',dossier.pos],['Terminal',dossier.device],['Agent',dossier.seller],['Dernier scan','Owendo · 09:44:08']])}<div class="premium-control"><div>${barcode(dossier.bag)}<b>TALON DE CONTRÔLE BAGAGE</b><span>À conserver jusqu’à la restitution</span></div>${qr(dossier.bag)}<aside><small>IDENTIFIANT UNIQUE</small><b>${dossier.bag}</b><span>Sceller sur la poignée · rapprochement obligatoire avec le billet voyageur.</span><em>✓ Billet lié · ✓ poids contrôlé · ✓ piste d’audit</em></aside></div></article>`}
+function bag(){return `<div class="tkt-page bag-pass-page"><div class="tkt-top"><h1>Ticket bagage</h1><span class="tkt-badge ok">${ti('check')}Enregistré</span></div><p class="tkt-sub">Fixer le coupon principal au bagage et conserver le talon jusqu’à la restitution.</p><article class="setrag-document premium-service bag-doc tkt-card bag-bp-card"><div class="tkt-bp-main"><div class="tkt-bp-band"><strong>TICKET BAGAGE</strong><span>SETRAG · BAGAGE ACCOMPAGNÉ</span></div><div class="tkt-bp-body"><div class="tkt-bp-barcode"></div><div class="tkt-bp-watermark">${tkTrainWatermark}</div><div class="tkt-bp-fields"><div><small>Propriétaire</small><b>${dossier.passenger}</b></div><div><small>Billet voyageur</small><b>${dossier.sale}</b></div><div><small>Train / service</small><b>${dossier.train} · ${dossier.service}</b></div><div><small>Date</small><b>12 AOÛT 2026</b></div></div><div class="tkt-bp-hero"><b>OWENDO</b><i>${ti('train')}</i><b>FRANCEVILLE</b></div><div class="tkt-bp-foot bag-bp-foot"><div><small>Poids contrôlé</small><b>24 KG</b></div><div><small>Affectation</small><b>SOUTE V4 · B</b></div><div><small>Montant TTC</small><b>520 FCFA</b></div><div><small>Dernier scan</small><b>09:44 · VALIDÉ</b></div></div></div></div><div class="tkt-bp-perf"></div><div class="tkt-bp-stub bag-bp-stub"><div class="tkt-bp-band dark"><b>OWENDO</b><i>${ti('train')}</i><b>FRANCEVILLE</b></div><div class="tkt-bp-stub-fields"><div><small>N° étiquette</small><b>${dossier.bag}</b></div><div><small>Propriétaire</small><b>${dossier.passenger}</b></div><div class="row"><div><small>Train</small><b>${dossier.train}</b></div><div><small>Poids</small><b>24 KG</b></div></div><div class="row"><div><small>Soute</small><b>V4 · B</b></div><div><small>Tarif</small><b>BAG-Z4</b></div></div></div><div class="tkt-bp-qr">${qr(dossier.bag).replace('doc-qr','doc-qr tkt-qr')}<b>${dossier.bag}</b></div></div></article><div class="tkt-trust bag-pass-trust"><div><i class="tkt-ic">${ti('shield')}</i><div><b>Bagage lié au billet</b><span>${dossier.sale}</span></div></div><div><i class="tkt-ic">${ti('check')}</i><div><b>Poids contrôlé</b><span>Franchise 20 kg + 4 kg</span></div></div><div><i class="tkt-ic">${ti('offline')}</i><div><b>Traçabilité hors ligne</b><span>Dernier scan mémorisé</span></div></div><div><i class="tkt-ic">${ti('refresh')}</i><div><b>Restitution sécurisée</b><span>Rapprochement talon / bagage</span></div></div></div><p class="tkt-legal">${ti('lock')}Étiquette unique et non transférable · rapprochement obligatoire avec le billet voyageur.</p></div>`}
 function parcel(){return `<article class="setrag-document premium-service parcel-doc"><div class="doc-watermark">COLIS EXPRESS</div>${brand('BORDEREAU COLIS EXPRESS',dossier.parcel,'EN TRANSIT')}${serviceRoute('OWE','FVE','FRET-332 · WAGON W12')}<div class="premium-identity"><div><small>EXPÉDITEUR</small><h2>Louis Nziengui</h2><span>+241 07 78 11 04 · identité vérifiée</span></div><div class="recipient"><small>DESTINATAIRE</small><h2>Alice Andjoua</h2><span>+241 06 90 32 44</span></div><strong><small>POIDS</small>18 KG</strong></div><div class="premium-keyline"><span><small>CONTENU</small><b>2 CARTONS · PIÈCES MÉCANIQUES</b></span><span><small>VIGNETTES</small><b>VGN-0314-A / B</b></span><span><small>SUIVI COLIRAIL</small><b>CLR-884210</b></span><span><small>PROCHAINE ÉTAPE</small><b>NDJOLÉ</b></span></div>${meta([['N° expédition',dossier.parcel],['Gare départ','OWE · Owendo'],['Gare arrivée','FVE · Franceville'],['Train / wagon','FRET-332 · W12'],['Description','Pièces mécaniques'],['Montant opération','12 400 FCFA'],['Montant perçu','12 400 FCFA'],['Paiement','Airtel Money · AIR-442981'],['Dépôt','12 août · 10:12'],['Déclaration','Contenu non dangereux'],['Émetteur',dossier.device],['Agent',dossier.seller]])}<div class="premium-control">${barcode(dossier.parcel)}${qr(dossier.parcel)}<aside><small>PREUVE DE PRISE EN CHARGE</small><b>Traçabilité de bout en bout</b><span>Signature expéditeur enregistrée · deux vignettes associées · synchronisation COLIRAIL active.</span><em>✓ Scellé · ✓ pesé · ✓ paiement confirmé</em></aside></div></article>`}
 function taa(){return `<article class="setrag-document premium-service taa-doc"><div class="doc-watermark">AUTO ACCOMPAGNÉE</div>${brand('AUTORISATION TRANSPORT AUTO ACCOMPAGNÉ',dossier.taa,'CHARGEMENT AUTORISÉ')}${serviceRoute('OWE','FVE','EXP-773 · PORTE-AUTO A1')}<div class="premium-identity vehicle"><div><small>VÉHICULE</small><h2>TOYOTA HILUX</h2><span>GA-482-LB · Blanc · VIN …8K214</span></div><div><small>CONDUCTEUR / BILLET</small><h2>Marc Rombi</h2><span>SET-260812-5118</span></div><strong><small>MASSE</small>2,1 T</strong></div><div class="premium-keyline"><span><small>EMPLACEMENT</small><b>NIVEAU BAS · P04</b></span><span><small>WAGON</small><b>PORTE-AUTO A1</b></span><span><small>DÉPART</small><b>12 AOÛT · 09:30</b></span><span><small>ÉTAT</small><b>PHOTOS 6/6 SIGNÉES</b></span></div>${meta([['N° expédition',dossier.taa],['Billet voyageur','SET-260812-5118'],['Code tarifaire','TAA-Z6'],['Validité','Train et date indiqués'],['Prix HT','80 189 FCFA'],['TVA / CSS','4 009 / 802 FCFA'],['Montant TTC','85 000 FCFA'],['Paiement','Visa · **** 8842'],['Clés','Remises à l’agent'],['Carburant','Niveau conforme'],['Alarme','Désactivée'],['Contrôle','Autorisé · agent OW-14']])}<div class="premium-control">${barcode(dossier.taa)}${qr(dossier.taa)}<aside><small>AUTORISATION NUMÉRIQUE DE CHARGEMENT</small><b>Contrôles départ conformes</b><span>Dossier lié au billet conducteur, au paiement et au manifeste du train.</span><em>✓ Identité · ✓ véhicule · ✓ emplacement</em></aside></div></article>`}
 function funeral(){return `<article class="setrag-document premium-service funeral-doc"><div class="doc-watermark">ACCÈS RESTREINT</div>${brand('BORDEREAU TRANSPORT FUNÉRAIRE',dossier.funeral,'DOSSIER CONFORME')}${serviceRoute('OWE','FVE','EXP-620 · FOURGON M1')}<div class="premium-identity confidential"><div><small>PERSONNE HABILITÉE</small><h2>Famille Raponda</h2><span>Données sensibles protégées selon le rôle</span></div><strong><small>DOSSIER</small>TF-01</strong></div><div class="premium-keyline"><span><small>AUTORISATION</small><b>AUT-SAN-260812-118</b></span><span><small>SCELLÉ</small><b>SCL-260812-044 · INTACT</b></span><span><small>AFFECTATION</small><b>FOURGON M1</b></span><span><small>CHAÎNE DE GARDE</small><b>ACTIVE</b></span></div>${meta([['N° expédition',dossier.funeral],['Relation','Owendo → Franceville'],['Train','EXP-620'],['Départ','12 août · 07:30'],['Arrivée','12 août · 16:20'],['Poids déclaré','118 kg'],['Montant HT','141 509 FCFA'],['TVA / CSS','7 075 / 1 416 FCFA'],['Montant TTC','150 000 FCFA'],['Paiement','Espèces · CAISSE-OW-01'],['Remise','Agent habilité'],['Journal','AUD-TF-260812-18']])}<div class="premium-control">${barcode(dossier.funeral)}${qr(dossier.funeral)}<aside><small>DOCUMENT À ACCÈS RESTREINT</small><b>Chaîne de garde horodatée</b><span>Consultation, contrôle, remise et impression intégralement journalisés.</span><em>✓ Autorisation · ✓ scellé · ✓ habilitation</em></aside></div></article>`}
