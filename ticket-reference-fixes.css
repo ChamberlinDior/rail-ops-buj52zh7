@@ -4,6 +4,22 @@
    reference palette to the baggage coupon so both documents match. Loads
    after ticket-reference-final.css. */
 
+/* ---------- fix: the card's forced aspect-ratio was clipping the QR out of view ---------- */
+@media(min-width:821px){
+  .tkt-card{aspect-ratio:auto!important;height:auto!important;min-height:300px!important}
+  .tkt-bp-qr .doc-qr.tkt-qr{width:82px!important;height:82px!important}
+  .tkt-bp-qr .doc-qr.tkt-qr img{width:74px!important;height:74px!important}
+}
+
+/* ---------- fix: give the decorative barcode its printed number, like a real one ---------- */
+.tkt-bp-barcode{overflow:visible}
+.tkt-bp-barcode b{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);
+  background:var(--ref-paper,var(--tkt-cream,#f3e6d5));padding:3px 4px;border-radius:2px;
+  font:800 9px/1 ui-monospace,'Space Mono',monospace;letter-spacing:.03em;
+  color:var(--ref-navy,var(--tkt-navy,#1c2734));white-space:nowrap;
+}
+
 /* ---------- fix: icon chips, timeline dots and QR frame must read on red ---------- */
 .ticket-doc .tkt-bp-stub .tkt-ic{background:rgba(255,255,255,.2)!important;color:#fff!important}
 .ticket-doc .tkt-bp-stub-stop .dot{border-color:#fff!important;background:rgba(255,255,255,.15)!important}
